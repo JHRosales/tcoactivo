@@ -114,8 +114,7 @@ $vuserlegal =  $userdata->legal;
         height: 300,
         width: '20%',
         ignoreCase: true,
-        //colNames: [" ", "idsigma", "mdocumento", "Documento", "Remitente", "Detalle Asunto", "Recep", "st_recep2", "Fec. Envio", "Fec. Recepcion", "ccocsini", "Area Inicio", "ccocsdes", "Area Destino", "Origen/Destino", "vobserv", "ctipacc", "Accion", "Ruta", "mruta", "ctipasunto", "Adj.", "Docs.", "Cerrar", "Elim."], --modificado 0106
-        colNames: ["", "idsigma", "mdocumento", "Nro", "Administrado", "Asunto Detallado", "Recep", "st_recep2", "Fec. Envio", "Fec. Recepcion", "ccocsini", "Area Inicio", "ccocsdes", "Area Destino", "Origen", "vobserv", "ctipacc", "Accion", "Ruta", "mruta", "ctipasunto", "Adj.", "Docs.", "Cerrar", "Concluir", "stConcluir2", "ctiptram", '', "Elim."], //--modificado 0106
+        colNames: ["", "idsigma", "mdocumento", "Nro", "Administrado", "Asunto Detallado", "Recep", "st_recep2", "Fec. Envio", "Fec. Recepcion", "ccocsini", "Area Inicio", "ccocsdes", "Area Destino", "Origen", "vobserv", "ctipacc", "Accion", "Ruta", "mruta", "ctipasunto", "Adj.", "Docs.", "Cerrar", "Concluir", "stConcluir2", "ctiptram", '', "Elim."],
         colModel: [{
                 name: 'bnd',
                 index: 'bnd',
@@ -294,13 +293,13 @@ $vuserlegal =  $userdata->legal;
                 align: 'center',
                 formatter: chkFormatconcluido,
                 search: false
-            }, //modificado 0206
+            },
             {
                 name: 'stconcluido2',
                 index: 'stconcluido2',
                 width: 60,
                 hidden: true
-            }, //modificado 0206
+            },
             {
                 name: 'ctiprtram',
                 index: 'ctiprtram',
@@ -375,7 +374,6 @@ $vuserlegal =  $userdata->legal;
     function filtrarBandejaEntrada() {
         _FiltroBandeja = 'E';
         ProcesoBuscarRuta('E');
-        //filtroes='Destino';
     }
 
     function formatoAsunto(cellvalue, options, rowObject) {
@@ -684,7 +682,7 @@ $vuserlegal =  $userdata->legal;
         title: "Nuevo Expediente Coactivo",
         buttonicon: "ui-icon-plus",
         onClickButton: function() {
-            window.open(path + "tramite/expediente?tiptram=0000000620", "_self");
+            window.open(path + "coactivo/expediente?tiptram=0000000620", "_self");
         }
     };
 

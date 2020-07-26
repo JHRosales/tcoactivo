@@ -754,4 +754,124 @@ class CoactivoController extends Zend_Controller_Action
         $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
         $this->view->cidusuario = $ddatosuserlog->cidusuario;
     }
+    public function expedienteAction()
+    {
+        $idsigma = '0000000000';
+        $titulo = 'Nuevo Expediente';
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $idsigma = $this->_request->getPost('idsigma');
+            $titulo = $this->_request->getPost('dstitulo');
+        }
+        $func = new Libreria_Pintar();
+        $cn = new Model_DataAdapter();
+
+        $this->view->idsigma = $idsigma;
+        $this->view->dstitulo = $titulo;
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $this->view->usuarioactual = $ddatosuserlog->cidusuario;
+
+        if ($idsigma == '0000000000') {
+            $this->view->dsadministrado = '';
+            $this->view->ndias = '';
+
+            $this->view->vnrodocu = '';
+            $this->view->dasunto = '';
+            $this->view->dasunto_tipasunto = '';
+            $this->view->dfecdocu = date('d/m/Y');
+            $this->view->ctiprtram = '';
+            if ($this->_request->getParam('tiptram') == '0000000620') {
+                $this->view->ctiprtram = $this->_request->getParam('tiptram');
+            }
+            $this->view->dasunto = '0000000010';
+            $this->view->dasunto_tipasunto = 'DOCUMENTO INTERNO';
+
+            $this->view->dtiprtram = '';
+            $this->view->nfolios = '';
+            $this->view->ccosini = '0000000003';
+
+            $this->view->ctiprele = '0000000140';
+            $this->view->vccosini = '';
+            $this->view->vasunto = '';
+            $this->view->vobserv = '';
+            $this->view->usuarioregistro = '';
+            $this->view->vnrodocini = '';
+            // Panel Administrado
+            $this->view->mperson = '';
+            $this->view->ctipper = '0000000111';
+            $this->view->vperson = '';
+            $this->view->vdirecc = '';
+            $this->view->vdocper = '';
+
+            // -- Representante Legal
+            $this->view->crepres = '';
+            $this->view->vrepres = '';
+            $this->view->vdocrep = '';
+
+            // Expediente precedente
+            $this->view->mdocumento = '';
+            $this->view->vmdocumento = '';
+        } else {
+
+            $parametros[0] =  $idsigma;
+            $parametros[1] =  "";
+            $parametros[2] =  "";
+            $parametros[3] =  "";
+            $parametros[4] =  "";
+            $parametros[5] =  "";
+
+            $userdata = new Zend_Session_Namespace('datosuserlog');
+            $nombrestore = 'coactivo.listar_mdocumento';
+            $datos = $cn->executeAssocQuery($nombrestore, $parametros);
+
+            $cdatos = count($datos);
+
+            // Obtener datos panel Expediente
+            $panelExp = $cn->executeAssocQuery(
+                'coactivo.panel_expediente',
+                $parametros
+            );
+
+            // Obtener datos panel Administrado
+            $parametros = null;
+            $parametros[] =  $datos[0]['mperson'];
+
+            $panelPers = $cn->executeAssocQuery('coactivo.buscar_persona', $parametros);
+
+            $this->view->dsadministrado = $datos[0]['ds_administrado'];
+            $this->view->ndias = $datos[0]['ndias'];
+
+            $this->view->vnrodocu = $datos[0]['vnrodocu'];
+            $this->view->dasunto = $datos[0]['dasunto'];
+            $this->view->dasunto_tipasunto = $datos[0]['dasunto_tipasunto'];
+            $this->view->dfecdocu = $datos[0]['dfecdocu'];
+            $this->view->ctiprtram = $datos[0]['ctiprtram'];
+            $this->view->dtiprtram = $datos[0]['dtiprtram'];
+            $this->view->nfolios = $datos[0]['nfolios'];
+            $this->view->ccosini = $datos[0]['ccosini'];
+            $this->view->ctiprele = $datos[0]['ctiprele'];
+            $this->view->vccosini = $datos[0]['vccosini'];
+            $this->view->vasunto = $datos[0]['vasunto'];
+            $this->view->vobserv = $datos[0]['vobserv'];
+            $this->view->usuarioregistro = $datos[0]['usuario_registro'];
+            $this->view->vnrodocini = $datos[0]['vnrodocini'];
+            // Panel Administrado
+            $this->view->mperson = $panelPers[0]['cidpers'];
+            $this->view->ctipper = $panelPers[0]['ctipper'];
+            $this->view->vperson = $panelPers[0]['crazsoc'];
+            $this->view->vdirecc = $panelPers[0]['direccf'];
+            $this->view->vdocper = $panelPers[0]['vnrodoc'];
+
+            // -- Representante Legal
+            $this->view->crepres = $datos[0]['crepres'];
+            $this->view->vrepres = $datos[0]['vrepres'];
+            $this->view->vdocrep = $datos[0]['vdocrep'];
+
+            // Expediente precedente
+            $this->view->mdocumento = $datos[0]['mdocumento'];
+            $this->view->vmdocumento = $datos[0]['vmdocumento'];
+        }
+    }
 }
