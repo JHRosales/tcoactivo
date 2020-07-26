@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP
+END
+LoggerThrowableInformation.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerThrowableInformation.php
+END
+LoggerException.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerException.php
+END
+LoggerAppender.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerAppender.php
+END
+LoggerConfigurable.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerConfigurable.php
+END
+LoggerConfigurator.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerConfigurator.php
+END
+LoggerMDC.php
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerMDC.php
+END
+LoggerNDC.php
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerNDC.php
+END
+LoggerLevel.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerLevel.php
+END
+LoggerReflectionUtils.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerReflectionUtils.php
+END
+LoggerLayout.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerLayout.php
+END
+LoggerHierarchy.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerHierarchy.php
+END
+Logger.php
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/Logger.php
+END
+LoggerRoot.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerRoot.php
+END
+LoggerLocationInfo.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerLocationInfo.php
+END
+LoggerFilter.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerFilter.php
+END
+LoggerLoggingEvent.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerLoggingEvent.php
+END
+LoggerAppenderPool.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/LoggerAppenderPool.php
+END

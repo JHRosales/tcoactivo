@@ -1,0 +1,55 @@
+<input type="hidden" id="hdiduser" value="">
+<input type="hidden" id="hdlogin" value="">
+<table width="100%">
+	<tr>
+		<td>Contrase&ntilde;a Actual </td>
+		<td>
+			<input type="password" id="passwdant" class="ui-text" />
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">&nbsp;</td>
+	</tr>
+	<tr>
+		<td>Nueva Contrase&ntilde;a</td>
+		<td>
+			<input type="password" id="passwdnueva" class="ui-text" />
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">&nbsp;</td>
+	</tr>
+	<tr>
+		<td>Validar Contrase&ntilde;a</td>
+		<td>
+			<input type="password" id="passwdnuevaval" class="ui-text" />
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">&nbsp;</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<button id="btnguardar"></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button id="btnsalir"></button>
+		</td>
+	</tr>
+</table>
+<script type='text/javascript'>
+$(document).ready(function(){
+	$('#btnsalir').button(
+	{
+	    label: '&nbsp;&nbsp;&nbsp;&nbsp;Salir&nbsp;&nbsp;',
+	    icons: {primary: null, secondary: 'ui-icon-arrowreturnthick-1-w'}
+	}		
+	);
+	
+	$('#btnguardar').button(
+	{
+		label: 'Guardar',
+	    icons: {primary: null, secondary: 'ui-icon-disk'}
+	}		
+	);
+	themeTextBox();
+});
+</script>

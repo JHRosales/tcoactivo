@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/258/trunk/titania/application/views/scripts/logeo
+END
+cambiarpasswd.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/258/trunk/titania/application/views/scripts/logeo/cambiarpasswd.phtml
+END
+redirect.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/6/trunk/titania/application/views/scripts/logeo/redirect.phtml
+END
+index.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/257/trunk/titania/application/views/scripts/logeo/index.phtml
+END
+validarlogeo.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/6/trunk/titania/application/views/scripts/logeo/validarlogeo.phtml
+END
+logout.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/6/trunk/titania/application/views/scripts/logeo/logout.phtml
+END

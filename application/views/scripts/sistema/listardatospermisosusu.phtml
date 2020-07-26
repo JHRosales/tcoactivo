@@ -1,0 +1,168 @@
+<form id="frmCentro">
+    <div class="ui-widget ui-widget-content ui-corner-all ">
+        <table border="0" cellspacing="4">
+            <tr>
+                <td colspan="4">
+                    <input type="hidden" id="idsigma" name="idsigma" value="<?php echo $this->idsigma;?>">
+                </td>
+            </tr>
+            <tr>
+                <td>Cod Usuario:</td>
+                <td>&nbsp;
+                    <input type="text" id="cidusuarioperm" name="cidusuarioperm" class="ui-text"  size="20" readonly maxlength="10" value="<?php echo $this->cidusuario; ?>">
+                </td>
+                <td>Nombre:</td>
+                <td>&nbsp;
+                    <input type="text" id="nomusuario" name="nomusuario" class="ui-text" disabled="disabled" size="50px" value="<?php echo $this->vnombre; ?>">
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="5">Usuario:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="usuario" name="usuario" class="ui-text"  size="21" disabled="disabled" maxlength="25" value="<?php echo $this->usuario; ?>">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="result"></div>
+
+</form>
+
+<div style="margin:20px 0 20px 0">
+    <div class="ui-widget ui-widget-content ui-corner-all" style="float:left; width:310px; padding:10px; margin:0 10px 20px 0;">
+        <table style="width: 100%; height: 300px; padding-bottom: 2px;" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td rowspan='2' style="width: 400px" align="center">
+                    <div id="tree-mconten" align="left" style="overflow:scroll; height: 452px; width:300px; border:2px solid #7692f9;"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="ui-widget ui-widget-content ui-corner-all" style="float:left; width:280px; padding:10px; margin:0 0 20px 10px;">
+        <input type="hidden" id="idObjPadre" value="9999999999" />
+        <div id="panelResultObjeto">
+            <table id="tblResultObjeto"></table>
+        </div>
+    </div>
+</div>
+
+<table border="0"  style="width: 100%; padding-bottom: 2px;">
+    <tr>
+        <td rowspan='2' style="width: 400px" align="center">
+
+        <button id="btnGuardar" type="button">Guardar</button> &nbsp;&nbsp;&nbsp;
+            <button id="btnCancelar" type="button">Cancelar</button></td>
+    </tr>
+</table>
+
+<script>
+    $('#btnGuardar').button({ icons: {primary:'ui-icon-disk'} }).click(function(){grabar();});
+    $('#btnCancelar').button({ icons: {primary:'ui-icon-closethick'}}).click(function(){closeDialog('jqDialog2');});
+
+    themeComboBox();
+    themeTextBox();
+
+    $("#cidusuarioperm").numeric({
+        decimal: false,
+        negative: false
+    }, function() {
+        openDialogWarning("Solo Numeros Enteros Positivos.", 150, 90);
+        this.value = "";
+        this.focus();
+    });
+
+    function grabar(){
+        var c = ObtenerValorObjeto('registros');
+        var codes = c.split('^');
+        var data = {'usuario': $("#cidusuarioperm").val(),'permisos':codes}
+        var correcto = true;
+        if(correcto){
+            openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?", 350, {
+                "Si" : function() {
+                    $.ajax({
+                        url: jQuery.scriptPath + "index.php/sistema/guardarpermisos",
+                        type: 'POST',
+                        cache: false,
+                        data:{json: JSON.stringify(data)},
+                        success: function (requestData) {
+                            // $("#result").html(requestData);
+                           closeDialog("jqDialogConfirmacion1");
+                            closeDialog('jqDialog2');
+                            openDialogInfo(requestData,400);
+                           // buscarUsuario();
+
+                           /* openDialogDataFunction2("sistema/listardatospermisosusu",{
+                                cidusuario:$("#cidperson").val()
+                            },"680", "720", "Agregar Permisos Usuario: "+$("#cidperson").val());*/
+                        }
+
+                    });
+
+                },
+                "No" : function() {
+                    closeDialog("jqDialogConfirmacion1");
+                }
+            });
+        }
+    }
+
+    function validEstado(value, colname){
+        setTimeout(function(){ $("#info_dialog").hide(); }, 1000);
+        return [ false, "" ];
+    }
+
+    buscarObjeto = function() {
+        $("#tblResultObjeto").jqGrid('clearGridData');
+
+        $("#tblResultObjeto").jqGrid({
+            editurl: jQuery.scriptPath + "index.php/sistema/editobjetos",
+            datatype: "local",
+            height: 435,
+            colNames: ["Est.", "Cod.Obj.", "Nom.Obj."],
+            colModel:[
+                {name:'estobj', index:'estobj', width:50, editable:true, search:false, align:'center', edittype:"checkbox", editoptions:{value:"a:b",defaultValue:"1"}, editrules: {custom: true, custom_func: validEstado}, formatter:'checkbox'},
+                {name:'cidobj', index:'cidobj', width:80},
+                {name:'nomobj', index:'nomobj', width:130}
+            ],
+            gridComplete: function () {
+                 var $this = $(this), ids = $this.jqGrid('getDataIDs'), i, l = ids.length;
+                 for (i = 0; i < l; i++) {
+                 $this.jqGrid('editRow', ids[i], true);
+                 }
+            },
+            beforeSelectRow: function (rowid, e) {
+                //alert(rowid);
+                //var id = rowid+'_estobj';
+                //var aa = $('#'+rowid+'_estobj:checked').val();
+                //alert(aa);
+            },
+            multiselect: false,
+            ignoreCase:true,
+            viewrecords: false,
+            sortname: 'nomvar',
+            sortorder: 'asc',
+            hidegrid: true
+        });
+
+        $.ajax({
+            url: jQuery.scriptPath + "index.php/sistema/formobjetos",
+            type: 'POST',
+            cache: false,
+            data: "cidUsuario="+$("#cidusuarioperm").val()+"&idObjPadre="+$("#idObjPadre").val(),
+            success : function(requestData) {
+                //alert(requestData);
+                if(requestData){
+                    var data = JSON.parse(requestData);
+                    for(i=0;i<data.length;i++){
+                        var row = new Array();
+                        row.push({id: i, estobj: data[i][9], cidobj: data[i][0], nomobj: data[i][1]});
+                        $("#tblResultObjeto").jqGrid('addRowData', i, row[0]);
+                    }
+                }
+            }
+        });
+    };
+
+    buscarObjeto();
+
+</script>

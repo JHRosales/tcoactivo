@@ -1,0 +1,113 @@
+<form id="frmlstcostas">
+    <table border="0" cellspacing="0px">
+        <tr>
+            <td colspan="1">
+                <input type="hidden" id="idsigma" name="idsigma" value="<?php echo $this->idsigma; ?>">
+            </td>
+        </tr>
+    </table>
+    <table id="tblCostasP"></table><div id="ptblCostasP"></div>
+
+    <table align="center">
+
+        <tr><td> <button id="btnguardara">Guardar</button></td><td>
+                <button type="button" id="btnregresara">Cancelar</button></td></tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    var lastsel;
+
+    $('#btnguardara').button({ icons: {primary:'ui-icon-disk'} }).click(function (){grabar();});
+    $('#btnregresara').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog2');});
+    $(document).ready(function() {
+        gridConfigArea = {
+            data: <?php echo $this->arrareas; ?>,
+            datatype: "local",
+            editurl: "clientArray",
+            height: 280,
+            width: 520,
+            colNames: ["idsigma", "Concepto", "vobserv"],
+            colModel: [
+                {name: 'idsigma', index: 'idsigma', width: 250, align: 'center', hidden: true},
+                {name: 'vdescri', index: 'vdescri', align: 'left', width: 420},
+                /*{name: 'jqcboaccion', index: 'jqcboaccion', align: 'left', width: 120, hidden: true
+                    , editable: true, formatter: 'select', edittype: "select"
+                    , editoptions: {value: JSON.parse('<?php echo $this->optionsjqcboaccion; ?>'), defaultValue: JSON.parse('{"9999999999" : "SELECCIONAR"}')}
+                },*/
+                {name: 'vobserv', index: 'vobserv', align: 'left', width: 100, hidden: true}
+            ],
+            caption: " Costas Procesales",
+            rowNum: 200,
+            rownumbers: true,
+            multiselect: true,
+            viewrecords: true,
+            recordpos: 'right',
+            afterInsertRow: function(rowid, aData) {
+                var arre=<?php echo $this->pcostas; ?>;
+                for(var i=0; i<arre.length;i ++){
+                     //console.log(arre);
+                    if(aData.idsigma==arre[i].idsigma) {
+                        //console.log(i+' - '+arre[i].idsigma);
+                        jQuery("#tblCostasP").jqGrid('setSelection', rowid);
+                    }
+                }
+               },
+
+            loadComplete: function() {
+                isGridComplete = true;
+                var rowsids = jQuery("#tblCostasP").jqGrid('getDataIDs');
+
+                $.each(rowsids, function(i, rowid) {
+                    var rowData = jQuery("#tblCostasP").jqGrid('getRowData', rowid);
+                   // $('#tblCostasP').jqGrid('editRow', rowid, false);
+                    //console.log(i);
+                });
+                lastsel = rowsids[0];
+
+            },
+            onSelectRow: function(id) {
+
+                if (id && id !== lastsel) {
+
+                    lastsel = id;
+                }
+            },
+            sortname: "vdescri",
+            sortorder: "asc"
+        };
+
+        inicializarGrid("tblCostasP", gridConfigArea);
+
+    });
+
+    function grabar(){
+        gsrr = jQuery("#tblCostasP").jqGrid('getGridParam', 'selarrrow');
+
+        if (gsrr.length > 0) {
+            var costasenvio = [];
+            for (var i = 0; i < gsrr.length; i++) {
+
+                $('#tblCostasP').jqGrid('saveRow', gsrr[i]);
+                var row = jQuery("#tblCostasP").jqGrid('getRowData', gsrr[i]);
+                costasenvio[i] = {pacosta: row.idsigma,precio:''};
+                $("#tblCostasP").editRow(gsrr[i], false, null);
+            }
+            var parmter = {};
+            parmter.pidsigmacosta = $('#idsigma').val();
+            parmter.pcostasenvio = JSON.stringify(costasenvio);
+
+            $.post(path + "coactivo/dcostasprocesalessave", parmter, updateresultenvio, 'json');
+
+
+  } else {
+            openDialogWarning("Seleccione Costa Procesal.", 380, 150);
+        }
+    }
+    function updateresultenvio(data) {
+        openDialogInfo(data, "250", "150", null, function() {
+            closeDialog("jqDialog2");
+            Procesolistarcostas();
+        });
+    }
+</script>

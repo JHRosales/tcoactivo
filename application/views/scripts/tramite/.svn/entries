@@ -1,0 +1,161 @@
+10
+
+dir
+0
+https://titania-psql.googlecode.com/svn/trunk/titania/application/views/scripts/tramite
+https://titania-psql.googlecode.com/svn
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+0873af1b-8edf-947b-ccef-b5089aa5ee3c
+
+_expediente.phtml
+file
+
+
+
+add
+
+asunto.phtml
+file
+
+
+
+add
+
+dasunto.phtml
+file
+
+
+
+add
+
+dasuntoreq.phtml
+file
+
+
+
+add
+
+expediente.phtml
+file
+
+
+
+add
+
+explegal.phtml
+file
+
+
+
+add
+
+guardarasunto.phtml
+file
+
+
+
+add
+
+guardardasunto.phtml
+file
+
+
+
+add
+
+guardarexpediente.phtml
+file
+
+
+
+add
+
+guardarexplegal.phtml
+file
+
+
+
+add
+
+index.phtml
+file
+
+
+
+add
+
+listardasunto.phtml
+file
+
+
+
+add
+
+listarexpediente.phtml
+file
+
+
+
+add
+
+listarmasunto.phtml
+file
+
+
+
+add
+
+nrequisito.phtml
+file
+
+
+
+add
+
+obtenerjuzgadolegal.phtml
+file
+
+
+
+add
+
+obtenermaterialegal.phtml
+file
+
+
+
+add
+
+paneladministrado.phtml
+file
+
+
+
+add
+
+panelexpediente.phtml
+file
+
+
+
+add
+

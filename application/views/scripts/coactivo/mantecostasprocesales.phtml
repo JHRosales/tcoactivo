@@ -1,0 +1,236 @@
+<form id="frmcostas">
+
+    <table border="0" cellspacing="2px">
+        <tr>
+            <td colspan="5">
+                <input type="hidden" id="idsigma" name="idsigma" value="<?php echo $this->idsigma; ?>">
+            </td>
+        </tr>
+        <tr>
+            <td><b>Tipo Documento</b></td>
+            <td>
+                <input type="text" id="tipodoc" name="tipodoc" class="ui-text"  size="20px" value="<?php echo $this->tipodocumento; ?>">
+            </td>
+            <td><b>Numero de Documento</b></td>
+            <td colspan="3">
+                <input type="text" id="numDoc" name="numDoc" class="ui-text" size="40px" value="<?php echo $this->nrodocumento; ?>">
+            </td>
+        </tr>
+        <tr>
+            <td><b>Fec. Documento</b></td>
+            <td align="left"><input type="text" name="txtfecdoc" id="txtfecdoc" value="<?php echo $this->fechadocumento; ?>"
+                                    class="ui-text" style="text-align: left; width: 80%;" />
+            </td>
+            <td><b>Fec. Inicio</b></td>
+            <td align="left"><input type="text"  name="txtfecini" id="txtfecini"  value="<?php echo $this->fechainicio; ?>"
+                                    class="ui-text" style="text-align: left; width: 80%;" />
+            </td>
+            <td><b>Fec. Fin</b></td>
+            <td align="left"><input type="text"  name="txtfecfin" id="txtfecfin"  value="<?php echo $this->fechafin; ?>"
+                                    class="ui-text" style="text-align: left; width: 70%;" />
+            </td>
+        </tr>
+        <tr>
+            <td><b>Nota</b></td>
+            <td align="left" colspan="5">
+            <textarea class="ui-text"
+                      style="width:98%;"
+                      id="txtvobserv"
+                      name="txtvobserv"><?php  echo $this->vobserv;?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Estado</b></td>
+            <td colspan="3">
+
+                <input type="checkbox" id="nestado" name="nestado"  value="1" offvalue="0" class="ui-text" <?php if ($this->estado!=''){ if($this->estado==1){echo 'checked';}}else{echo 'checked';} ?>>
+            </td>
+        </tr>
+    </table>
+</form>
+<br>
+<div id="panelCostasP" >
+    <table id="tblCostasp"></table>
+</div>
+    <table border="0" style="width:98%;">
+        <tr class="btnocult" >
+        <td><button id="btnAgregarCostas">Agregar Costas</button></td>
+        </tr>
+        <tr ><td align="right"> <button id="btnguardar">Guardar</button></td><td>
+                <button type="button" id="btnregresar">Cancelar</button></td></tr>
+    </table>
+
+
+<script type="text/javascript">
+//Tabla costas contenido
+    themeComboBox("#cbofiltro_tipo");
+    $('#btnguardar').button({ icons: {primary:'ui-icon-disk'} }).click(function (){grabarCostas();});
+    $('#btnregresar').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog1');});
+    $('#btnAgregarCostas').button({ icons: {primary:'ui-icon-plus'} }).click(function (){newCostas();});
+
+    $("#txtfecdoc").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#txtfecini").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#txtfecfin").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+
+    newCostas=function(){
+       gsrr = jQuery("#tblCostasp").jqGrid('getRowData');
+        var cosAgregadas = [];
+        if (gsrr.length > 0) {
+            for (var i = 0; i < gsrr.length; i++) {
+               // console.log(gsrr[i].cidcostas);
+                cosAgregadas[i] = {idsigma: gsrr[i].cidcostas};
+            }
+        }
+        openDialogDataFunction2("coactivo/listarcostasprocesales",{idsigma: $("#idsigma").val(),pcostas:JSON.stringify( cosAgregadas) },"540", "430", "Listado de Costas Procesales");
+    };
+
+    function grabarCostas(){
+        var correcto = true;
+        var form = $('#frmcostas');
+ //       Totaliza();
+        if($("#cnrocaja").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#cnrocaja").focus();
+            correcto = false;
+        }
+        else if($("#usuario").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#usuario").focus();
+            correcto = false;
+        } else if($("#dfecini").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#dfecini").focus();
+            correcto = false;
+        }
+        else if($("#dfecfin").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#dfecfin").focus();
+            correcto = false;
+        }
+
+        if(correcto){
+            openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?", 350, {
+                "Si" : function() {
+                    jQuery('#tblCostasp').jqGrid('saveRow',lastsel3);
+                    var rows= jQuery("#tblCostasp").jqGrid('getRowData');
+                   // console.log( rows.length);
+                    if (rows.length > 0) {
+                        var costasenvio = [];
+                        for (var i=0;i<rows.length;i++) {
+                            var row=rows[i];
+                            //console.log( row.monto);
+                            costasenvio[i] = {pacosta: row.cidcostas, precio:row.monto};
+
+                        }
+                        var parmter = {};
+                        parmter.pidsigmacosta = $('#idsigma').val();
+                        parmter.pcostasenvio = JSON.stringify(costasenvio);
+
+                        $.post(path + "coactivo/dcostasprocesalessave", parmter, null, 'json');
+                    }
+
+
+                    $.ajax({
+                        url: jQuery.scriptPath + "index.php/coactivo/mantecostasprocesalessave",
+                        type: 'POST',
+                        cache: false,
+                        data: form.serialize(),
+                        beforeSend : function(data) {
+                            // $('#result').html('Cargando...');
+                        },
+                        success : function(requestData) {
+
+                            closeDialog("jqDialogConfirmacion1");
+                            openDialogInfo(requestData,400);
+                            closeDialog("jqDialogCargando");
+                          //  limpiarobjetos();
+                            closeDialog('jqDialog1');
+
+                            ProcesoBuscarCostasProcesales();
+                        },
+                        error : function(requestData, strError, strTipoError) {
+                            openDialogInfo(strError,200);
+                        },
+                        complete : function(requestData, exito) {
+                        }
+                    });
+                },
+                "No" : function() {
+                    closeDialog("jqDialogConfirmacion1");
+                }
+            });
+        }
+    }
+function updateresultenvio(data) {
+    openDialogInfo(data, "250", "150", null, function() {
+        closeDialog("jqDialog2");
+        Procesolistarcostas();
+    });
+}
+function Totaliza() {
+
+    jQuery('#tblCostasp').jqGrid('saveRow',lastsel3);
+    gsrr = jQuery("#tblCostasp").jqGrid('getRowData');
+
+
+    if (gsrr.length > 0) {
+        var areaenvio = [];
+        for (var i = 0; i < gsrr.length; i++) {
+        // console.log( gsrr[i].monto);
+            areaenvio[i] = {parea: row.idsigma, jqcboaccion: row.jqcboaccion, vobserv: row.vobserv};
+
+
+        }
+    }
+
+        return true;
+};
+var lastsel3;
+gridcostas = {
+    datatype: "local",
+    height: 200,
+    colNames:['CODIGO','Concepto', '%UIT','MONTO'],
+    colModel:[
+        {name:'idsigma',index:'idsigma', width:90, sorttype:"int",align:'center', editable: false},
+        {name:'vdescri',index:'vdescri', width:430,editable: false},
+        {name:'cidcostas',index:'cidcostas', width:70, editable: false,hidden:true},
+        {name:'monto',index:'monto', width:80,sortable:false, editable: true}
+
+    ],
+    onSelectRow: function(id){
+        if(id && id!==lastsel3){
+             jQuery('#tblCostasp').jqGrid('saveRow',lastsel3);
+            lastsel3=id;
+        }
+        jQuery('#tblCostasp').jqGrid('editRow',id,true);
+    },
+    gridComplete: function() {
+      //  $("#tblCostasp").jqGrid('setSelection', 1, true);
+
+    },
+    editurl: "clientArray",
+    caption: "Costas Procesales"
+
+};
+Procesolistarcostas = function() {
+    parameters = {
+        "name": "tblCostasp",
+        "procedure": "coactivo.lst_dcostasprocesales",
+        "print": "true",
+        "parameters": '{' +
+        '"p_idsigma":"'+ $("#idsigma").val()+'"' +
+        '}'
+    };
+    procesarProcedimientoJSON('panelCostasP','tblCostasp',gridcostas,parameters,null,null);
+};
+$(document).ready(function() {
+    if($("#idsigma").val()==''){
+        $(".btnocult").hide();
+    }
+    else{
+        $(".btnocult").show();
+    }
+    Procesolistarcostas();
+
+});
+</script>

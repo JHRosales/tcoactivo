@@ -1,0 +1,241 @@
+<form id="frmauxiliares">
+
+    <table border="0" cellspacing="5px">
+        <tr>
+            <td colspan="4">
+                <input type="hidden" id="idsigma" name="idsigma" value="<?php echo $this->idsigma; ?>">
+            </td>
+        </tr>
+        <tr>
+            <td>Usuario</td>
+            <td>
+                <input type="text" id="usuario" name="usuario" class="ui-text"  size="20px" value="<?php echo $this->usuario; ?>">
+                <input type="hidden" id="ciduser" name="ciduser" value="<?php echo $this->ciduser; ?>">
+            </td>
+            <td>Nombre Usuario</td>
+            <td>
+                <input type="text" id="nomusuario" name="nomusuario" class="ui-text" size="50px" disabled="disabled" value="<?php echo $this->nomusuario; ?>">
+                <input type="hidden" id="cidpers" name="cidpers" value="<?php echo $this->cidpers; ?>">
+            </td>
+        </tr>
+        <tr>
+            <td>Tipo</td>
+            <td style="width: 200px;" colspan="3">
+                <select id="cbofiltro_tipo" name="cbofiltro_tipo" style="width: 200px;">
+                    <?php echo $this->ctipoHTML; ?>
+                </select>
+
+
+
+            </td>
+        </tr>
+        <tr><td>Firma</td>
+            <td colspan="3">
+                <div id="dv_ie8"  style="display:none;">
+                        <button id="btnplusfile">Pluss</button><br/>
+                    <iframe src="<?php echo $this->util()->getPath(); ?>index.php/coactivo/iframedocumentupload" width="100%" height="40px" frameborder="0">
+
+                    </iframe>
+                </div>
+                <div id="browserX" style="display:none;">
+                    <div id="manual-fine-uploader"></div>
+                   <!-- <button id="btnsuubirarchivos" style="margin-top: 10px;">Subir Archivos</button>-->
+                    <?php echo $this->firma; ?>
+                    <input type="hidden" id="nombrefirma" value="<?php echo $this->firma; ?>">
+                </div>
+                <input type="button" class="btnGaleria" id="btnGaleria" value="Ver Foto">
+            </td>
+
+        </tr>
+        <tr>
+            <td>Estado</td>
+            <td colspan="3">
+
+                <input type="checkbox" id="nestado" name="nestado"  value="1" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>>
+            </td>
+        </tr>
+    </table>
+    <table align="center">
+        <tr><td> <button id="btnguardar">Guardar</button></td><td>
+
+                <button id="btnCancelar" type="button">Cancelar</button>
+            </td></tr>
+    </table>
+</form>
+
+<style>
+    .ui-autocomplete {
+        max-height: 218px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 8px;
+    }
+
+    /* IE 6 doesn't support max-height
+    * we use height instead, but this forces the menu to always be this tall
+    */
+    * html .ui-autocomplete {
+        height: 218px;
+    }
+</style>
+<script type="text/javascript">
+    themeComboBox("#cbofiltro_tipo");
+    $('#btnguardar').button({ icons: {primary:'ui-icon-disk'} }).click(function (){grabar();});
+    $('#btnCancelar').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog1');});
+    $("#btnGaleria").button({ icons: {primary:'ui-icon-disk'}    }).bind('click', function () {
+        openDialog2("coactivo/galeriafotos?firma=" + $("#nombrefirma").val() + "&usuario="+$("#ciduser").val(), "250", "240", "Firma");
+    });
+
+    var _jsonusu = <?php echo json_encode($this->musuari); ?>;
+
+
+    $("#usuario").autocompleteCategory({
+        delay: 0,
+        source: _jsonusu,
+        minLength: 2,
+        select: function(event, ui) {
+            $('#ciduser').val(ui.item._cidusuario);
+            $('#nomusuario').val(ui.item._nombrepers);
+            $('#ccodcos').val(ui.item._cidarea);
+            $('#cidpers').val(ui.item._cidpers);
+        },
+        change: function(event, ui) {
+            if(ui.item) {
+                $('#ciduser').val(ui.item._cidusuario);
+                $('#nomusuario').val(ui.item._nombrepers);
+                $('#ccodcos').val(ui.item._cidarea);
+                $('#cidpers').val(ui.item._cidpers);
+            } else {
+                if($(this).val().length > 0) {
+                    openDialogWarning("El valor ingresado no esta en la lista de elementos.", 380, 150);
+                }
+            }
+        }
+    });
+
+
+    function grabar(){
+        var correcto = true;
+        var form = $('#frmauxiliares');
+
+       if($("#usuario").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#usuario").focus();
+            correcto = false;
+        } else if($("#dfecini").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#dfecini").focus();
+            correcto = false;
+        }
+        else if($("#dfecfin").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#dfecfin").focus();
+            correcto = false;
+        }
+       var usu= $("#ciduser").val();
+
+
+        if(correcto){
+            openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?", 350, {
+                "Si" : function() {
+
+                    $.ajax({
+                        url: jQuery.scriptPath + "index.php/coactivo/cargarauxiliarsesion",
+                        type: 'POST',
+                        cache: false,
+                        data: form.serialize(),
+                        beforeSend : function(data) {
+                        },
+                        success : function(requestData) {
+                            manualuploader.uploadStoredFiles();
+                            closeDialog("jqDialogConfirmacion1");
+                            openDialogInfo(requestData,400);
+                            closeDialog("jqDialogCargando");
+                            closeDialog('jqDialog1');
+                            buscarauxiliar();
+
+                        },
+                        error : function(requestData, strError, strTipoError) {
+                            openDialogInfo(strError,200);
+                        },
+                        complete : function(requestData, exito) {
+                        }
+                    });
+                },
+                "No" : function() {
+                    closeDialog("jqDialogConfirmacion1");
+                }
+            });
+        }
+    }
+
+    var manualuploader;
+    $(document).ready(function() {
+        //var form = $('#frmauxiliares');
+        manualuploader = new qq.FineUploader({
+            debug: false,
+            element: document.getElementById('manual-fine-uploader'),
+            request: {
+                //endpoint: 'uploadddocuments'
+                endpoint: path + "coactivo/uploadauxiliarcoactivo"
+                // data: form.serialize()
+            },
+            //template: "qq-template-manual-noedit",
+            autoUpload: false
+        });
+
+      //  selectInCombo('cbofiltro_tipo','<?php echo trim($this->tipo); ?>')
+/*
+        $("#btnsuubirarchivos").button().click(function() {
+            if ($("#idsigma").val() != "") {
+                manualuploader.uploadStoredFiles();
+                // manualuploader.fineUploader('uploadStoredFiles');
+            }
+        });*/
+
+        if (navigator.appName == 'Microsoft Internet Explorer')
+        {
+            var ver = getInternetExplorerVersion();
+            if (ver > -1)
+            {
+                // alert(ver);
+                if (ver <= 9.0)
+                {
+                    if ("<?php echo $this->ddocumento; ?>" == "") {
+                        //$("#tabs-2").hide();
+                        $("#tabs").tabs("option", "disabled", [2]);
+                    }
+                    $("#dv_ie8").show();
+
+                    $("#btnplusfile").button({
+                        icons: {
+                            primary: "ui-icon-plus"
+                        },
+                        text: false
+                    }).click(function() {
+                        $("#dv_ie8").append('<iframe src="' + path + 'documentos/iframedocumentupload" width="100%" height="40px" frameborder="0"></iframe>');
+                    });
+
+
+                }
+            } else {
+                $("#browserX").show();
+            }
+        } else {
+            $("#browserX").show();
+        }
+
+        if ($("#idsigma").val() == "") {
+           $(".btnGaleria").hide();
+        }
+        $("#btnsuubirarchivos").button().click(function() {
+            if ($("#ciduser").val() != "") {
+                // manualuploader.uploadStoredFiles();
+                // manualuploader.fineUploader('uploadStoredFiles');
+            }
+        });
+    });
+
+</script>

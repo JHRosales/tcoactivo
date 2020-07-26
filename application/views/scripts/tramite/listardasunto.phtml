@@ -1,0 +1,143 @@
+<style type="text/css">
+    input.uppercase {text-transform: uppercase}
+</style>
+<div id="panelListaDAsunto" align="center" style="width: 99%;margin: 3px;">
+    <table id="tblListaDAsunto"></table>
+    <div id="ptblListaDAsunto"></div>
+</div>
+<div id="container" style="display: none; min-width: 400px; height: 150px; margin: 0 auto"></div>
+<script type="text/javascript">
+    function aMays(e, elemento) {
+        tecla=(document.all) ? e.keyCode : e.which;
+        elemento.value = elemento.value.toUpperCase();
+    }
+    optionDAsunto = {
+        width: 980,
+        height: 300,
+        ignoreCase : true,
+        colNames: [
+            'idsigma',
+            'masunto',
+            'masunto_descri',
+            'ctipasunto',
+
+            'ctipccos',
+
+            'ctiptra',
+            'nestado',
+
+            'estacion',
+            'usuario_registro',
+            'fecha_registro',
+
+            'masunto_estado',
+
+            'Asunto',
+            'Dias',
+            'Centro de costo',
+        ],
+        colModel: [
+            {name: 'idsigma', index:'idsigma', hidden: true},
+            {name: 'masunto', index:'masunto', hidden: true},
+            {name: 'masunto_descri', index:'masunto_descri', hidden: true},
+            {name: 'ctipasunto', index:'ctipasunto', hidden: true},
+            {name: 'ctipccos', index:'ctipccos', hidden:true},
+            {name: 'ctiptra', index:'ctiptra', hidden:true},
+            {name: 'nestado', index:'nestado', hidden:true},
+            {name: 'estacion', index:'estacion', hidden:true},
+            {name: 'usuario_registro', index:'usuario_registro', hidden:true},
+            {name: 'fecha_registro', index:'fecha_registro', hidden:true},
+            {name: 'masunto_estado', index:'masunto_estado', hidden:true},
+            {
+                name: 'dtipoasunto',
+                index:'dtipoasunto',
+                width: 580,
+                searchoptions:{
+                    dataInit: function (el) {23
+                        $(el).css('text-transform', 'uppercase');
+                        $(el).keyup(function(){
+                            aMays(event, this);
+                        });
+                        $(el).blur(function(){
+                            aMays(event, this);
+                        });
+                    }
+                }
+            },
+            {name: 'ndias', index:'ndias', width: 30},
+            {name: 'dtipccos', index:'dtipccos', width: 350},
+
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Asuntos Registrados",
+        ondblClickRow: function(id){
+            row = $(this).getRowData(id);
+            $("#hddasunto").val(row.idsigma);
+            $("#txtdasunto").val(row.dtipoasunto);
+            //alert($("#cboccosini").val());
+            //$("#cboccosini").val(row.ctipccos);
+
+            // Destroy the combobox
+            $("#cboccosini").combobox("destroy");
+
+			// Unselect the currently selected option
+            $("#cboccosini option:selected").removeAttr("selected");
+
+			// Select the option you want to select
+            $("#cboccosini option[value='"+row.ctipccos+"']").attr("selected", "selected");
+
+			// Create the combobox again
+            $("#cboccosini").combobox();
+
+			
+			// Destroy the combobox
+            $("#cboctiprtram").combobox("destroy");
+
+            // Unselect the currently selected option
+            $("#cboctiprtram option:selected").removeAttr("selected");
+
+            // Select the option you want to select
+            $("#cboctiprtram option[value='"+row.ctiptra+"']").attr("selected", "selected");
+
+            // Create the combobox again
+            $("#cboctiprtram").combobox();
+			
+            closeDialog("jqDialog1");
+        },
+        onSelectRow: function(id) {
+            row = $(this).getRowData(id);
+        }
+    };
+
+    function buttonsGridDetalleAsunto(){
+        $("#tblListaDAsunto").jqGrid('navGrid', '#ptblListaDAsunto', {edit: false, add: false, del: false, search: false, refresh: false});
+        $("#tblListaDAsunto").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+
+    }
+
+    buscarDAsunto = function() {
+        var params = '['
+            + '["@p_masunto_estado","1"],'
+            + '["@p_idsigma","%"],'
+            + '["@p_masunto", "%"],'
+            + '["@p_ctiptra", "%<?php echo $this->ctiptra; ?>%"]'
+        +']';
+        parameters = {
+            "name": "tblListaDAsunto",
+            "procedure": "COACTIVO.listar_dasunto",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaDAsunto"
+            , "tblListaDAsunto"
+            , optionDAsunto
+            , parameters
+            , null
+            , buttonsGridDetalleAsunto);
+    };
+
+    $(function(){
+        buscarDAsunto();
+    });
+</script>

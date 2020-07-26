@@ -1,0 +1,140 @@
+<form id="frmexpedientescostas">
+
+    <table border="0" cellspacing="2px">
+        <tr>
+            <td colspan="5">
+                <input type="hidden" id="codmdocum" name="codmdocum" value="<?php echo $this->codmdocum; ?>">
+                <input type="hidden" id="idsigmaexpcos" name="idsigmaexpcos" value="<?php echo $this->idsigma; ?>">
+            </td>
+        </tr>
+        <tr>
+            <td><b>Fecha de Imposicion de la Costa</b></td>
+            <td>
+                <input type="text" id="tipodoc" name="tipodoc" class="ui-text-highlight" disabled size="20px">
+            </td>
+        </tr>
+    </table>
+
+        <div id="panelResultEC">
+            <table id="tblResultEC"></table>
+            <div id="ptblResultEC"></div>
+        </div>
+
+</form>
+
+
+<script type="text/javascript">
+    //Tabla costas contenido
+    themeComboBox("#cbofiltro_tipo");
+    $('#btnregresar').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog1');});
+
+    $("#txtfecdoc").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    function cambiar(){
+        if($("#cantidad").val()>=0 && $("#cantidad").val()!=undefined){
+            var monto= $("#txtmonto").val();
+            var cantid= $("#cantidad").val();
+            if(monto==''){
+                monto=0;
+            }
+            $("#txtcostas").val(monto*cantid);
+        }
+    }
+    function soloNumeros(e){
+        var key = window.Event ? e.which : e.keyCode
+        return (key >= 48 && key <= 57)
+    }
+
+        //++++++++++++++++
+        //-- -->INICIO EXPEDIENTES COSTAS
+        //
+        var navPanelCentroP3 = function() {
+            $("#tblResultEC").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+        };
+        optionCaja = {
+            width: 510,
+            height: 180,
+            colNames:['CODIGO','Docuemnto', '%UIT','Fecha'],
+            colModel:[
+                {name:'idsigma',index:'idsigma', width:90, sorttype:"int",align:'center',hidden:true, editable: false},
+                {name:'dtipodoc',index:'vdescri', width:430,editable: false},
+                {name:'nro',index:'cidcostas', width:70, editable: false,hidden:true},
+                {name:'fecha_creacion',index:'monto', width:80,sortable:false, editable: true}
+
+            ],
+            onSelectRow: function(){
+                var grid = $("#tblResultEC");
+                var rowid = grid.jqGrid('getGridParam','selrow');
+                var row = grid.jqGrid('getRowData', rowid);
+                $("#valuit").val('3950.00');
+                $("#uit").val('0');
+                $("#descrip").val(row.vdescri);
+                $("#codigo").val(row.idsigma);
+                $("#txtmonto").val(row.monto);
+                $("#montouit").val(row.monto);
+                $("#cantidad").val(1);
+                cambiar();
+                //closeDialog("jqDialogCargando");
+            },
+            caption:"Agregar Costas Procesales",
+            rowNum:20,
+            rownumbers:false,
+            ignoreCase:true,
+            viewrecords: false,
+            hidegrid: true,
+            gridComplete: function(){
+
+            },
+            afterInsertRow: function(rowid, aData){
+                switch (aData.nestado) {
+                    case '1':
+                        break;
+                    case '0':
+                        jQuery("#tblResultEC").jqGrid('setCell',rowid,'idsigma','',{color:'red'});
+                        jQuery("#tblResultEC").jqGrid('setCell',rowid,'vnrodocu','',{color:'red'});
+                        break;
+                }
+            }
+            // ondblClickRow: editCentro
+        };
+
+        xmanteUpdatemcaja = function(numberrow,_row){};
+        bindkeysCaja = {"onEnter": xmanteUpdatemcaja};
+        buscarc = function(mpoblad) {
+            valid = true;
+            if(valid==true) {
+                var params = {
+                    "name": "tblResult",
+                    "procedure": "coactivo.lst_documentos",
+                    "print": "true",
+                    "parameters": '{' +
+                    '"p_mdocument":"'+mpoblad+'"' +
+                    '}'
+                };
+                procesar = function(requestData){
+                    options = $.extend(optionCaja, {
+                        data: requestData,
+                        datatype: "local",
+                        gridComplete: function(){
+                            isGridComplete = true;
+                            $("#tblResultEC").jqGrid('setSelection', 1, true);
+                        }
+                    });
+                    procesarProcedimientoJSON('panelResultEC', 'tblResultEC', optionCaja, params, bindkeysCaja,navPanelCentroP3);
+                };
+                procesarConsultaSubProceso("registrar", params, procesar, 'json');
+            } else {
+                openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+            }
+        };
+
+        //++++++++++++++++
+        //-- -->FIN EXPEDIENTES COSTAS
+        //
+
+    $(function(){
+        var doc=$("#codmdocum").val();
+        buscarc(doc);
+    });
+
+
+</script>

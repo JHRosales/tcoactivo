@@ -1,0 +1,2496 @@
+2016-09-26 11:33:09 ERROR  : ERROR:  error de sintaxis en o cerca de «pccosto»
+LINE 1: pccosto
+        ^
+2016-09-26 11:37:46 ERROR  : ERROR:  error de sintaxis en o cerca de «END»
+LINE 24: ... WHEN pccosto = a.ccosdes THEN 'E' ELSE '<>' END  END bnd   ...
+                                                              ^
+2016-09-26 12:03:28 ERROR  : ERROR:  error de sintaxis en o cerca de «)»
+LINE 17: ...en pfdesde !='' THEN pfdesde else '01/01/1900' end));       ...
+                                                              ^
+2016-09-26 12:13:30 ERROR  : ERROR:  error de sintaxis en o cerca de «,»
+LINE 16:       CONVERT(CHAR(10),a.dfecenv,103) +' '+CONVERT(CHAR(5),a...
+                               ^
+2016-09-26 12:28:18 ERROR  : ERROR:  no existe la relación «tramite.mruta»
+LINE 31:   FROM TRAMITE.mruta a    
+                ^
+2016-09-26 12:28:49 ERROR  : ERROR:  no existe la relación «dbo.mconten»
+LINE 32: left join dbo.mconten b on a.ccosini =b.idsigma    
+                   ^
+2016-09-26 12:29:02 ERROR  : ERROR:  no existe la relación «coactivo.mconten»
+LINE 34: left join COACTIVO.mconten e on a.ctipacc = e.idsigma  
+                   ^
+2016-09-26 12:34:30 ERROR  : ERROR:  no existe la relación «dbo.mconten»
+LINE 1:   select * from dbo.mconten
+                        ^
+2016-09-26 12:44:50 ERROR  : ERROR:  error de sintaxis en o cerca de «(»
+LINE 20: (
+         ^
+2016-09-26 12:45:00 ERROR  : ERROR:  no existe el tipo «datetime»
+LINE 16:  ddatetm datetime NOT NULL,
+                  ^
+2016-09-26 12:45:30 ERROR  : ERROR:  no existe la función isnull(character varying, unknown)
+LINE 11:       ,isnull(b.vdescri,'') vcocsini    
+                ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-26 12:46:16 ERROR  : ERROR:  falta una entrada para la tabla «coactivo» en la cláusula FROM
+LINE 1: select COACTIVO.vw_mruta 
+               ^
+2016-09-26 12:52:46 ERROR  : ERROR:  error de sintaxis en o cerca de «BEGIN»
+LINE 7: DECLARE cmruta VARCHAR(500)
+                       ^
+CONTEXT:  el nombre de tipo «VARCHAR(500)
+BEGIN
+	select cmruta» no es válido
+2016-09-26 12:53:12 ERROR  : ERROR:  fin inesperado de la definición de la función al final de la entrada
+LINE 14: $BODY$
+         ^
+2016-09-26 12:53:30 ERROR  : ERROR:  error de sintaxis en o cerca de «RETURN»
+LINE 12: RETURN cmruta; 
+         ^
+2016-09-26 12:58:08 ERROR  : ERROR:  la consulta no tiene un destino para los datos de resultado
+HINT:  Si quiere descartar los resultados de un SELECT, utilice PERFORM.
+CONTEXT:  función PL/pgSQL coactivo.fx_nomusuario(character varying) en la línea 5 en sentencia SQL
+2016-09-26 12:59:08 ERROR  : ERROR:  la consulta no tiene un destino para los datos de resultado
+HINT:  Si quiere descartar los resultados de un SELECT, utilice PERFORM.
+CONTEXT:  función PL/pgSQL coactivo.fx_nomusuario(character varying) en la línea 5 en sentencia SQL
+2016-09-26 18:44:15 ERROR  : ERROR:  el identificador del archivo COPY no es reconocido
+2016-09-26 18:44:17 ERROR  : Copy failed!
+
+2016-09-26 18:44:24 ERROR  : ERROR:  secuencia de bytes no válida para codificación «UTF8»: 0xd0 0xcf
+CONTEXT:  COPY mconten, línea 1
+2016-09-26 18:44:27 ERROR  : Copy failed!
+
+2016-09-26 18:44:37 ERROR  : ERROR:  secuencia de bytes no válida para codificación «UTF8»: 0xd0 0xcf
+CONTEXT:  COPY mconten, línea 1
+2016-09-26 18:44:43 ERROR  : Copy failed!
+
+2016-09-26 18:50:01 ERROR  : ERROR:  el valor es demasiado largo para el tipo character(1)
+CONTEXT:  COPY mconten, línea 1, columna ctipdoc: «;;»
+2016-09-26 18:50:06 ERROR  : Copy failed!
+
+2016-09-26 18:51:06 ERROR  : ERROR:  la tabla «mconten» no tiene OIDs
+2016-09-26 18:51:08 ERROR  : no COPY in progress
+2016-09-26 18:51:09 ERROR  : Copy failed!
+
+2016-09-26 18:51:14 ERROR  : ERROR:  el valor es demasiado largo para el tipo character(1)
+CONTEXT:  COPY mconten, línea 1, columna ctipdoc: «;;»
+2016-09-26 18:51:16 ERROR  : Copy failed!
+
+2016-09-26 18:51:21 ERROR  : ERROR:  el valor es demasiado largo para el tipo character(1)
+CONTEXT:  COPY mconten, línea 1, columna ctipdoc: «;;»
+2016-09-26 18:51:33 ERROR  : Copy failed!
+
+2016-09-26 18:51:44 ERROR  : ERROR:  el valor es demasiado largo para el tipo character(1)
+CONTEXT:  COPY mconten, línea 1, columna ctipdoc: «;;»
+2016-09-26 18:51:46 ERROR  : Copy failed!
+
+2016-09-26 18:53:19 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:53:27 ERROR  : Copy failed!
+
+2016-09-26 18:53:37 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:53:38 ERROR  : Copy failed!
+
+2016-09-26 18:53:43 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:53:47 ERROR  : Copy failed!
+
+2016-09-26 18:55:39 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:55:41 ERROR  : Copy failed!
+
+2016-09-26 18:56:05 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:56:08 ERROR  : Copy failed!
+
+2016-09-26 18:57:48 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:57:50 ERROR  : Copy failed!
+
+2016-09-26 18:57:57 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:57:59 ERROR  : Copy failed!
+
+2016-09-26 18:58:08 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:58:09 ERROR  : Copy failed!
+
+2016-09-26 18:58:16 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «»
+CONTEXT:  COPY mconten, línea 1, columna nnregis: «»
+2016-09-26 18:58:17 ERROR  : Copy failed!
+
+2016-09-26 19:01:15 ERROR  : ERROR:  error de sintaxis en o cerca de «x0000A2C800430573»
+LINE 1: select CAST(0x0000A2C800430573 AS DateTime)
+                     ^
+2016-09-26 19:01:25 ERROR  : ERROR:  no existe el tipo «datetime»
+LINE 1: select CAST('0x0000A2C800430573' AS DateTime)
+                                            ^
+2016-09-26 19:04:30 ERROR  : ERROR:  error de sintaxis en o cerca de «AS»
+LINE 1: select to_char('0x0000A2C800430573' AS DateTime)
+                                            ^
+2016-09-26 19:04:39 ERROR  : ERROR:  error de sintaxis en o cerca de «date»
+LINE 1: select to_char('0x0000A2C800430573' date)
+                                            ^
+2016-09-26 19:04:48 ERROR  : ERROR:  error de sintaxis en o cerca de «as»
+LINE 1: select to_char('0x0000A2C800430573' as date)
+                                            ^
+2016-09-26 19:04:55 ERROR  : ERROR:  error de sintaxis en o cerca de «x0000A2C800430573»
+LINE 1: select to_char(0x0000A2C800430573 as date)
+                        ^
+2016-09-26 19:24:18 ERROR  : ERROR:  no se puede eliminar tabla coactivo.mconten porque otros objetos dependen de él
+DETAIL:  vista coactivo.vw_mruta depende de tabla coactivo.mconten
+HINT:  Use DROP ... CASCADE para eliminar además los objetos dependientes.
+2016-09-26 19:24:50 ERROR  : ERROR:  no se puede eliminar tabla coactivo.mconten porque otros objetos dependen de él
+DETAIL:  vista coactivo.vw_mruta depende de tabla coactivo.mconten
+HINT:  Use DROP ... CASCADE para eliminar además los objetos dependientes.
+2016-09-26 19:55:31 ERROR  : ERROR:  error de sintaxis en o cerca de «AS»
+LINE 2: ...ction COACTIVO.fx_usuarioCreoDocumento(mdocumento AS varchar...
+                                                             ^
+2016-09-26 19:58:06 ERROR  : ERROR:  error de sintaxis en o cerca de «mc1»
+LINE 10:  from COACTIVO.mconten mc1  mc1  
+                                     ^
+2016-09-26 20:01:22 ERROR  : ERROR:  error de sintaxis al final de la entrada
+LINE 4:  idsigma <> '0000000101'  and  
+                                       ^
+2016-09-26 20:22:54 ERROR  : ERROR:  no existe la columna «cidtabla»
+LINE 1: ...te coactivo.mconten set cidtabla = regexp_replace(cidtabla, ...
+                                                             ^
+2016-09-26 20:23:18 ERROR  : ERROR:  no existe la columna «cidtabla»
+LINE 1: ...te coactivo.mconten set cidtabla = regexp_replace(cidtabla, ...
+                                                             ^
+2016-09-26 20:24:26 ERROR  : ERROR:  no existe la columna «cidtabla»
+LINE 1: update coactivo.mconten set cidtabla = replace(cidtabla, 'T'...
+                                                       ^
+2016-09-26 20:24:56 ERROR  : ERROR:  no existe la columna «cidtabla»
+LINE 1:   select replace(cidtabla, 'T', '0') from coactivo.mconten
+                         ^
+2016-09-27 11:58:27 ERROR  : ERROR:  error de sintaxis en o cerca de «:=»
+LINE 13:  select areaact := max(ccosdes) from tramite.mruta where ids...
+                         ^
+2016-09-27 11:58:43 ERROR  : ERROR:  error de sintaxis en o cerca de «:=»
+LINE 16:  select cont1 := count(*) 
+                       ^
+2016-09-27 11:58:53 ERROR  : ERROR:  error de sintaxis en o cerca de «:=»
+LINE 20:  select cont2:=count(*) 
+                      ^
+2016-09-27 11:59:05 ERROR  : ERROR:  falta «THEN» al final de la expresión SQL
+LINE 30: ...' st ,'Transaccion correcta.' msj , pmdocumento AS  idsigma;
+                                                                       ^
+2016-09-27 11:59:21 ERROR  : ERROR:  falta «THEN» al final de la expresión SQL
+LINE 28: ...te.mdocumento set stconcluido='1' where idsigma=pmdocumento;
+                                                                       ^
+2016-09-27 11:59:26 ERROR  : ERROR:  falta «THEN» al final de la expresión SQL
+LINE 34: ...enviado a un área o usuario.' msj , pmdocumento AS  idsigma;
+                                                                       ^
+2016-09-27 11:59:33 ERROR  : ERROR:  falta «THEN» al final de la expresión SQL
+LINE 37:    return p_ref ; 
+                         ^
+2016-09-27 11:59:39 ERROR  : ERROR:  error de sintaxis en o cerca de «begin»
+LINE 25:  begin
+          ^
+2016-09-27 11:59:54 ERROR  : ERROR:  error de sintaxis en o cerca de «begin»
+LINE 25:  begin
+          ^
+2016-09-27 12:00:01 ERROR  : ERROR:  error de sintaxis en o cerca de «begin»
+LINE 25:  begin
+          ^
+2016-09-27 12:00:11 ERROR  : ERROR:  error de sintaxis en o cerca de «begin»
+LINE 25:  begin
+          ^
+2016-09-27 12:01:10 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 28:   update tramite.mdocumento set stconcluido='1' where idsigm...
+           ^
+2016-09-27 12:01:43 ERROR  : ERROR:  falta «THEN» al final de la expresión SQL
+LINE 29:        end if;
+                      ^
+2016-09-27 12:01:48 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 25:  update tramite.mdocumento set stconcluido='1' where idsigma...
+          ^
+2016-09-27 12:02:26 ERROR  : ERROR:  error de sintaxis en o cerca de «if»
+LINE 26:  if (cont1=1 and cont2=0)  
+          ^
+2016-09-27 12:03:11 ERROR  : ERROR:  error de sintaxis en o cerca de «if»
+LINE 26:  if (cont1=1 and cont2=0) then  
+          ^
+2016-09-27 12:03:23 ERROR  : ERROR:  fin inesperado de la definición de la función al final de la entrada
+LINE 35: $BODY$
+         ^
+2016-09-27 12:03:33 ERROR  : ERROR:  fin inesperado de la definición de la función al final de la entrada
+LINE 34: $BODY$
+         ^
+2016-09-27 12:07:00 ERROR  : ERROR:  error de sintaxis en o cerca de «open»
+LINE 27: open p_ref for 
+         ^
+2016-09-27 12:22:47 ERROR  : ERROR:  error de sintaxis en o cerca de «(»
+LINE 17:   into( p_mdocumento, p_mruta)
+               ^
+2016-09-27 12:23:22 ERROR  : ERROR:  error de sintaxis en o cerca de «end»
+LINE 49: end;
+         ^
+2016-09-27 12:23:34 ERROR  : ERROR:  error de sintaxis en o cerca de «return»
+LINE 51:    return p_ref ; 
+            ^
+2016-09-27 12:28:31 ERROR  : ERROR:  error de sintaxis en o cerca de «null»
+LINE 14:     set   pvusernm= null;
+                             ^
+2016-09-27 12:28:41 ERROR  : ERROR:  error de sintaxis en o cerca de «:=»
+LINE 14:     set   pvusernm := null;
+                            ^
+2016-09-27 12:35:53 ERROR  : ERROR:  error de sintaxis en o cerca de «'dstipdocu'»
+LINE 17: ...igma,dstr.ddocumento,mc.ctipdocu ,mctn.vdescri as 'dstipdocu...
+                                                              ^
+2016-09-27 12:36:12 ERROR  : ERROR:  error de sintaxis en o cerca de «'dstipestrdocu'»
+LINE 21:  ,replace(mctn2.vdescri,'Nº','Nro')as 'dstipestrdocu'    
+                                               ^
+2016-09-27 12:36:27 ERROR  : ERROR:  error de sintaxis en o cerca de «'vdatoitem'»
+LINE 22:  ,UPPER(dstr.vdescrip) as 'vdatoitem',mctn2.vobjeto tipdat f...
+                                   ^
+2016-09-27 12:48:47 ERROR  : ERROR:  error de sintaxis en o cerca de «(»
+LINE 12:  (
+          ^
+2016-09-27 12:54:54 ERROR  : ERROR:  error de sintaxis en o cerca de «now»
+LINE 2: timestamp now()))
+                  ^
+2016-09-27 12:57:56 ERROR  : ERROR:  error de sintaxis en o cerca de «(»
+LINE 12:  (
+          ^
+2016-09-27 12:58:06 ERROR  : ERROR:  error de sintaxis en o cerca de «p_docfech»
+LINE 16: ...  CASE WHEN (extract(days from (now() - timestamp p_docfech)...
+                                                              ^
+2016-09-27 12:58:12 ERROR  : ERROR:  error de sintaxis en o cerca de «p_docfech»
+LINE 16: ...  CASE WHEN (extract(days from (now() - timestamp p_docfech)...
+                                                              ^
+2016-09-27 14:57:57 ERROR  : ERROR:  error de sintaxis en o cerca de «p_docfech»
+LINE 1: select extract(days from (now() - timestamp p_docfech))
+                                                    ^
+2016-09-27 14:58:12 ERROR  : ERROR:  error de sintaxis en o cerca de «p_docfech»
+LINE 18:    WHEN (extract(days from (now() - timestamp p_docfech)) * ...
+                                                       ^
+2016-09-27 15:00:17 ERROR  : ERROR:  no existe la función coactivo.fnestadodocum(integer, timestamp without time zone)
+LINE 1: select  COACTIVO.fnEstadoDocum(23,timestamp '23/12/2015');
+                ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-27 15:22:01 ERROR  : ERROR:  error de sintaxis en o cerca de «BEGIN»
+LINE 4: DECLARE vdfecdocu VARCHAR(500)
+                          ^
+CONTEXT:  el nombre de tipo «VARCHAR(500)
+BEGIN
+
+
+SELECT vdfecdocu» no es válido
+2016-09-27 15:22:06 ERROR  : ERROR:  error de sintaxis en o cerca de «,»
+LINE 8: SELECT vdfecdocu=  CONVERT(VARCHAR(10), d.dfecdocu, 121)
+                                              ^
+2016-09-27 15:29:30 ERROR  : ERROR:  error de sintaxis en o cerca de «as»
+LINE 7: declare v_vtipdocu as varchar(500)='';
+                           ^
+CONTEXT:  el nombre de tipo «as varchar(500)» no es válido
+2016-09-27 15:29:42 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 9: declare varcursor cursor;  
+                                ^
+2016-09-27 15:29:53 ERROR  : ERROR:  error de sintaxis en o cerca de «as»
+LINE 9: declare varcursor as cursor;  
+                          ^
+CONTEXT:  el nombre de tipo «as cursor» no es válido
+2016-09-27 15:29:56 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 9: declare varcursor cursor;  
+                                ^
+2016-09-27 15:30:17 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 9: declare varcursor cursor;  
+                                ^
+2016-09-27 15:31:20 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 9: declare varcursor cursor;  
+                                ^
+2016-09-27 15:32:04 ERROR  : ERROR:  error de sintaxis en o cerca de «SELECT»
+LINE 12: varcursor := cursor for SELECT tdoc.vdescri,dd.vnrodocu FROM...
+                                 ^
+2016-09-27 15:32:09 ERROR  : ERROR:  error de sintaxis en o cerca de «SELECT»
+LINE 12: varcursor := cursor for SELECT tdoc.vdescri,dd.vnrodocu FROM...
+                                 ^
+2016-09-27 15:32:14 ERROR  : ERROR:  error de sintaxis en o cerca de «SELECT»
+LINE 12: varcursor := refcursor for SELECT tdoc.vdescri,dd.vnrodocu F...
+                                    ^
+2016-09-27 15:32:50 ERROR  : ERROR:  error de sintaxis en o cerca de «cursor»
+LINE 12: varcursor cursor for SELECT tdoc.vdescri,dd.vnrodocu FROM CO...
+                   ^
+2016-09-27 15:33:09 ERROR  : ERROR:  error de sintaxis en o cerca de «SELECT»
+LINE 12: varcursor = cursor for SELECT tdoc.vdescri,dd.vnrodocu FROM ...
+                                ^
+2016-09-27 15:33:28 ERROR  : ERROR:  error de sintaxis en o cerca de «SELECT»
+LINE 12: varcursor := cursor for SELECT tdoc.vdescri,dd.vnrodocu FROM...
+                                 ^
+2016-09-27 15:33:38 ERROR  : ERROR:  INTO fue especificado más de una vez en o cerca de «into»
+LINE 25:         fetch next from varcursor into  v_vtipdocu,v_vnrodoc...
+                                           ^
+2016-09-27 15:33:54 ERROR  : ERROR:  INTO fue especificado más de una vez en o cerca de «into»
+LINE 25:         fetch next from varcursor into  v_vtipdocu,v_vnrodoc...
+                                           ^
+2016-09-27 15:34:16 ERROR  : ERROR:  error de sintaxis en o cerca de «for»
+LINE 12: set varcursor = cursor for SELECT tdoc.vdescri,dd.vnrodocu F...
+                                ^
+2016-09-27 15:34:23 ERROR  : ERROR:  error de sintaxis en o cerca de «for»
+LINE 12: set varcursor = cursor for SELECT tdoc.vdescri,dd.vnrodocu F...
+                                ^
+2016-09-27 15:34:26 ERROR  : ERROR:  INTO fue especificado más de una vez en o cerca de «into»
+LINE 25:         fetch next from varcursor into  v_vtipdocu,v_vnrodoc...
+                                           ^
+2016-09-27 15:35:00 ERROR  : ERROR:  INTO fue especificado más de una vez en o cerca de «into»
+LINE 25:         fetch next from varcursor into  v_vtipdocu,v_vnrodoc...
+                                           ^
+2016-09-27 15:44:24 ERROR  : ERROR:  INTO fue especificado más de una vez en o cerca de «into»
+LINE 23:     fetch next from varcursor into  v_vtipdocu,v_vnrodocu   ...
+                                       ^
+2016-09-27 15:44:38 ERROR  : ERROR:  error de sintaxis en o cerca de «for»
+LINE 12: set varcursor = cursor for SELECT tdoc.vdescri,dd.vnrodocu F...
+                                ^
+2016-09-27 15:44:44 ERROR  : ERROR:  error de sintaxis en o cerca de «for»
+LINE 12: set varcursor = cursor for SELECT tdoc.vdescri,dd.vnrodocu F...
+                                ^
+2016-09-27 15:44:57 ERROR  : ERROR:  error de sintaxis en o cerca de «for»
+LINE 12: set varcursor = cursor for (SELECT tdoc.vdescri,dd.vnrodocu ...
+                                ^
+2016-09-27 15:45:09 ERROR  : ERROR:  error de sintaxis en o cerca de «(»
+LINE 12: varcursor = cursor for (SELECT tdoc.vdescri,dd.vnrodocu FROM...
+                                ^
+2016-09-27 15:45:12 ERROR  : ERROR:  error de sintaxis en o cerca de «(»
+LINE 12: varcursor := cursor for (SELECT tdoc.vdescri,dd.vnrodocu FRO...
+                                 ^
+2016-09-27 15:45:43 ERROR  : ERROR:  INTO fue especificado más de una vez en o cerca de «into»
+LINE 23:     fetch next from varcursor into  v_vtipdocu,v_vnrodocu   ...
+                                       ^
+2016-09-27 15:45:54 ERROR  : ERROR:  error de sintaxis en o cerca de «for»
+LINE 12: set varcursor = cursor for SELECT tdoc.vdescri,dd.vnrodocu F...
+                                ^
+2016-09-27 15:51:15 ERROR  : ERROR:  no existe la relación «resultado»
+CONTEXT:  compilación de la función PL/pgSQL «spu_seleccionadata» cerca de la línea 3
+2016-09-27 15:51:35 ERROR  : ERROR:  el nombre de tipo «resultado rowtype» no es válido
+LINE 5: declare v_rs resultado rowtype;
+                     ^
+2016-09-27 15:51:40 ERROR  : ERROR:  no existe la relación «resultado»
+CONTEXT:  compilación de la función PL/pgSQL «spu_seleccionadata» cerca de la línea 3
+2016-09-27 15:53:16 ERROR  : ERROR:  falta «FROM or IN» al final de la expresión SQL
+LINE 31: vvia_filaoriginal, vvia_filaeliminada , vusa_id;
+                                                        ^
+2016-09-27 15:54:45 ERROR  : ERROR:  falta «FROM or IN» al final de la expresión SQL
+LINE 31: vvia_filaoriginal, vvia_filaeliminada , vusa_id;
+                                                        ^
+2016-09-27 15:54:59 ERROR  : ERROR:  «vcursor» no es una variable conocida
+LINE 40: close vcursor;
+               ^
+2016-09-27 15:56:24 ERROR  : ERROR:  error de sintaxis en o cerca de «SELECT»
+LINE 12: varcursor = cursor for SELECT tdoc.vdescri,dd.vnrodocu FROM ...
+                                ^
+2016-09-27 15:57:19 ERROR  : ERROR:  falta una entrada para la tabla «coactivo» en la cláusula FROM
+LINE 1: select coactivo.spu_seleccionadata
+               ^
+2016-09-27 15:57:27 ERROR  : ERROR:  no existe la relación «sic_direccion.via»
+LINE 9: FROM sic_direccion.via
+             ^
+QUERY:  SELECT via_id ,
+via_descripcion,
+via_cantidadden ,
+via_verificado,
+via_filafecha ,
+via_filaoriginal ,
+via_filaeliminada ,
+usa_id
+FROM sic_direccion.via
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 26 en OPEN
+2016-09-27 15:58:00 ERROR  : ERROR:  no existe la relación «coactivo»
+LINE 2: select * from coactivo mconten;
+                      ^
+2016-09-27 15:59:34 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «TOLICITUD VERBAL»
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 28 en FETCH
+2016-09-27 15:59:47 ERROR  : ERROR:  la sintaxis de entrada no es válida para integer: «TOLICITUD VERBAL»
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 28 en FETCH
+2016-09-27 16:00:40 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo boolean: «T2»
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 28 en FETCH
+2016-09-27 16:01:15 ERROR  : ERROR:  no existe la relación «sic_direccion.viau»
+LINE 1: INSERT INTO sic_direccion.viaU (via_id, via_descripcion, via...
+                    ^
+QUERY:  INSERT INTO sic_direccion.viaU (via_id, via_descripcion, via_cantidadDen, via_verificado, via_filaFecha, via_filaOriginal, via_filaEliminada, usa_id)
+VALUES(vvia_id , vvia_descripcion , vvia_cantidadden, vvia_verificado , vvia_filafecha ,
+vvia_filaoriginal, vvia_filaeliminada , vusa_id)
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 33 en sentencia SQL
+2016-09-27 16:08:05 ERROR  : ERROR:  no existe la relación «sic_direccion.viau»
+LINE 1: INSERT INTO sic_direccion.viaU (via_id, via_descripcion, via...
+                    ^
+QUERY:  INSERT INTO sic_direccion.viaU (via_id, via_descripcion, via_cantidadDen, via_verificado, via_filaFecha, via_filaOriginal, via_filaEliminada, usa_id)
+VALUES(vvia_id , vvia_descripcion , vvia_cantidadden, vvia_verificado , vvia_filafecha ,
+vvia_filaoriginal, vvia_filaeliminada , vusa_id)
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 33 en sentencia SQL
+2016-09-27 16:08:18 ERROR  : ERROR:  no existe la relación «coactivo.viau»
+LINE 1: INSERT INTO coactivo.viaU (via_id, via_descripcion, via_cant...
+                    ^
+QUERY:  INSERT INTO coactivo.viaU (via_id, via_descripcion, via_cantidadDen, via_verificado, via_filaFecha, via_filaOriginal, via_filaEliminada, usa_id)
+VALUES(vvia_id , vvia_descripcion , vvia_cantidadden, vvia_verificado , vvia_filafecha ,
+vvia_filaoriginal, vvia_filaeliminada , vusa_id)
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 33 en sentencia SQL
+2016-09-27 16:24:26 ERROR  : ERROR:  el valor es demasiado largo para el tipo character varying(10)
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 28 en FETCH
+2016-09-27 16:25:26 ERROR  : ERROR:  el valor es demasiado largo para el tipo character varying(20)
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 28 en FETCH
+2016-09-27 16:25:37 ERROR  : ERROR:  el valor es demasiado largo para el tipo character varying(50)
+CONTEXT:  función PL/pgSQL coactivo.spu_seleccionadata() en la línea 28 en FETCH
+2016-09-27 16:34:24 ERROR  : ERROR:  «v_cursor» no es una variable conocida
+LINE 21: close v_cursor; 
+               ^
+2016-09-27 16:36:00 ERROR  : ERROR:  no existe la función len(unknown)
+LINE 2: select substring('jhimi',0,len('jhimi'));
+                                   ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-27 16:52:58 ERROR  : ERROR:  error de sintaxis en o cerca de «RETURN»
+LINE 12: RETURN vrecurrente;
+         ^
+2016-09-27 16:56:27 ERROR  : ERROR:  error de sintaxis en o cerca de «select»
+LINE 7: DECLARE cusuario_registro VARCHAR(500)
+                                  ^
+CONTEXT:  el nombre de tipo «VARCHAR(500)
+select cusuario_registro» no es válido
+2016-09-27 16:56:37 ERROR  : ERROR:  error de sintaxis en o cerca de «select»
+LINE 10:  select vdescri= mp.vpatern +' '+mp.vmatern+', '+mp.vnombre ...
+          ^
+2016-09-27 17:04:10 ERROR  : ERROR:  los parámetros de entrada después de uno que tenga valor por omisión también deben tener valores por omisión
+2016-09-27 17:05:01 ERROR  : ERROR:  los parámetros de entrada después de uno que tenga valor por omisión también deben tener valores por omisión
+2016-09-27 17:05:39 ERROR  : ERROR:  los parámetros de entrada después de uno que tenga valor por omisión también deben tener valores por omisión
+2016-09-27 17:06:14 ERROR  : ERROR:  los parámetros de entrada después de uno que tenga valor por omisión también deben tener valores por omisión
+2016-09-27 17:06:14 ERROR  : ERROR:  los parámetros de entrada después de uno que tenga valor por omisión también deben tener valores por omisión
+2016-09-27 17:06:32 ERROR  : ERROR:  los parámetros de entrada después de uno que tenga valor por omisión también deben tener valores por omisión
+2016-09-27 17:07:22 ERROR  : ERROR:  los parámetros de entrada después de uno que tenga valor por omisión también deben tener valores por omisión
+2016-09-27 17:07:28 ERROR  : ERROR:  los parámetros de entrada después de uno que tenga valor por omisión también deben tener valores por omisión
+2016-09-27 17:07:58 ERROR  : ERROR:  error de sintaxis en o cerca de «'idsigma'»
+LINE 34:  select p_idsigma as 'idsigma';
+                              ^
+2016-09-27 17:42:00 ERROR  : ERROR:  no existe la función coactivo.guardar_masunto(character varying, character varying, character varying, integer, character varying, character varying, character varying, refcursor)
+2016-09-27 18:06:37 ERROR  : ERROR:  error de sintaxis en o cerca de «,»
+LINE 19: , p_mdocumento character varying DEFAULT ''::character varyi...
+         ^
+2016-09-27 18:51:21 ERROR  : ERROR:  error de sintaxis en o cerca de «p_dtini»
+LINE 8: p_dtini character varying DEFAULT ''::character varying,
+        ^
+2016-09-27 18:51:21 ERROR  : ERROR:  error de sintaxis en o cerca de «p_dtini»
+LINE 8: p_dtini character varying DEFAULT ''::character varying,
+        ^
+2016-09-27 18:51:30 ERROR  : ERROR:  error de sintaxis en o cerca de «#»
+LINE 16:  INTO #tmpExpedientes
+               ^
+2016-09-27 19:03:16 ERROR  : ERROR:  error de sintaxis en o cerca de «#»
+LINE 2:  INTO #tmpExpedientes
+              ^
+2016-09-27 19:03:31 ERROR  : ERROR:  no existe la columna «tmpexpedientes»
+LINE 1:  select tmpExpedientes
+                ^
+2016-09-27 19:03:47 ERROR  : ERROR:  no existe la relación «coactivo.mcontent»
+LINE 3:   FROM coactivo.mcontent a 
+               ^
+2016-09-27 19:03:57 ERROR  : ERROR:  error de sintaxis en o cerca de «temp»
+LINE 2:   drop temp tmpExpedientes
+               ^
+2016-09-27 19:04:07 ERROR  : ERROR:  no existe la relación «coactivo.mcontent»
+LINE 3:   FROM coactivo.mcontent a 
+               ^
+2016-09-27 19:04:20 ERROR  : ERROR:  no existe la relación «coactivo.mcontent»
+LINE 3:   FROM coactivo.mcontent
+               ^
+2016-09-27 19:06:04 ERROR  : ERROR:  «temp» no es una variable conocida
+LINE 16:  INTO temp tmpExpedientes
+               ^
+2016-09-27 19:06:44 ERROR  : ERROR:  «temporary» no es una variable conocida
+LINE 16:  INTO temporary tmpExpedientes
+               ^
+2016-09-27 19:06:53 ERROR  : ERROR:  «temp» no es una variable conocida
+LINE 16:  INTO temp tmpExpedientes
+               ^
+2016-09-27 19:06:57 ERROR  : ERROR:  «tmpexpedientes» no es una variable conocida
+LINE 16:  INTO  tmpExpedientes
+                ^
+2016-09-27 19:07:49 ERROR  : ERROR:  «temp» no es una variable conocida
+LINE 16:  INTO temp tmpExpedientes
+               ^
+2016-09-27 19:07:55 ERROR  : ERROR:  «temp» no es una variable conocida
+LINE 16:  INTO temp tmpExpedientes
+               ^
+2016-09-27 19:08:27 ERROR  : ERROR:  «temp» no es una variable conocida
+LINE 16:  INTO temp tmpExpedientes
+               ^
+2016-09-27 19:11:36 ERROR  : ERROR:  «temp» no es una variable conocida
+LINE 49:  into temp query  
+               ^
+2016-09-27 19:12:13 ERROR  : ERROR:  error de sintaxis en o cerca de «,»
+LINE 39:   , convert(char(10), a.dfecdocu, 103) as dfecdocu
+                             ^
+2016-09-30 12:26:53 ERROR  : ERROR:  error de sintaxis en o cerca de «create»
+LINE 50:   create temporary table tmpExpedientes  as      
+           ^
+2016-09-30 12:27:05 ERROR  : ERROR:  error de sintaxis en o cerca de «clustered»
+LINE 107:  create clustered index ix_tmpexpedientes_mdocumento on tmpE...
+                  ^
+2016-09-30 15:01:00 ERROR  : ERROR:  error de sintaxis en o cerca de «'pref'»
+LINE 1: ...ar_mdocumento('','','','','','','pref'); fetch all in 'pref'
+                                                                 ^
+2016-09-30 15:01:15 ERROR  : ERROR:  error de sintaxis en o cerca de «'pref'»
+LINE 1: ...mdocumento('','','','','','','','pref'); fetch all in 'pref'
+                                                                 ^
+2016-09-30 15:01:21 ERROR  : ERROR:  error de sintaxis en o cerca de «'pref'»
+LINE 1: ...documento('','','','','','','','pref'); fetch all in 'pref';
+                                                                ^
+2016-09-30 15:01:29 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 2: ...documento('','','','','','','','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:01:35 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumento(unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown)
+LINE 1: select COACTIVO.listar_mdocumento('','','','','','','','refc...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 15:02:08 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:02:11 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:02:18 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:02:36 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:02:36 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:02:37 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:03:05 ERROR  : ERROR:  no existe la tabla «tmpexpedientes»
+2016-09-30 15:03:40 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 1: ...mdocumento('','','','','','sg','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:03:40 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 3: ...mdocumento('','','','','','sg','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:04:03 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 1: ...mdocumento('','','','','','sg','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:04:17 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 1: ...ivo.obtener_tabla('0000000006','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:04:17 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 1: ...ivo.obtener_tabla('0000000006','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:04:17 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 1: ...ivo.obtener_tabla('0000000006','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:04:17 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 1: ...ivo.obtener_tabla('0000000006','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:04:18 ERROR  : ERROR:  error de sintaxis en o cerca de «'refc'»
+LINE 1: ...ivo.obtener_tabla('0000000006','refc'); fetch all in 'refc';
+                                                                ^
+2016-09-30 15:20:09 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:20:25 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:20:26 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:20:26 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:20:49 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:20:49 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:20:52 ERROR  : ERROR:  no existe la tabla «tmpexpedientes»
+2016-09-30 15:20:55 ERROR  : ERROR:  no se puede hacer DROP TABLE en «tmpexpedientes» porque está siendo usada por consultas activas en esta sesión
+CONTEXT:  sentencia SQL: «DROP TABLE tmpExpedientes»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 105 en sentencia SQL
+2016-09-30 15:21:37 ERROR  : ERROR:  no se puede hacer DROP TABLE en «tmpexpedientes» porque está siendo usada por consultas activas en esta sesión
+CONTEXT:  sentencia SQL: «DROP TABLE tmpExpedientes»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 105 en sentencia SQL
+2016-09-30 15:21:46 ERROR  : ERROR:  la relación «tmpexpedientes» ya existe
+CONTEXT:  sentencia SQL: «create temporary table tmpExpedientes as
+	SELECT d.idsigma mdocumento
+	--INTO #tmpExpedientes
+	FROM COACTIVO.mruta a  
+	INNER JOIN COACTIVO.mdocumento d on a.mdocumento = d.idsigma  
+	INNER JOIN COACTIVO.dasunto f ON d.dasunto = f.idsigma
+	WHERE a.idsigma IN 
+		(
+			SELECT idsigma FROM 
+				(
+					SELECT MAX(a.idsigma) idsigma,a.mdocumento   
+					FROM COACTIVO.mruta a  
+					GROUP BY  a.mdocumento
+				) tb
+		) AND 
+	a.ccosdes LIKE '%' || p_ccosdes || '%'AND
+	(
+		case when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 75 then
+			'PENDIENTES'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) < 100 then
+			'OBSERVADOS'
+		when (extract(days from (now() -  d.dfecdocu)) * 100/f.ndias) >= 100 then
+			'VENCIDOS'
+		end
+	) LIKE  '%' || p_vestado || '%' AND
+	d.idsigma like '%' || p_idsigma || '%' AND
+	d.vnrodocu like '%' || p_vnrodocu || '%' AND
+	d.mperson like '%' || p_mperson || '%' AND
+	coalesce(d.centrega,'') LIKE '%' || p_centrega || '%'»
+función PL/pgSQL coactivo.listar_mdocumento(character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 3 en sentencia SQL
+2016-09-30 15:22:02 ERROR  : ERROR:  error de sintaxis en o cerca de «if»
+LINE 1: DROP if exists TABLE tmpExpedientes;
+             ^
+2016-09-30 15:22:05 ERROR  : ERROR:  error de sintaxis en o cerca de «if»
+LINE 2: DROP if exists TABLE tmpExpedientes;
+             ^
+2016-09-30 15:22:28 ERROR  : ERROR:  error de sintaxis en o cerca de «if»
+LINE 1:  if exists DROP TABLE tmpExpedientes;
+         ^
+2016-09-30 16:05:16 ERROR  : ERROR:  no existe la función coactivo.listar_dasunto(unknown, unknown, unknown, unknown, unknown, unknown, unknown)
+LINE 1: select COACTIVO.listar_dasunto('1','','','','','','refc');
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 16:27:11 ERROR  : ERROR:  no existe la función year(timestamp with time zone)
+LINE 1:  select YEAR(NOW())
+                ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 16:27:20 ERROR  : ERROR:  no existe la función year(timestamp with time zone)
+LINE 1:  select year(now())
+                ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 16:37:15 ERROR  : ERROR:  error de sintaxis en o cerca de «end»
+LINE 96:   end IF; 
+           ^
+2016-09-30 17:00:22 ERROR  : ERROR:  no existe la función replicate(unknown, integer)
+LINE 1:  select replicate('0',8)
+                ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 17:08:58 ERROR  : ERROR:  los tipos character y integer no son coincidentes en COALESCE
+LINE 1: ...string('0000000000' || cast(cast(coalesce(idsigma,0) as inte...
+                                                             ^
+2016-09-30 17:10:37 ERROR  : ERROR:  los tipos character y integer no son coincidentes en COALESCE
+LINE 2: ...string('0000000000' || cast(cast(coalesce(idsigma,0) as inte...
+                                                             ^
+2016-09-30 17:21:26 ERROR  : ERROR:  error de sintaxis en o cerca de «'COMUN'»
+LINE 1: ...activo.correldocum values ('0000000121' ,'2016', 0 'COMUN');
+                                                              ^
+2016-09-30 17:25:13 ERROR  : ERROR:  error de sintaxis al final de la entrada
+LINE 3:   inner join COACTIVO.mconten b on a.ctiprtra = b.
+                                                          ^
+2016-09-30 17:25:38 ERROR  : ERROR:  una cadena de caracteres entre comillas está inconclusa en o cerca de «'TNT»
+LINE 1: ...pdate  COACTIVO.mconten set vobjeto='INT' WHERE vobjeto='TNT
+                                                                   ^
+2016-09-30 17:25:45 ERROR  : ERROR:  una cadena de caracteres entre comillas está inconclusa en o cerca de «'TNT»
+LINE 1: ...pdate  COACTIVO.mconten set vobjeto='INT' WHERE vobjeto='TNT
+                                                                   ^
+2016-09-30 17:30:00 ERROR  : ERROR:  no existe la función ltrim(unknown, unknown, unknown)
+LINE 1: select ltrim('fecha','f','t')
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 17:30:03 ERROR  : ERROR:  no existe la función ltrim(unknown, unknown, unknown)
+LINE 1: select ltrim('fecha','f','t')
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 17:30:16 ERROR  : ERROR:  no existe la función left(unknown, unknown, unknown)
+LINE 1: select left('fecha','f','t')
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 17:30:29 ERROR  : ERROR:  no existe la función right(unknown, unknown, unknown)
+LINE 1: select right('fecha','f','t')
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 17:35:17 ERROR  : ERROR:  una cadena de caracteres entre comillas está inconclusa en o cerca de «'TECHA%»
+LINE 1: select * from  COACTIVO.mconten where vdescri like 'TECHA%
+                                                           ^
+2016-09-30 17:40:51 ERROR  : ERROR:  una cadena de caracteres entre comillas está inconclusa en o cerca de «'TORMAL%»
+LINE 1: ...i=regexp_replace(vdescri,'T','N')WHERE vdescri like 'TORMAL%
+                                                               ^
+2016-09-30 17:40:51 ERROR  : ERROR:  error de sintaxis en o cerca de «select»
+LINE 9:    select substring('00000000' || cast(0 as varchar) from '....
+           ^
+2016-09-30 18:06:58 ERROR  : ERROR:  no existe la relación «coactivo.masundo»
+LINE 1: SELECT * FROM COACTIVO.MASUNDO
+                      ^
+2016-09-30 19:06:47 ERROR  : ERROR:  error de sintaxis en o cerca de «'2014-05-02 00:00:00.000'»
+LINE 2: VALUES('0000000001' ,'PROCESO COACTIVO' ,1 '2014-05-02 00:00...
+                                                   ^
+2016-09-30 19:09:18 ERROR  : ERROR:  inserción o actualización en la tabla «dasunto» viola la llave foránea «fk__dasunto__ctipasu__28»
+DETAIL:  La llave (ctipasunto)=(0000001010) no está presente en la tabla «mconten».
+2016-09-30 19:25:44 ERROR  : ERROR:  no existe la relación «seguridad.areas»
+LINE 2:  SELECT * FROM SEGURIDAD.AREAS
+                       ^
+2016-09-30 19:25:49 ERROR  : ERROR:  error de sintaxis en o cerca de «p_ref»
+LINE 17:    return p_ref ; 
+                   ^
+2016-09-30 19:28:04 ERROR  : ERROR:  no existe la columna «nestado»
+LINE 3:  WHERE nestado != '0' 
+               ^
+2016-09-30 20:02:32 ERROR  : ERROR:  la restricción «fk__mruta__ccosdes__3c» para la relación «mruta» ya existe
+2016-09-30 20:09:54 ERROR  : ERROR:  no existe la columna b.vdescri
+LINE 8:       ,coalesce(b.vdescri,'') vcocsini    
+                        ^
+2016-09-30 20:10:27 ERROR  : ERROR:  no existe la columna b.area
+LINE 9:       ,coalesce(b.area,'') vcocsini    
+                        ^
+2016-09-30 20:14:20 ERROR  : ERROR:  falta una entrada para la tabla «coactivo» en la cláusula FROM
+LINE 1: select coactivo.vw_ruta
+               ^
+2016-09-30 20:14:20 ERROR  : ERROR:  falta una entrada para la tabla «coactivo» en la cláusula FROM
+LINE 3: select coactivo.vw_ruta
+               ^
+2016-09-30 20:14:24 ERROR  : ERROR:  falta una entrada para la tabla «coactivo» en la cláusula FROM
+LINE 1: select coactivo.vw_mruta
+               ^
+2016-09-30 20:15:45 ERROR  : ERROR:  no existe la relación «tramite.mruta»
+LINE 1: select min(idsigma)               from  tramite.mruta 
+                                                ^
+QUERY:  select min(idsigma)               from  tramite.mruta 
+	where mdocumento=mdocumento and ccosdes=ccosdes
+CONTEXT:  función PL/pgSQL coactivo.fx_primerpasoxarea(character varying,character varying) en la línea 4 en sentencia SQL
+2016-09-30 20:16:46 ERROR  : ERROR:  la referencia a la columna «mdocumento» es ambigua
+LINE 2:  where mdocumento=mdocumento and ccosdes=ccosdes
+               ^
+DETAIL:  Podría referirse tanto a una variable PL/pgSQL como a una columna de una tabla.
+QUERY:  select min(idsigma)               from  coactivo.mruta 
+	where mdocumento=mdocumento and ccosdes=ccosdes
+CONTEXT:  función PL/pgSQL coactivo.fx_primerpasoxarea(character varying,character varying) en la línea 4 en sentencia SQL
+2016-09-30 20:17:21 ERROR  : ERROR:  la referencia a la columna «mdocumento» es ambigua
+LINE 2:  where a.mdocumento=mdocumento and a.ccosdes=ccosdes
+                            ^
+DETAIL:  Podría referirse tanto a una variable PL/pgSQL como a una columna de una tabla.
+QUERY:  select min(idsigma)               from  coactivo.mruta a
+	where a.mdocumento=mdocumento and a.ccosdes=ccosdes
+CONTEXT:  función PL/pgSQL coactivo.fx_primerpasoxarea(character varying,character varying) en la línea 4 en sentencia SQL
+2016-09-30 20:17:33 ERROR  : ERROR:  la referencia a la columna «mdocumento» es ambigua
+LINE 2:  where a.mdocumento=mdocumento and a.ccosdes=ccosdes
+                            ^
+DETAIL:  Podría referirse tanto a una variable PL/pgSQL como a una columna de una tabla.
+QUERY:  select min(idsigma)               from  coactivo.mruta a
+	where a.mdocumento=mdocumento and a.ccosdes=ccosdes
+CONTEXT:  función PL/pgSQL coactivo.fx_primerpasoxarea(character varying,character varying) en la línea 4 en sentencia SQL
+2016-09-30 20:17:53 ERROR  : ERROR:  no se puede cambiar el nombre del parámetro de entrada «mdocumento»
+HINT:  Use DROP FUNCTION coactivo.fx_primerpasoxarea(character varying,character varying) primero.
+2016-09-30 20:18:00 ERROR  : ERROR:  no se puede cambiar el nombre del parámetro de entrada «mdocumento»
+HINT:  Use DROP FUNCTION coactivo.fx_primerpasoxarea(character varying,character varying) primero.
+2016-09-30 23:00:40 ERROR  : ERROR:  no existe la función seguridad.login(unknown, unknown)
+LINE 1: select seguridad.login('JHIMI','123');
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-09-30 23:36:18 ERROR  : ERROR:  falta una entrada para la tabla «a» en la cláusula FROM
+LINE 5:         a.vdescri ,  
+                ^
+2016-09-30 23:36:25 ERROR  : ERROR:  no existe la relación «dbo.mconten»
+LINE 9: INNER JOIN dbo.mconten a ON u.cidarea=a.idsigma 
+                   ^
+2016-09-30 23:36:35 ERROR  : ERROR:  falta una entrada para la tabla «p» en la cláusula FROM
+LINE 7:         p.vpatern ||' '|| p.vmatern + ', ' || p.vnombre AS v...
+                ^
+2016-09-30 23:37:15 ERROR  : ERROR:  no existe la columna a.vdescri
+LINE 5:         a.vdescri ,  
+                ^
+2016-09-30 23:37:37 ERROR  : ERROR:  el operador no existe: character varying + unknown
+LINE 7:         p.vpatern ||' '|| p.vmatern + ', ' || p.vnombre AS v...
+                                            ^
+HINT:  Ningún operador coincide con el nombre y el tipo de los argumentos. Puede ser necesario agregar conversiones explícitas de tipos.
+2016-09-30 23:59:22 ERROR  : ERROR:  los tipos character y integer no son coincidentes en COALESCE
+LINE 1: select  coalesce(MAX(idsigma),0) from coactivo.druta
+                                      ^
+2016-10-01 00:04:57 ERROR  : ERROR:  error de sintaxis en o cerca de «WITH      
+ (»
+LINE 3:  FROM OPENXML (handle,'d/r',1)WITH      
+                                      ^
+2016-10-01 00:05:12 ERROR  : ERROR:  no existe la columna «handle»
+LINE 3:  FROM OPENXML (handle,'d/r',1) 
+                       ^
+2016-10-01 00:05:28 ERROR  : ERROR:  no existe la función openxml(unknown, unknown, integer)
+LINE 3:  FROM OPENXML ('<R>JHIMI</R>','d/r',1)
+              ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-01 13:57:38 ERROR  : ERROR:  la lista de definición de columnas es obligatoria para funciones que retornan «record»
+LINE 2:   from stringtotable('|0000000268|2016|4704.67|0000000278|00...
+               ^
+2016-10-01 13:57:50 ERROR  : ERROR:  la lista de definición de columnas es obligatoria para funciones que retornan «record»
+LINE 2:   from public.stringtotable('|0000000268|2016|4704.67|000000...
+               ^
+2016-10-01 13:58:21 ERROR  : ERROR:  wrong record type supplied in RETURN NEXT
+DETAIL:  La cantidad de columnas retornadas (13) no coincide con la cantidad esperada de columnas (14).
+CONTEXT:  función PL/pgSQL stringtotable(character varying,character varying,character varying) en la línea 19 en RETURN NEXT
+2016-10-01 13:58:54 ERROR  : ERROR:  wrong record type supplied in RETURN NEXT
+DETAIL:  La cantidad de columnas retornadas (12) no coincide con la cantidad esperada de columnas (14).
+CONTEXT:  función PL/pgSQL stringtotable(character varying,character varying,character varying) en la línea 19 en RETURN NEXT
+2016-10-01 13:58:55 ERROR  : ERROR:  wrong record type supplied in RETURN NEXT
+DETAIL:  La cantidad de columnas retornadas (12) no coincide con la cantidad esperada de columnas (14).
+CONTEXT:  función PL/pgSQL stringtotable(character varying,character varying,character varying) en la línea 19 en RETURN NEXT
+2016-10-01 13:59:21 ERROR  : ERROR:  wrong record type supplied in RETURN NEXT
+DETAIL:  La cantidad de columnas retornadas (13) no coincide con la cantidad esperada de columnas (14).
+CONTEXT:  función PL/pgSQL stringtotable(character varying,character varying,character varying) en la línea 19 en RETURN NEXT
+2016-10-01 14:01:22 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 3: ...s(id varchar,cidpers varchar,cperanio varchar,monto varchar;
+                                                                      ^
+2016-10-01 14:19:28 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 66:  return p_ref;;
+                       ^
+2016-10-01 15:18:40 ERROR  : ERROR:  error de sintaxis en o cerca de «declare»
+LINE 9:  DECLARE handle INT            
+                        ^
+CONTEXT:  el nombre de tipo «INT            
+  declare maxdet as int 
+BEGIN
+
+create temporary table t_registros (correlativo int ,
+	 xmdocumento varchar(12),
+	 xccocsini varchar(20)
+	  ) on commit drop» no es válido
+2016-10-01 15:37:08 ERROR  : ERROR:  inserción o actualización en la tabla «mruta» viola la llave foránea «fk__mruta__ccosini__3d»
+DETAIL:  La llave (ccosini)=(0000000003) no está presente en la tabla «mconten».
+2016-10-01 15:37:25 ERROR  : ERROR:  inserción o actualización en la tabla «mruta» viola la llave foránea «fk__mruta__ccosini__3d»
+DETAIL:  La llave (ccosini)=(0000000003) no está presente en la tabla «mconten».
+2016-10-01 15:38:30 ERROR  : ERROR:  inserción o actualización en la tabla «mruta» viola la llave foránea «fk__mruta__ccosini__3d»
+DETAIL:  La llave (ccosini)=(0000000307) no está presente en la tabla «area».
+2016-10-01 15:39:56 ERROR  : ERROR:  no existe la columna b.vdescri
+LINE 11:       ,coalesce(b.vdescri,'') vcocsini    
+                         ^
+2016-10-01 16:44:14 ERROR  : ERROR:  no existe la relación «coacivo.mdocumento»
+LINE 1: SELECT * FROM COACIVO.MDOCUMENTO
+                      ^
+2016-10-01 17:48:15 ERROR  : ERROR:  no existe la relación «tramite.mruta»
+LINE 2: select coalesce(MAX(idsigma),0)  from tramite.mruta;
+                                              ^
+2016-10-01 17:48:22 ERROR  : ERROR:  los tipos character y integer no son coincidentes en COALESCE
+LINE 2: select coalesce(MAX(idsigma),0)  from coactivo.mruta;
+                                     ^
+2016-10-01 17:58:35 ERROR  : ERROR:  error de sintaxis en o cerca de «max»
+LINE 27: xvobserv varchar(max)
+                          ^
+2016-10-01 17:58:53 ERROR  : ERROR:  error de sintaxis en o cerca de «INTO»
+LINE 74: INSERT INTO coactivo.mruta    
+                ^
+2016-10-01 18:56:29 ERROR  : ERROR:  no existe la columna «vmdocumentprinc»
+LINE 4:               ,coactivo.fx_vnrodocu (vmdocumentprinc) vnrodo...
+                                             ^
+2016-10-01 18:56:59 ERROR  : ERROR:  no existe la relación «dbo.mconten»
+LINE 1: SELECT vdescri  = vdescri FROM dbo.mconten WHERE idsigma=ccc...
+                                       ^
+QUERY:  SELECT vdescri  = vdescri FROM dbo.mconten WHERE idsigma=cccosto
+CONTEXT:  función PL/pgSQL coactivo.fx_centrocosto(character varying) en la línea 5 en sentencia SQL
+2016-10-01 18:57:06 ERROR  : ERROR:  no existe la relación «dbo.mconten»
+LINE 1: SELECT vdescri  = vdescri FROM dbo.mconten WHERE idsigma=ccc...
+                                       ^
+QUERY:  SELECT vdescri  = vdescri FROM dbo.mconten WHERE idsigma=cccosto
+CONTEXT:  función PL/pgSQL coactivo.fx_centrocosto(character varying) en la línea 5 en sentencia SQL
+2016-10-01 18:58:22 ERROR  : ERROR:  error de sintaxis en o cerca de «coactivo»
+LINE 4:              coactivo.fx_vnrodocu ('0000000001') vnrodocu   ...
+                     ^
+2016-10-01 18:58:28 ERROR  : ERROR:  la referencia a la columna «mdocumento» es ambigua
+LINE 1: ...= vnrodocu FROM COACTIVO.mdocumento WHERE idsigma=mdocumento
+                                                             ^
+DETAIL:  Podría referirse tanto a una variable PL/pgSQL como a una columna de una tabla.
+QUERY:  SELECT vdesDocu  = vnrodocu FROM COACTIVO.mdocumento WHERE idsigma=mdocumento
+CONTEXT:  función PL/pgSQL coactivo.fx_vnrodocu(character varying) en la línea 4 en sentencia SQL
+2016-10-01 18:59:47 ERROR  : ERROR:  la consulta no tiene un destino para los datos de resultado
+HINT:  Si quiere descartar los resultados de un SELECT, utilice PERFORM.
+CONTEXT:  función PL/pgSQL coactivo.fx_vnrodocu(character varying) en la línea 4 en sentencia SQL
+2016-10-01 19:00:08 ERROR  : ERROR:  la consulta no tiene un destino para los datos de resultado
+HINT:  Si quiere descartar los resultados de un SELECT, utilice PERFORM.
+CONTEXT:  función PL/pgSQL coactivo.fx_vnrodocu(character varying) en la línea 4 en sentencia SQL
+2016-10-01 19:01:04 ERROR  : ERROR:  error de sintaxis en o cerca de «,»
+LINE 6:               -,coactivo.fx_CentroCosto('0000000003')  AS vc...
+                       ^
+2016-10-01 19:01:10 ERROR  : ERROR:  no existe la relación «dbo.mconten»
+LINE 1: SELECT vdescri  = vdescri FROM dbo.mconten WHERE idsigma=ccc...
+                                       ^
+QUERY:  SELECT vdescri  = vdescri FROM dbo.mconten WHERE idsigma=cccosto
+CONTEXT:  función PL/pgSQL coactivo.fx_centrocosto(character varying) en la línea 5 en sentencia SQL
+2016-10-01 19:01:43 ERROR  : ERROR:  no existe la relación «dbo.mconten»
+LINE 1: SELECT vdescri  = vdescri FROM dbo.mconten WHERE idsigma=ccc...
+                                       ^
+QUERY:  SELECT vdescri  = vdescri FROM dbo.mconten WHERE idsigma=cccosto
+CONTEXT:  función PL/pgSQL coactivo.fx_centrocosto(character varying) en la línea 5 en sentencia SQL
+2016-10-01 19:02:24 ERROR  : ERROR:  la referencia a la columna «vdescri» es ambigua
+LINE 1: SELECT vdescri              FROM coactivo.mconten WHERE idsi...
+               ^
+DETAIL:  Podría referirse tanto a una variable PL/pgSQL como a una columna de una tabla.
+QUERY:  SELECT vdescri              FROM coactivo.mconten WHERE idsigma=cccosto
+CONTEXT:  función PL/pgSQL coactivo.fx_centrocosto(character varying) en la línea 5 en sentencia SQL
+2016-10-01 19:05:01 ERROR  : ERROR:  no existe la relación «tramite.mdocumento»
+LINE 1: select ctiprtram=ctiprtram from  tramite.mdocumento where id...
+                                         ^
+QUERY:  select ctiprtram=ctiprtram from  tramite.mdocumento where idsigma=mdocumento
+CONTEXT:  función PL/pgSQL coactivo.fx_tipotramite(character varying) en la línea 5 en sentencia SQL
+2016-10-01 19:06:12 ERROR  : ERROR:  no existe la columna «ctiprtram»
+LINE 1: SELECT ctiprtram
+               ^
+QUERY:  SELECT ctiprtram
+CONTEXT:  función PL/pgSQL coactivo.fx_tipotramite(character varying) en la línea 6 en RETURN
+2016-10-01 19:09:16 ERROR  : ERROR:  no existe la columna «ctiprtram»
+LINE 1: SELECT ctiprtram
+               ^
+QUERY:  SELECT ctiprtram
+CONTEXT:  función PL/pgSQL coactivo.fx_tipotramite(character varying) en la línea 7 en RETURN
+2016-10-01 19:09:17 ERROR  : ERROR:  no existe la columna «ctiprtram»
+LINE 1: SELECT ctiprtram
+               ^
+QUERY:  SELECT ctiprtram
+CONTEXT:  función PL/pgSQL coactivo.fx_tipotramite(character varying) en la línea 7 en RETURN
+2016-10-01 19:09:17 ERROR  : ERROR:  no existe la columna «ctiprtram»
+LINE 1: SELECT ctiprtram
+               ^
+QUERY:  SELECT ctiprtram
+CONTEXT:  función PL/pgSQL coactivo.fx_tipotramite(character varying) en la línea 7 en RETURN
+2016-10-01 19:09:40 ERROR  : ERROR:  no existe la columna «ctiprtram»
+LINE 1: SELECT ctiprtram
+               ^
+QUERY:  SELECT ctiprtram
+CONTEXT:  función PL/pgSQL coactivo.fx_tipotramite(character varying) en la línea 7 en RETURN
+2016-10-01 19:10:26 ERROR  : ERROR:  no existe la relación «tramite.mruta»
+LINE 1: select cmruta=min(idsigma) from  tramite.mruta where mdocume...
+                                         ^
+QUERY:  select cmruta=min(idsigma) from  tramite.mruta where mdocumento=mdocumento
+CONTEXT:  función PL/pgSQL coactivo.fx_primerpaso(character varying) en la línea 4 en sentencia SQL
+2016-10-01 19:11:28 ERROR  : ERROR:  la referencia a la columna «mdocumento» es ambigua
+LINE 1: ..._registro from coactivo.mdocumento  where idsigma=mdocumento
+                                                             ^
+DETAIL:  Podría referirse tanto a una variable PL/pgSQL como a una columna de una tabla.
+QUERY:  select cusuario_registro=usuario_registro from coactivo.mdocumento  where idsigma=mdocumento
+CONTEXT:  función PL/pgSQL coactivo.fx_usuariodocumento(character varying) en la línea 7 en sentencia SQL
+2016-10-01 19:17:10 ERROR  : ERROR:  una cadena separada por $ está inconclusa en o cerca de «$BODY$   
+DECLARE v2isLeaf INTEGER = 0;   
+DECLARE vidsigmamin AS VARCHAR(10);  
+DECLARE vmdocumentprinc AS VARCHAR(10);     
+DECLARE vidnew0 AS VARCHAR(100)  ;
+DECLARE vmdocumento VARCHAR(10) ;   
+DECLARE vidnew1 AS VARCHAR(100) ;   
+DECLARE cursor AS CURSOR ; 
+DECLARE v2rownumber AS INT= 0  ;  
+DECLARE v2mdocumento AS VARCHAR(10)= ''  ;  
+DECLARE v2idsigmamruta AS VARCHAR(10)= ''  ;  
+DECLARE v2vnrodocu AS VARCHAR(200)= ''    ;
+DECLARE v2ccosini AS VARCHAR(10)= '';    
+DECLARE v2vcocsini AS VARCHAR(500)= '' ;   
+DECLARE v2ccosdes AS VARCHAR(10)= '' ;   
+DECLARE v2vcocsdes AS VARCHAR(500)= '' ;  
+DECLARE v2dfecenv AS VARCHAR(100)= '';    
+DECLARE v2dfecrecep AS VARCHAR(100)= '' ;   
+declare v2stcierre as varchar(1)='';
+DECLARE v2ccosiniBefore  AS VARCHAR(10)= '';
+DECLARE v2ccosdesBefore AS VARCHAR(10)= '';
+DECLARE cccostoCreador varchar(10)=''; 
+DECLARE bCcostoCreador char(1)='1';
+declare v2idrowfirst as int =0;
+DECLARE vidnew2 AS VARCHAR(100)   ; 
+DECLARE cursor2 AS CURSOR   ;  
+declare vdescripCCosto as varchar(400);
+
+DECLARE v3cdruta AS VARCHAR(100)= ''    
+DECLARE v3mruta AS VARCHAR(100)= ''    
+DECLARE v3musuario AS VARCHAR(100)= ''    
+DECLARE v3dfecenv AS VARCHAR(100)= ''    
+DECLARE v3dfecrecep AS VARCHAR(100)= ''    
+DECLARE v3dfecdevol AS VARCHAR(100)= ''    
+DECLARE v3tecnico AS VARCHAR(100)= ''    
+DECLARE vidnew3 AS VARCHAR(100)    
+DECLARE cursor3 AS CURSOR  
+
+ BEGIN  
+set nocount on    
+  
+set language Spanish
+    DECLARE tblarbol AS TABLE    
+        (    
+          idtbl INT IDENTITY ,    
+          vdescrip VARCHAR(500) ,    
+          [level] INT ,    
+          isLeaf VARCHAR(100) ,    
+          expanded VARCHAR(100) ,    
+          loaded VARCHAR(100) ,    
+          id VARCHAR(100) ,    
+          parent VARCHAR(100) ,    
+          cruta VARCHAR(10) ,    
+          mdocumento VARCHAR(10) ,    
+          vnrodocu VARCHAR(500) ,    
+          ccosini VARCHAR(10) ,    
+          vccosini VARCHAR(500) ,    
+          ccosdes VARCHAR(10) ,    
+          vcocsdes VARCHAR(500) ,    
+          dfecenv VARCHAR(100) ,    
+          dfecrecep datetime ,    
+          orden INT,    
+          fechasalida datetime default null,    
+          cdruta varchar(10) default '',    
+          cidsigma varchar(10) default '',    
+          ctipjerar  varchar(10) default '',
+		  isEditable varchar(1) default '1'
+        )    
+    
+    
+    
+    SELECT   MIN(idsigma)  into vidsigmamin  
+    FROM    coactivo.mruta  WHERE   mruta = pmruta ;       
+
+    SELECT  mdocumento    into vmdocumentprinc 
+    FROM    coactivo.mruta   WHERE   idsigma = vidsigmamin ;   
+    
+    
+   
+    vidnew0 := CAST(NEWID() AS VARCHAR(500));
+        
+    INSERT  INTO tblarbol    
+            ( vdescrip ,    
+              [level] ,    
+              isLeaf ,    
+              expanded ,    
+              loaded ,    
+              id ,    
+              parent ,    
+              cruta ,    
+              mdocumento ,    
+              vnrodocu ,    
+              ccosini ,    
+              vccosini ,    
+              ccosdes ,    
+              vcocsdes ,    
+              dfecenv ,    
+              dfecrecep ,    
+              orden   ,
+			  isEditable 
+            )    
+    VALUES  ( coactivo.fx_vnrodocu(vmdocumentprinc) ,    
+              '0' ,    
+              'false' ,    
+              'true' ,    
+              'true' ,    
+              vidnew0 ,    
+              '' ,    
+              '' ,    
+              vmdocumentprinc ,    
+              coactivo.fx_vnrodocu(vmdocumentprinc) ,    
+              '' ,    
+              '' ,    
+              '' ,    
+              '' ,    
+              '' ,    
+              '' ,    
+              0 ,
+	      '1'   
+            )    
+    
+    
+    
+ 
+    
+    
+    SET cursor = CURSOR FOR SELECT  mdocumento FROM coactivo.mruta WHERE mruta=pmruta GROUP BY mdocumento    
+    OPEN cursor    
+    
+    FETCH NEXT FROM cursor INTO vmdocumento    
+    
+    WHILE fetch_status = 0     
+        BEGIN    
+  --PRINT vmdocumento
+            vidnew1 := CAST(NEWID() AS VARCHAR(500));    
+
+            INSERT  INTO tblarbol    
+                    ( vdescrip ,    
+                      [level] ,    
+                      isLeaf ,    
+                      expanded ,    
+                      loaded ,    
+                      id ,    
+                      parent ,    
+                      cruta ,    
+                      mdocumento ,    
+                      vnrodocu ,    
+                      ccosini ,    
+                      vccosini ,    
+                      ccosdes ,    
+                      vcocsdes ,    
+                      dfecenv ,    
+                      dfecrecep ,    
+                      orden,    
+                      cidsigma ,    
+                        ctipjerar,
+						isEditable   
+                    )    
+            VALUES  ( tramite.fx_vnrodocu(vmdocumento) ,
+                      '1' ,
+                      'false' ,
+                      'true' ,
+                      'true' ,
+                      vidnew1 ,
+                      vidnew0 ,
+                      '' ,
+                      vmdocumento ,
+                      tramite.fx_vnrodocu(vmdocumento) ,
+                      '' ,
+                      '' ,    
+                      '' ,    
+                      '' ,    
+                      '' ,    
+                      '' ,    
+                      0,    
+                      vmdocumento,    
+                      '0000000130',
+					  '1'    
+                    )    
+
+            SET cursor2 = CURSOR FOR SELECT ROW_NUMBER() OVER (order by r.idsigma)  rownumber    
+											   ,r.mdocumento     
+											   ,r.idsigma idsigmamruta    
+											   ,coactivo.fx_vnrodocu (vmdocumentprinc) vnrodocu    
+											   ,r.ccosini    
+											   ,coactivo.fx_CentroCosto(r.ccosini)  AS vcocsini    
+											   ,r.ccosdes    
+											   ,case when coactivo.fx_tipoTramite(r.mdocumento )='0000000287' and coactivo.fx_primerPaso(r.mdocumento)=r.idsigma then coactivo.fx_usuarioDocumento(r.mdocumento) else coactivo.fx_CentroCosto(r.ccosdes) end AS vcocsdes
+											   ,to_char(r.dfecenv,'dd/MM/yyyy')dfecenv    
+											   ,to_char(r.dfecrecep,'dd/MM/yyyy')dfecrecep
+											   ,r.stcierre
+										FROM COACTIVO.mruta r     
+									  WHERE r.mdocumento =vmdocumento order by r.idsigma;    
+            OPEN cursor2    
+            FETCH NEXT FROM cursor2 INTO v2rownumber,v2mdocumento ,v2idsigmamruta,v2vnrodocu,v2ccosini,v2vcocsini,v2ccosdes,v2vcocsdes,v2dfecenv,v2dfecrecep,v2stcierre  
+            WHILE fetch_status = 0     
+                BEGIN   
+		print 'v2ccosiniBefore : '+v2ccosiniBefore + ' - v2ccosdesBefore : ' + v2ccosdesBefore + '   ------    ' +'v2ccosini : '+v2ccosini + ' - v2ccosdes : ' + v2ccosdes;
+                        
+
+		SELECT  COUNT(*) into v2isLeaf    
+		FROM    tramite.druta   WHERE   mruta = v2idsigmamruta  ;  
+
+		IF v2rownumber = 1   then                           
+		cccostoCreador:=v2ccosdes;
+		END  if;  
+		
+     vidnew2 := CAST(NEWID() AS VARCHAR(500));    
+		
+		--print bCcostoCreador
+		--print cccostoCreador
+
+			if (cccostoCreador=v2ccosini and coactivo.fx_tipoTramite(v2mdocumento )='0000000287' and bCcostoCreador='1') then			 
+				vdescripCCosto:=coactivo.fx_usuarioDocumento(v2mdocumento); 			 
+			 else			 
+				vdescripCCosto:= v2vcocsini;
+				bCcostoCreador:=case when v2rownumber > 1 then '2' else '1' end;
+			end if;
+		
+         
+		 
+     update tblarbol  set fechasalida =v2dfecenv where idtbl=v2idrowfirst     
+                    INSERT  INTO tblarbol    
+                            ( vdescrip ,    
+                              [level] ,    
+                              isLeaf ,    
+                              expanded ,    
+                              loaded ,    
+                              id ,    
+                              parent ,    
+2016-10-01 19:50:51 ERROR  : ERROR:  una cadena separada por $ está inconclusa en o cerca de «$BODY$   
+DECLARE v2isLeaf INTEGER = 0;   
+DECLARE vidsigmamin AS VARCHAR(10);  
+DECLARE vmdocumentprinc AS VARCHAR(10);     
+DECLARE vidnew0 AS VARCHAR(100)  ;
+DECLARE vmdocumento VARCHAR(10) ;   
+DECLARE vidnew1 AS VARCHAR(100) ;   
+DECLARE cursor AS CURSOR ; 
+DECLARE v2rownumber AS INT= 0  ;  
+DECLARE v2mdocumento AS VARCHAR(10)= ''  ;  
+DECLARE v2idsigmamruta AS VARCHAR(10)= ''  ;  
+DECLARE v2vnrodocu AS VARCHAR(200)= ''    ;
+DECLARE v2ccosini AS VARCHAR(10)= '';    
+DECLARE v2vcocsini AS VARCHAR(500)= '' ;   
+DECLARE v2ccosdes AS VARCHAR(10)= '' ;   
+DECLARE v2vcocsdes AS VARCHAR(500)= '' ;  
+DECLARE v2dfecenv AS VARCHAR(100)= '';    
+DECLARE v2dfecrecep AS VARCHAR(100)= '' ;   
+declare v2stcierre as varchar(1)='';
+DECLARE v2ccosiniBefore  AS VARCHAR(10)= '';
+DECLARE v2ccosdesBefore AS VARCHAR(10)= '';
+DECLARE cccostoCreador varchar(10)=''; 
+DECLARE bCcostoCreador char(1)='1';
+declare v2idrowfirst as int =0;
+DECLARE vidnew2 AS VARCHAR(100)   ; 
+DECLARE cursor2 AS CURSOR   ;  
+declare vdescripCCosto as varchar(400);
+
+DECLARE v3cdruta AS VARCHAR(100)= ''    
+DECLARE v3mruta AS VARCHAR(100)= ''    
+DECLARE v3musuario AS VARCHAR(100)= ''    
+DECLARE v3dfecenv AS VARCHAR(100)= ''    
+DECLARE v3dfecrecep AS VARCHAR(100)= ''    
+DECLARE v3dfecdevol AS VARCHAR(100)= ''    
+DECLARE v3tecnico AS VARCHAR(100)= ''    
+DECLARE vidnew3 AS VARCHAR(100)    
+DECLARE cursor3 AS CURSOR  
+
+ BEGIN  
+set nocount on    
+  
+set language Spanish
+    DECLARE tblarbol AS TABLE    
+        (    
+          idtbl INT IDENTITY ,    
+          vdescrip VARCHAR(500) ,    
+          [level] INT ,    
+          isLeaf VARCHAR(100) ,    
+          expanded VARCHAR(100) ,    
+          loaded VARCHAR(100) ,    
+          id VARCHAR(100) ,    
+          parent VARCHAR(100) ,    
+          cruta VARCHAR(10) ,    
+          mdocumento VARCHAR(10) ,    
+          vnrodocu VARCHAR(500) ,    
+          ccosini VARCHAR(10) ,    
+          vccosini VARCHAR(500) ,    
+          ccosdes VARCHAR(10) ,    
+          vcocsdes VARCHAR(500) ,    
+          dfecenv VARCHAR(100) ,    
+          dfecrecep datetime ,    
+          orden INT,    
+          fechasalida datetime default null,    
+          cdruta varchar(10) default '',    
+          cidsigma varchar(10) default '',    
+          ctipjerar  varchar(10) default '',
+		  isEditable varchar(1) default '1'
+        )    
+    
+    
+    
+    SELECT   MIN(idsigma)  into vidsigmamin  
+    FROM    coactivo.mruta  WHERE   mruta = pmruta ;       
+
+    SELECT  mdocumento    into vmdocumentprinc 
+    FROM    coactivo.mruta   WHERE   idsigma = vidsigmamin ;   
+    
+    
+   
+    vidnew0 := CAST(NEWID() AS VARCHAR(500));
+        
+    INSERT  INTO tblarbol    
+            ( vdescrip ,    
+              [level] ,    
+              isLeaf ,    
+              expanded ,    
+              loaded ,    
+              id ,    
+              parent ,    
+              cruta ,    
+              mdocumento ,    
+              vnrodocu ,    
+              ccosini ,    
+              vccosini ,    
+              ccosdes ,    
+              vcocsdes ,    
+              dfecenv ,    
+              dfecrecep ,    
+              orden   ,
+			  isEditable 
+            )    
+    VALUES  ( coactivo.fx_vnrodocu(vmdocumentprinc) ,    
+              '0' ,    
+              'false' ,    
+              'true' ,    
+              'true' ,    
+              vidnew0 ,    
+              '' ,    
+              '' ,    
+              vmdocumentprinc ,    
+              coactivo.fx_vnrodocu(vmdocumentprinc) ,    
+              '' ,    
+              '' ,    
+              '' ,    
+              '' ,    
+              '' ,    
+              '' ,    
+              0 ,
+	      '1'   
+            )    
+    
+    
+    
+ 
+    
+    
+    SET cursor = CURSOR FOR SELECT  mdocumento FROM coactivo.mruta WHERE mruta=pmruta GROUP BY mdocumento    
+    OPEN cursor    
+    
+    FETCH NEXT FROM cursor INTO vmdocumento    
+    
+    WHILE fetch_status = 0     
+        BEGIN    
+  --PRINT vmdocumento
+            vidnew1 := CAST(NEWID() AS VARCHAR(500));    
+
+            INSERT  INTO tblarbol    
+                    ( vdescrip ,    
+                      [level] ,    
+                      isLeaf ,    
+                      expanded ,    
+                      loaded ,    
+                      id ,    
+                      parent ,    
+                      cruta ,    
+                      mdocumento ,    
+                      vnrodocu ,    
+                      ccosini ,    
+                      vccosini ,    
+                      ccosdes ,    
+                      vcocsdes ,    
+                      dfecenv ,    
+                      dfecrecep ,    
+                      orden,    
+                      cidsigma ,    
+                        ctipjerar,
+						isEditable   
+                    )    
+            VALUES  ( coactivo.fx_vnrodocu(vmdocumento) ,
+                      '1' ,
+                      'false' ,
+                      'true' ,
+                      'true' ,
+                      vidnew1 ,
+                      vidnew0 ,
+                      '' ,
+                      vmdocumento ,
+                      coactivo.fx_vnrodocu(vmdocumento) ,
+                      '' ,
+                      '' ,    
+                      '' ,    
+                      '' ,    
+                      '' ,    
+                      '' ,    
+                      0,    
+                      vmdocumento,    
+                      '0000000130',
+					  '1'    
+                    )    
+
+            SET cursor2 = CURSOR FOR SELECT ROW_NUMBER() OVER (order by r.idsigma)  rownumber    
+											   ,r.mdocumento     
+											   ,r.idsigma idsigmamruta    
+											   ,coactivo.fx_vnrodocu (vmdocumentprinc) vnrodocu    
+											   ,r.ccosini    
+											   ,coactivo.fx_CentroCosto(r.ccosini)  AS vcocsini    
+											   ,r.ccosdes    
+											   ,case when coactivo.fx_tipoTramite(r.mdocumento )='0000000287' and coactivo.fx_primerPaso(r.mdocumento)=r.idsigma then coactivo.fx_usuarioDocumento(r.mdocumento) else coactivo.fx_CentroCosto(r.ccosdes) end AS vcocsdes
+											   ,to_char(r.dfecenv,'dd/MM/yyyy')dfecenv    
+											   ,to_char(r.dfecrecep,'dd/MM/yyyy')dfecrecep
+											   ,r.stcierre
+										FROM COACTIVO.mruta r     
+									  WHERE r.mdocumento =vmdocumento order by r.idsigma;    
+            OPEN cursor2    
+            FETCH NEXT FROM cursor2 INTO v2rownumber,v2mdocumento ,v2idsigmamruta,v2vnrodocu,v2ccosini,v2vcocsini,v2ccosdes,v2vcocsdes,v2dfecenv,v2dfecrecep,v2stcierre  
+            WHILE fetch_status = 0     
+                BEGIN   
+		print 'v2ccosiniBefore : '+v2ccosiniBefore + ' - v2ccosdesBefore : ' + v2ccosdesBefore + '   ------    ' +'v2ccosini : '+v2ccosini + ' - v2ccosdes : ' + v2ccosdes;
+                        
+
+		SELECT  COUNT(*) into v2isLeaf    
+		FROM    tramite.druta   WHERE   mruta = v2idsigmamruta  ;  
+
+		IF v2rownumber = 1   then                           
+		cccostoCreador:=v2ccosdes;
+		END  if;  
+		
+     vidnew2 := CAST(NEWID() AS VARCHAR(500));    
+		
+		--print bCcostoCreador
+		--print cccostoCreador
+
+			if (cccostoCreador=v2ccosini and coactivo.fx_tipoTramite(v2mdocumento )='0000000287' and bCcostoCreador='1') then			 
+				vdescripCCosto:=coactivo.fx_usuarioDocumento(v2mdocumento); 			 
+			 else			 
+				vdescripCCosto:= v2vcocsini;
+				bCcostoCreador:=case when v2rownumber > 1 then '2' else '1' end;
+			end if;
+		
+         
+		 
+     update tblarbol  set fechasalida =v2dfecenv where idtbl=v2idrowfirst;
+          
+                    INSERT  INTO tblarbol    
+                            ( vdescrip ,    
+                              [level] ,    
+                              isLeaf ,    
+                              expanded ,    
+                              loaded ,    
+                              id ,    
+                              par
+2016-10-01 19:52:41 ERROR  : ERROR:  error de sintaxis en o cerca de «AS»
+LINE 7: DECLARE vidsigmamin AS VARCHAR(10);  
+                            ^
+CONTEXT:  el nombre de tipo «AS VARCHAR(10)» no es válido
+2016-10-01 19:52:52 ERROR  : ERROR:  error de sintaxis en o cerca de «AS»
+LINE 8: DECLARE vmdocumentprinc AS VARCHAR(10);     
+                                ^
+CONTEXT:  el nombre de tipo «AS VARCHAR(10)» no es válido
+2016-10-01 19:53:16 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 12: DECLARE cursor1  CURSOR ; 
+                                 ^
+2016-10-01 19:53:22 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 12: DECLARE cursor1  CURSOR; 
+                                ^
+2016-10-01 19:53:29 ERROR  : ERROR:  error de sintaxis en o cerca de «;»
+LINE 30: DECLARE cursor2  CURSOR   ;  
+                                   ^
+2016-10-01 19:53:37 ERROR  : ERROR:  error de sintaxis en o cerca de «as»
+LINE 31: declare vdescripCCosto as varchar(400);
+                                ^
+CONTEXT:  el nombre de tipo «as varchar(400)» no es válido
+2016-10-01 19:54:05 ERROR  : ERROR:  error de sintaxis en o cerca de «Spanish»
+LINE 46: set language Spanish
+                      ^
+2016-10-01 19:54:34 ERROR  : ERROR:  error de sintaxis en o cerca de «IDENTITY»
+LINE 49:           idtbl INT IDENTITY ,    
+                             ^
+2016-10-01 19:54:44 ERROR  : ERROR:  error de sintaxis en o cerca de «IDENTITY»
+LINE 49:           idtbl INTeger IDENTITY ,    
+                                 ^
+2016-10-01 20:02:05 ERROR  : ERROR:  error de sintaxis en o cerca de «[»
+LINE 51:           [level] INT ,    
+                   ^
+2016-10-01 20:02:10 ERROR  : ERROR:  error de sintaxis en o cerca de «[»
+LINE 88:               [level] ,    
+                       ^
+2016-10-01 20:02:15 ERROR  : ERROR:  error de sintaxis en o cerca de «SET»
+LINE 131:     SET cursor = CURSOR FOR SELECT  mdocumento FROM coactivo...
+              ^
+2016-10-01 20:03:13 ERROR  : ERROR:  error de sintaxis en o cerca de «open»
+LINE 131:     open cursor1  FOR SELECT  mdocumento FROM coactivo.mruta...
+              ^
+2016-10-01 20:03:21 ERROR  : ERROR:  error de sintaxis en o cerca de «Open»
+LINE 131:     Open cursor1  FOR SELECT  mdocumento FROM coactivo.mruta...
+              ^
+2016-10-01 20:03:38 ERROR  : ERROR:  error de sintaxis, se esperaba «FOR» en o cerca de «FETCH»
+LINE 133:      FETCH NEXT FROM cursor1 INTO vmdocumento;    
+               ^
+2016-10-01 20:11:11 ERROR  : ERROR:  error de sintaxis, se esperaba «FOR» en o cerca de «;»
+LINE 132:    open cursor1;
+                         ^
+2016-10-01 20:11:24 ERROR  : ERROR:  error de sintaxis en o cerca de «[»
+LINE 142:                       [level] ,    
+                                ^
+2016-10-01 20:11:32 ERROR  : ERROR:  error de sintaxis, se esperaba «FOR» en o cerca de «;»
+LINE 199:             OPEN cursor2 ;
+                                   ^
+2016-10-01 20:11:39 ERROR  : ERROR:  error de sintaxis en o cerca de «[»
+LINE 231:                               [level] ,    
+                                        ^
+2016-10-01 20:11:44 ERROR  : ERROR:  error de sintaxis, se esperaba «FOR» en o cerca de «;»
+LINE 293:                     OPEN cursor3;
+                                          ^
+2016-10-01 20:11:49 ERROR  : ERROR:  error de sintaxis en o cerca de «[»
+LINE 362:             [level] ,    
+                      ^
+2016-10-01 20:21:48 ERROR  : ERROR:  no existe la relación «tramite.druta»
+LINE 1: SELECT  COUNT(*)                      FROM    tramite.druta ...
+                                                      ^
+QUERY:  SELECT  COUNT(*)                      FROM    tramite.druta   WHERE   mruta = v2idsigmamruta
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 202 en sentencia SQL
+2016-10-01 20:23:26 ERROR  : ERROR:  la columna «fechasalida» es de tipo timestamp with time zone pero la expresión es de tipo character varying
+LINE 1: update tblarbol  set fechasalida =v2dfecenv where idtbl=v2id...
+                                          ^
+HINT:  Necesitará reescribir la expresión o aplicarle una conversión de tipo.
+QUERY:  update tblarbol  set fechasalida =v2dfecenv where idtbl=v2idrowfirst
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 223 en sentencia SQL
+2016-10-01 20:26:16 ERROR  : ERROR:  la columna «dfecrecep» es de tipo timestamp with time zone pero la expresión es de tipo character varying
+LINE 41:                               v2dfecrecep ,    
+                                       ^
+HINT:  Necesitará reescribir la expresión o aplicarle una conversión de tipo.
+QUERY:  INSERT  INTO tblarbol    
+                            ( vdescrip ,    
+                              level ,    
+                              isLeaf ,    
+                              expanded ,    
+                              loaded ,    
+                              id ,    
+                              parent ,    
+                              cruta ,    
+                              mdocumento ,    
+                              vnrodocu ,    
+                              ccosini ,    
+                              vccosini ,    
+                              ccosdes ,    
+                              vcocsdes ,    
+                              dfecenv ,    
+                              dfecrecep ,    
+                              orden ,    
+                              fechasalida,    
+                              cidsigma ,
+                              ctipjerar,
+			      isEditable
+                            )    
+                    VALUES  ( v2vcocsdes,
+                              '2' ,    
+                              CASE WHEN v2isLeaf > 0 THEN 'false'    
+                                   ELSE 'true'    
+                              END ,    
+                              'true' ,    
+                              'true' ,    
+                              vidnew2 ,    
+                              vidnew1 ,    
+                              v2idsigmamruta ,    
+                              v2mdocumento ,    
+                              v2vnrodocu ,    
+                              v2ccosini ,    
+			      vdescripCCosto ,
+                              v2ccosdes ,    
+                              v2vcocsdes ,    
+                              v2dfecenv ,    
+                              v2dfecrecep ,    
+                              0 ,    
+                              null,    
+                              v2idsigmamruta,    
+                              '0000000131' ,
+				case when v2stcierre='1' then '0' else '1' end 
+                            )
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 225 en sentencia SQL
+2016-10-01 20:27:02 ERROR  : ERROR:  no existe la columna «identity»
+LINE 1: SELECT IDENTITY
+               ^
+QUERY:  SELECT IDENTITY
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 272 en asignación
+2016-10-01 20:27:18 ERROR  : ERROR:  la columna «dfecrecep» es de tipo timestamp with time zone pero la expresión es de tipo character varying
+LINE 40:                                       v3dfecrecep ,    
+                                               ^
+HINT:  Necesitará reescribir la expresión o aplicarle una conversión de tipo.
+QUERY:  INSERT  INTO tblarbol    
+				     ( vdescrip ,  
+                                      level ,    
+                                      isLeaf ,    
+                                      expanded ,    
+                                      loaded ,    
+                                      id ,    
+                                      parent ,    
+                                      cruta ,    
+                                      mdocumento ,    
+                                      vnrodocu ,    
+                                      ccosini ,    
+                                      vccosini ,    
+                                      ccosdes ,    
+                                      vcocsdes ,    
+                                      dfecenv ,    
+                                      dfecrecep ,    
+                                      fechasalida,    
+                                      orden,    
+                                      cdruta,    
+                                      cidsigma ,   
+				      ctipjerar, 
+				     isEditable   
+                                    )    
+                            VALUES  ( v3tecnico ,    
+                                      '3' ,    
+                                      'true' ,    
+                                      'true' ,    
+                                      'true' ,    
+                                      vidnew3 ,    
+                                      vidnew2 ,    
+                                      '' ,    
+                                      v2mdocumento ,    
+                                      v2vnrodocu ,    
+                                      '' ,    
+                                      '' ,    
+                                      '' ,    
+                                      '' ,    
+                                      v3dfecenv ,    
+                                      v3dfecrecep ,    
+                                      v3dfecdevol,--fecha salida    
+                                      0,    
+                                      v3cdruta,    
+                                      v3cdruta,    
+                                      '0000000132',
+				       case when coalesce(v3dfecdevol,'') ='' then '1' else '0' end
+                                    )
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 296 en sentencia SQL
+2016-10-01 20:27:47 ERROR  : ERROR:  la columna «fechasalida» es de tipo timestamp with time zone pero la expresión es de tipo character varying
+LINE 41:                                       v3dfecdevol,--fecha sa...
+                                               ^
+HINT:  Necesitará reescribir la expresión o aplicarle una conversión de tipo.
+QUERY:  INSERT  INTO tblarbol    
+				     ( vdescrip ,  
+                                      level ,    
+                                      isLeaf ,    
+                                      expanded ,    
+                                      loaded ,    
+                                      id ,    
+                                      parent ,    
+                                      cruta ,    
+                                      mdocumento ,    
+                                      vnrodocu ,    
+                                      ccosini ,    
+                                      vccosini ,    
+                                      ccosdes ,    
+                                      vcocsdes ,    
+                                      dfecenv ,    
+                                      dfecrecep ,    
+                                      fechasalida,    
+                                      orden,    
+                                      cdruta,    
+                                      cidsigma ,   
+				      ctipjerar, 
+				     isEditable   
+                                    )    
+                            VALUES  ( v3tecnico ,    
+                                      '3' ,    
+                                      'true' ,    
+                                      'true' ,    
+                                      'true' ,    
+                                      vidnew3 ,    
+                                      vidnew2 ,    
+                                      '' ,    
+                                      v2mdocumento ,    
+                                      v2vnrodocu ,    
+                                      '' ,    
+                                      '' ,    
+                                      '' ,    
+                                      '' ,    
+                                      v3dfecenv ,    
+                                      v3dfecrecep::date ,    
+                                      v3dfecdevol,--fecha salida    
+                                      0,    
+                                      v3cdruta,    
+                                      v3cdruta,    
+                                      '0000000132',
+				       case when coalesce(v3dfecdevol,'') ='' then '1' else '0' end
+                                    )
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 296 en sentencia SQL
+2016-10-01 20:34:29 ERROR  : ERROR:  error de sintaxis en o cerca de «print»
+LINE 204:   print 'v2ccosiniBefore : '+v2ccosiniBefore + ' - v2ccosdes...
+            ^
+2016-10-01 20:34:37 ERROR  : ERROR:  error de sintaxis en o cerca de «echo»
+LINE 204:   echo 'v2ccosiniBefore : '+v2ccosiniBefore + ' - v2ccosdesB...
+            ^
+2016-10-01 20:34:43 ERROR  : ERROR:  error de sintaxis en o cerca de «write»
+LINE 204:   write 'v2ccosiniBefore : '+v2ccosiniBefore + ' - v2ccosdes...
+            ^
+2016-10-01 20:34:48 ERROR  : ERROR:  error de sintaxis en o cerca de «write_ln»
+LINE 204:   write_ln 'v2ccosiniBefore : '+v2ccosiniBefore + ' - v2ccos...
+            ^
+2016-10-01 20:34:52 ERROR  : ERROR:  error de sintaxis en o cerca de «print»
+LINE 204:   print 'v2ccosiniBefore : '+v2ccosiniBefore + ' - v2ccosdes...
+            ^
+2016-10-03 12:03:19 ERROR  : ERROR:  el cursor «<unnamed portal 3>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:03:29 ERROR  : ERROR:  el cursor «<unnamed portal 6>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:03:55 ERROR  : ERROR:  error de sintaxis en o cerca de «4»
+LINE 1: 4
+        ^
+2016-10-03 12:04:49 ERROR  : ERROR:  el cursor «<unnamed portal 41>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:04:50 ERROR  : ERROR:  el cursor «<unnamed portal 44>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:04:52 ERROR  : ERROR:  el cursor «<unnamed portal 47>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:04 ERROR  : ERROR:  el cursor «<unnamed portal 50>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:12 ERROR  : ERROR:  el cursor «<unnamed portal 53>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:15 ERROR  : ERROR:  el cursor «<unnamed portal 56>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:26 ERROR  : ERROR:  el cursor «<unnamed portal 59>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:32 ERROR  : ERROR:  el cursor «<unnamed portal 62>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:40 ERROR  : ERROR:  el cursor «<unnamed portal 65>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:41 ERROR  : ERROR:  el cursor «<unnamed portal 68>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:42 ERROR  : ERROR:  el cursor «<unnamed portal 71>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:42 ERROR  : ERROR:  el cursor «<unnamed portal 74>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:42 ERROR  : ERROR:  el cursor «<unnamed portal 77>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:43 ERROR  : ERROR:  el cursor «<unnamed portal 80>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:43 ERROR  : ERROR:  el cursor «<unnamed portal 83>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:43 ERROR  : ERROR:  el cursor «<unnamed portal 86>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:43 ERROR  : ERROR:  el cursor «<unnamed portal 89>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:44 ERROR  : ERROR:  el cursor «<unnamed portal 92>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:44 ERROR  : ERROR:  el cursor «<unnamed portal 95>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:44 ERROR  : ERROR:  el cursor «<unnamed portal 98>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:44 ERROR  : ERROR:  el cursor «<unnamed portal 101>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:45 ERROR  : ERROR:  el cursor «<unnamed portal 104>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:46 ERROR  : ERROR:  el cursor «<unnamed portal 107>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 12:05:55 ERROR  : ERROR:  el cursor «<unnamed portal 110>» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_arblhojaruta_get(character varying,refcursor) en la línea 270 en OPEN
+2016-10-03 18:08:52 ERROR  : ERROR:  error de sintaxis en o cerca de «.»
+LINE 1: select COACTIVO.panel_expediente('0000000008'. 'ref_cursor')...
+                                                     ^
+2016-10-03 18:31:28 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumentoe(unknown, unknown)
+LINE 2: select coactivo.listar_mdocumentoe('0000000008','ref_cursor'...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-03 18:31:40 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumentoe(unknown, unknown, unknown, unknown, unknown, unknown)
+LINE 1: select coactivo.listar_mdocumentoe('0000000008','','','','',...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-03 18:31:44 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumentoe(unknown, unknown, unknown, unknown, unknown, unknown, unknown)
+LINE 1: select coactivo.listar_mdocumentoe('0000000008','','','','',...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-03 18:31:48 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumentoe(unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown)
+LINE 1: select coactivo.listar_mdocumentoe('0000000008','','','','',...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-03 18:31:53 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumentoe(unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown)
+LINE 1: select coactivo.listar_mdocumentoe('0000000008','','','','',...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-03 18:32:03 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumentoe(unknown, unknown, unknown, unknown, unknown)
+LINE 1: select coactivo.listar_mdocumentoe('0000000008','','','','re...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-03 18:32:09 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumentoe(unknown, unknown, unknown, unknown, unknown, unknown)
+LINE 1: select coactivo.listar_mdocumentoe('0000000008','','','','',...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-03 18:32:35 ERROR  : ERROR:  no existe la función coactivo.listar_mdocumentoe(unknown, unknown, unknown, unknown, unknown, unknown, unknown)
+LINE 1: select coactivo.listar_mdocumentoe('0000000008','','','','',...
+               ^
+HINT:  Ninguna función coincide en el nombre y tipos de argumentos. Puede ser necesario agregar conversión explícita de tipos.
+2016-10-03 18:34:41 ERROR  : ERROR:  no existe el cursor «ref_cursor»
+2016-10-03 18:45:24 ERROR  : ERROR:  no existe la relación «coactivo.meconten»
+LINE 1: select * from coactivo.meconten where idsigma='0000000001'
+                      ^
+2016-10-03 19:02:14 ERROR  : ERROR:  error de sintaxis en o cerca de «p_ref»
+LINE 7:     p_ref refcursor DEFAULT NULL::refcursor)
+            ^
+2016-10-03 19:02:21 ERROR  : ERROR:  error de sintaxis en o cerca de «,»
+LINE 35:   , c.vnrodoc, convert(char(10),c.dfecnac, 103) dfecnac
+                                        ^
+2016-10-03 19:05:32 ERROR  : ERROR:  error de sintaxis en o cerca de «select»
+LINE 47:              select *    from public.mperson c   
+                      ^
+2016-10-03 19:14:45 ERROR  : ERROR:  expresión faltante en o cerca de «;»
+LINE 20:     return;
+                   ^
+2016-10-03 19:21:59 ERROR  : ERROR:  el cursor «pref» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_obsenvio_get(character varying,character varying,refcursor) en la línea 27 en OPEN
+2016-10-03 19:22:03 ERROR  : ERROR:  el cursor «pref» ya está en uso
+CONTEXT:  función PL/pgSQL coactivo.sp_obsenvio_get(character varying,character varying,refcursor) en la línea 27 en OPEN
+2016-10-03 19:22:49 ERROR  : ERROR:  error de sintaxis en o cerca de «break»
+LINE 14:   break;
+           ^
+2016-10-03 19:25:50 ERROR  : ERROR:  la ejecución alcanzó el fin de la función sin encontrar RETURN
+CONTEXT:  función PL/pgSQL coactivo.sp_obsenvio_get(character varying,character varying,refcursor)
+2016-10-03 19:25:52 ERROR  : ERROR:  la ejecución alcanzó el fin de la función sin encontrar RETURN
+CONTEXT:  función PL/pgSQL coactivo.sp_obsenvio_get(character varying,character varying,refcursor)
+2016-10-03 19:25:53 ERROR  : ERROR:  la ejecución alcanzó el fin de la función sin encontrar RETURN
+CONTEXT:  función PL/pgSQL coactivo.sp_obsenvio_get(character varying,character varying,refcursor)
+2016-10-03 20:33:10 ERROR  : ERROR:  no se puede cambiar el nombre del parámetro de entrada «ddocumento»
+HINT:  Use DROP FUNCTION coactivo.ddocumestr_get(character varying,character varying,refcursor) primero.
+2016-10-03 20:33:26 ERROR  : ERROR:  «ctipdocu» no es una variable conocida
+LINE 11:  ctipdocu:=NULL;    
+          ^
+2016-10-05 12:56:40 ERROR  : ERROR:  llave duplicada viola restricción de unicidad «objetos_pkey»
+DETAIL:  Ya existe la llave (cidobjeto)=(0000000051).
+2016-10-05 12:57:00 ERROR  : ERROR:  llave duplicada viola restricción de unicidad «objetos_pkey»
+DETAIL:  Ya existe la llave (cidobjeto)=(0000000051).
+2016-10-05 16:01:33 ERROR  : ERROR:  llave duplicada viola restricción de unicidad «objetos_pkey»
+DETAIL:  Ya existe la llave (cidobjeto)=(0000000057).
+2016-10-05 16:21:30 ERROR  : ERROR:  error de sintaxis en o cerca de «fect»
+LINE 1: select seguridad.obt_menu('0000000343','p_ref'); fect all in...
+                                                         ^
+2016-10-05 17:11:37 ERROR  : ERROR:  error de sintaxis en o cerca de «max»
+LINE 43: xidsigma varchar(max),
+                          ^
+2016-10-05 17:12:11 ERROR  : ERROR:  error de sintaxis en o cerca de «)»
+LINE 46: ) on commit drop;          
+         ^
+2016-10-05 17:41:03 ERROR  : ERROR:  error de sintaxis en o cerca de «(»
+LINE 1: select coactivo.ddocument_get pcidsigma ('0000000011','00000...
+                                                ^
+2016-10-05 17:43:58 ERROR  : ERROR:  error de sintaxis al final de la entrada
+LINE 16: where (dd.cidsigma =coalesce('',dd.cidsigma)
+                                                     ^
+2016-10-05 19:09:28 ERROR  : ERROR:  la columna «mruta.mruta» debe aparecer en la cláusula GROUP BY o ser usada en una función de agregación
+LINE 1: select MIN(idsigma)idsigmamin,mruta 
+                                      ^
+2016-10-05 19:11:17 ERROR  : ERROR:  error de sintaxis en o cerca de «,»
+LINE 1: SELECT  mdocumento,min(CONVERT(VARCHAR(16),dfecenv,103)) dfe...
+                                                  ^
+2016-10-05 19:12:37 ERROR  : ERROR:  la columna «mruta.mdocumento» debe aparecer en la cláusula GROUP BY o ser usada en una función de agregación
+LINE 1:  SELECT  mdocumento,min(to_char(dfecenv,'dd/MM/yyyy')) dfece...
+                 ^
+2016-10-05 19:21:23 ERROR  : ERROR:  error de sintaxis en o cerca de «EXIT»
+LINE 68:   EXIT WHEN NOt FOUND;  
+           ^
+2016-10-05 19:25:52 ERROR  : ERROR:  la columna «mruta.mdocumento» debe aparecer en la cláusula GROUP BY o ser usada en una función de agregación
+LINE 1: SELECT  mdocumento,min(to_char(dfecenv,'dd/MM/yyyy')) dfecen...
+                ^
+2016-10-05 19:35:15 ERROR  : ERROR:  «tids» no es una variable conocida
+LINE 9: create temporary table into tids as  
+                                    ^
+2016-10-05 19:43:16 ERROR  : ERROR:  falta una entrada para la tabla «dr» en la cláusula FROM
+LINE 2:     dr.idsigma as cidsigma,'0000000132' as ctipjerar  ,coact...
+            ^
+2016-10-06 15:04:54 ERROR  : ERROR:  error de sintaxis en o cerca de «.»
+LINE 1: select count(*) regitro.mperson
+                               ^
+2016-10-06 15:04:59 ERROR  : ERROR:  error de sintaxis en o cerca de «.»
+LINE 1: select count(*) registro.mperson
+                                ^
+2016-10-06 15:05:09 ERROR  : ERROR:  error de sintaxis en o cerca de «.»
+LINE 1: select count(*) registro.mpropie
+                                ^
+2016-10-06 15:05:18 ERROR  : ERROR:  error de sintaxis en o cerca de «from»
+LINE 1: select count(*) * from registro.mperson
+                          ^
+2016-10-06 15:05:23 ERROR  : ERROR:  no existe la relación «registro.mperson»
+LINE 1: select count(*) from registro.mperson
+                             ^
+2016-10-06 15:05:52 ERROR  : ERROR:  no existe la relación «public.mpropie»
+LINE 1: select count(*) from public.mpropie
+                             ^
+2016-10-07 14:36:18 ERROR  : ERROR:  falta una entrada para la tabla «id» en la cláusula FROM
+LINE 1: select id.cmdocumento,coactivo.fx_vnrodocu(id.cmdocumento) v...
+               ^
+2016-10-07 15:51:22 ERROR  : ERROR:  error de sintaxis en o cerca de «select»
+LINE 2: select id.cmdocumento,coactivo.fx_vnrodocu(id.cmdocumento) v...
+        ^
+2016-10-07 15:52:44 ERROR  : ERROR:  no existe la relación «tids»
+LINE 1: select * from tids
+                      ^
+2016-10-07 15:55:02 ERROR  : ERROR:  falta una entrada para la tabla «u» en la cláusula FROM
+LINE 3: ,u.usuario ds_usuario  
+         ^
+2016-10-07 15:55:22 ERROR  : ERROR:  la relación «tids» ya existe
+CONTEXT:  sentencia SQL: «create temporary table  tids as  
+select *   from(    
+select md.idsigma cmdocumento, md.idsigma as cidsigma,'0000000130' as ctipjerar ,coactivo.fx_CentroCosto(md.ccosini) as ds_descrip,coactivo.fx_Usuario(md.vusernm) as ds_usuario  
+from coactivo.mdocumento md    
+union all    
+select md.idsigma cmdocumento, mr.idsigma as cidsigma,'0000000131' as ctipjerar ,coactivo.fx_CentroCosto(mr.ccosdes ) as ds_descrip,coactivo.fx_Usuario(mr.vusernm) as ds_usuario  
+from coactivo.mdocumento md    
+inner join coactivo.mruta mr on md.idsigma=mr.mdocumento    
+union all    
+select md.idsigma cmdocumento, dr.idsigma as cidsigma,'0000000132' as ctipjerar  ,coactivo.fx_Usuario(dr.musuario) as ds_descrip,coactivo.fx_Usuario(dr.vusernm) as ds_usuario  
+from coactivo.mdocumento md    
+inner join coactivo.mruta mr on md.idsigma=mr.mdocumento    
+inner join coactivo.druta dr on mr.idsigma=dr.mruta    
+) a    
+where cmdocumento = p_cmdocumento»
+función PL/pgSQL coactivo.sp_ddocumentoxdocumento_get(character varying,refcursor) en la línea 5 en sentencia SQL
+2016-10-07 15:56:02 ERROR  : ERROR:  no existe la tabla «tids»
+2016-10-07 16:19:12 ERROR  : ERROR:  error de sintaxis en o cerca de «if»
+LINE 9: if UPDATE count<1 then
+        ^
+2016-10-07 16:19:19 ERROR  : ERROR:  error de sintaxis en o cerca de «if»
+LINE 9: if ERROR>=1 then
+        ^
+2016-10-07 16:19:29 ERROR  : ERROR:  error de sintaxis en o cerca de «:»
+LINE 14: select 'Adjunto eliminado' msj ,'1' st:
+                                               ^
+2016-10-07 16:19:56 ERROR  : ERROR:  error de sintaxis en o cerca de «>»
+LINE 9: if UPDATE count>1 then
+                       ^
+2016-10-07 16:20:01 ERROR  : ERROR:  error de sintaxis en o cerca de «<»
+LINE 9: if UPDATE count<1 then
+                       ^
+2016-10-07 17:44:43 ERROR  : ERROR:  no existe el esquema «tramite»
+2016-10-07 17:45:10 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:51:07 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:53:45 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:53:49 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:53:49 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:02 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:03 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:04 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:04 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:05 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:06 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:15 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:55:32 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:03 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:04 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:04 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:04 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:09 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:10 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:13 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:13 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:17 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:57:32 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:58:01 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:58:01 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:58:02 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:58:02 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:58:50 ERROR  : ERROR:  error de sintaxis en o cerca de «return»
+LINE 75:    return p_ref ; 
+            ^
+2016-10-07 17:59:00 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:59:00 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:59:01 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:59:01 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:59:01 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:59:01 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 17:59:52 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:14 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:15 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:16 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:16 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:20 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:20 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:20 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:21 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:22 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:26 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:33 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:33 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:38 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:00:39 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:29 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:31 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:31 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:31 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:31 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:32 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:37 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:38 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:02:38 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:03:30 ERROR  : ERROR:  no existe la columna «pccosto»
+LINE 1: SELECT CASE WHEN pccosto = a.ccosini THEN 'S' ELSE CASE WHEN...
+                         ^
+2016-10-07 18:03:49 ERROR  : ERROR:  no existe la columna «pccosto»
+LINE 12:    CASE WHEN pccosto = a.ccosini THEN a.vcocsdes ELSE CASE W...
+                      ^
+2016-10-07 18:03:58 ERROR  : ERROR:  no existe la columna «pccosto»
+LINE 37: WHERE (a.ccosini=pccosto OR a.ccosdes=pccosto)              
+                          ^
+2016-10-07 18:07:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:08:15 ERROR  : ERROR:  los tipos date y text no son coincidentes en COALESCE
+LINE 45:   Coalesce(cast(a.dfecrecep as date),a.dfecenv) BETWEEN     ...
+                                              ^
+2016-10-07 18:08:30 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:09:08 ERROR  : ERROR:  los tipos text y date no son coincidentes en COALESCE
+LINE 46:   cast(Coalesce(a.dfecrecep,a.dfecenv::date)  as date)BETWEE...
+                                     ^
+2016-10-07 18:09:45 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:10:31 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:13:17 ERROR  : ERROR:  los tipos text y timestamp with time zone no son coincidentes en COALESCE
+LINE 46:   cast(Coalesce(a.dfecrecep,now())  as date) BETWEEN        ...
+                                     ^
+2016-10-07 18:13:33 ERROR  : ERROR:  la sintaxis de entrada no es válida para tipo date: «»
+2016-10-07 18:14:31 ERROR  : ERROR:  error de sintaxis en o cerca de «)»
+LINE 46:   cast(case when a.dfecrecep='' then a.dfecenv end)  as date...
+                                                           ^
+2016-10-07 18:19:16 ERROR  : ERROR:  error de sintaxis en o cerca de «nrol»
+LINE 1: nrol
+        ^
+2016-10-07 18:20:16 ERROR  : ERROR:  no existe la columna «cidusuario»
+LINE 42: and cidusuario = case when nrol ='4' then COACTIVO.fx_usuari...
+             ^
+QUERY:  select * from(      
+SELECT CASE WHEN pccosto = a.ccosini THEN 'S' ELSE CASE WHEN pccosto = a.ccosdes THEN 'E' ELSE '<>' END  END bnd                 
+  , a.idsigma              
+      ,a.mdocumento              
+      ,a.vnrodocu              
+      ,a.st_recep              
+      ,a.st_recep AS st_recep2              
+      ,a.ccosini              
+      ,a.vcocsini              
+      ,a.ccosdes              
+      ,a.vcocsdes              
+      ,    
+   CASE WHEN pccosto = a.ccosini THEN a.vcocsdes ELSE CASE WHEN pccosto = a.ccosdes THEN     
+    case when COACTIVO.fx_primerPasoxArea(a.mdocumento,a.ccosdes) =a.idsigma  and a.ctiprtram = '0000000287'     
+     then COACTIVO.fx_NomUsuario(a.usuario_registro)     
+     else  a.vcocsini      
+    end    
+    ELSE '<>' END  END             
+    orgdes     
+      --,convert(char(10),cast(a.dfecenv  as date),103)dfecenv          
+      ,a.dfecenv    
+      --,case when a.dfecrecep !='' then convert(char(10),cast(a.dfecrecep  as date),103) else a.dfecrecep end dfecrecep          
+      ,a.dfecrecep     
+      ,a.vobserv        
+      ,a.ctipacc        
+      ,a.vtipacc        
+      ,a.mruta        
+      ,a.stcierre  
+   ,a.stconcluido  
+   ,a.stconcluido as  stconcluido2  
+   ,a.ctiprtram       
+   ,vasunto    
+   ,ctipasunto    
+   ,vtipasunto    
+   ,COACTIVO.fx_NombreCompletoPersona(a.mperson) remitente 
+   ,vnrodocini 
+  FROM COACTIVO.vw_mruta a              
+WHERE (a.ccosini=pccosto OR a.ccosdes=pccosto)              
+       
+and a.vnrodocu  like '%'||pvnroexp||'%'     
+--and a.ctiprtram = case when nrol ='4' then '0000000287' else a.ctiprtram end    
+and cidusuario = case when nrol ='4' then COACTIVO.fx_usuarioCreoDocumento(a.mdocumento) else pcidusuario end    
+ ) a      
+where a.bnd like '%'||popbusdefault||'%'  AND (        
+  cast(a.dfecenv as date) BETWEEN         
+   cast(pfdesde as date) AND cast(pfhasta as date)    
+ OR         
+  cast(case when a.dfecrecep='' then a.dfecenv else a.dfecrecep end  as date) BETWEEN            
+   cast(pfdesde as date) AND cast(pfhasta    as date)    
+ )    
+ORDER BY a.idsigma DESC
+CONTEXT:  función PL/pgSQL coactivo.mruta_get(character varying,character varying,character varying,character varying,character varying,character varying,character varying,character varying,refcursor) en la línea 10 en OPEN
+2016-10-07 18:21:20 ERROR  : ERROR:  error de sintaxis en o cerca de «p_ref»
+LINE 76:    return p_ref ; 
+                   ^
+2016-10-07 18:21:28 ERROR  : ERROR:  error de sintaxis en o cerca de «p_ref»
+LINE 76:    return p_ref ; 
+                   ^
+2016-10-09 12:03:07 ERROR  : ERROR:  error de sintaxis en o cerca de «vobjeto»
+LINE 1: ... coactivo.mconten set vdescri='DOC. VARIOS' , set vobjeto=''...
+                                                             ^
+2016-10-09 12:03:23 ERROR  : ERROR:  error de sintaxis en o cerca de «vobserv»
+LINE 2: ...onten set vdescri='DOC. VARIOS' , vobjeto='', set vobserv=' ...
+                                                             ^
+2016-10-09 12:05:04 ERROR  : ERROR:  error de sintaxis en o cerca de «coactivo»
+LINE 327: update coactivo.mconten set vdescri='COPIA SIMPLE DE VALORES...
+                 ^
+2016-10-09 12:07:13 ERROR  : ERROR:  error de sintaxis en o cerca de «SOLICITUD»
+LINE 396: update coactivo.mconten set vdescri='SOLICITUD DIRIGIDA AL A...
+                                               ^
+2016-10-09 12:08:23 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 404: update coactivo.mconten set vdescri='ESTADO DE CUENTA CORRIE...
+          ^
+2016-10-09 12:10:28 ERROR  : ERROR:  error de sintaxis en o cerca de «coactivo»
+LINE 328: update coactivo.mconten set vdescri='COPIA SIMPLE DE VALORES...
+                 ^
+2016-10-09 12:14:09 ERROR  : ERROR:  error de sintaxis en o cerca de «SOLICITUD»
+LINE 397: update coactivo.mconten set vdescri='SOLICITUD DIRIGIDA AL A...
+                                               ^
+2016-10-09 12:14:48 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 405: update coactivo.mconten set vdescri='ESTADO DE CUENTA CORRIE...
+          ^
+2016-10-09 12:14:48 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 405: update coactivo.mconten set vdescri='ESTADO DE CUENTA CORRIE...
+          ^
+2016-10-09 12:15:09 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 405: update coactivo.mconten set vdescri='ESTADO DE CUENTA CORRIE...
+          ^
+2016-10-09 12:16:34 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 405: update coactivo.mconten set vdescri='ESTADO DE CUENTA CORRIE...
+          ^
+2016-10-09 12:17:05 ERROR  : ERROR:  error de sintaxis en o cerca de «CERTIFICADO»
+LINE 497: update coactivo.mconten set vdescri='CERTIFICADO DE HABILITA...
+                                               ^
+2016-10-09 12:17:25 ERROR  : ERROR:  error de sintaxis en o cerca de «CERTIFICADO»
+LINE 497: update coactivo.mconten set vdescri='CERTIFICADO DE HABILITA...
+                                               ^
+2016-10-09 12:18:08 ERROR  : ERROR:  error de sintaxis en o cerca de «whe»
+LINE 563: ...AUTORIDAD CORRESPONDIENTE.' , vobjeto='243',  vobserv='' whe
+                                                                      ^
+2016-10-09 12:18:38 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 607: update coactivo.mconten set vdescri='REQUISITOS IDEM AL PROC...
+          ^
+2016-10-09 12:19:06 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 630: update coactivo.mconten set vdescri='IDEM 5.01: 6) Y ,7)' , ...
+          ^
+2016-10-09 12:19:41 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 630: update coactivo.mconten set vdescri='IDEM 5.01: 6) Y ,7)' , ...
+          ^
+2016-10-09 12:20:16 ERROR  : ERROR:  error de sintaxis en o cerca de «coactivo»
+LINE 633: update coactivo.mconten set vdescri='PLANOS, MEMORIAS U OTRO...
+                 ^
+2016-10-09 12:20:46 ERROR  : ERROR:  error de sintaxis en o cerca de «FORMULARIO»
+LINE 635: update coactivo.mconten set vdescri='FORMULARIO UNICO OFICIA...
+                                               ^
+2016-10-09 12:21:34 ERROR  : ERROR:  error de sintaxis en o cerca de «COPIA»
+LINE 638: update coactivo.mconten set vdescri='COPIA SIMPLE DEL CERTIF...
+                                               ^
+2016-10-09 12:21:51 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 638: update coactivo.mconten set vdescri='COPIA SIMPLE DEL CERTIF...
+          ^
+2016-10-09 12:22:07 ERROR  : ERROR:  error de sintaxis en o cerca de «PAGO»
+LINE 732: update coactivo.mconten set vdescri='PAGO POR INSPECCION OCU...
+                                               ^
+2016-10-09 12:22:43 ERROR  : ERROR:  error de sintaxis en o cerca de «DOCUMENTO»
+LINE 748: update coactivo.mconten set vdescri='DOCUMENTO QUE ACREDITE ...
+                                               ^
+2016-10-09 12:22:59 ERROR  : ERROR:  error de sintaxis en o cerca de «POR»
+LINE 750: update coactivo.mconten set vdescri='POR CADA SUB LOTE ADICI...
+                                               ^
+2016-10-09 12:23:31 ERROR  : ERROR:  error de sintaxis en o cerca de «POR»
+LINE 754: update coactivo.mconten set vdescri='POR CADA SUB LOTE ADICI...
+                                               ^
+2016-10-09 12:24:34 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 888: update coactivo.mconten set vdescri='CERTIFICADAS' , vobjeto...
+          ^
+2016-10-09 12:24:57 ERROR  : ERROR:  error de sintaxis en o cerca de «update»
+LINE 910: update coactivo.mconten set vdescri='COPIA FEDATEADA DEL PAS...
+          ^
+2016-10-10 17:56:40 ERROR  : ERROR:  la relación «pk__dasunto__33» ya existe
+2016-10-10 18:15:54 ERROR  : ERROR:  error de sintaxis en o cerca de «)»
+LINE 15:  ) 
+          ^
+2016-10-10 18:36:42 ERROR  : ERROR:  la relación «doc_emitidodet» ya existe
+2016-10-11 13:05:34 ERROR  : ERROR:  no existe la columna a.ccodcos
+LINE 8:    ,a.ccodcos --# 
+            ^
+2016-10-11 13:06:29 ERROR  : ERROR:  el operador no existe: character = integer
+LINE 8:    ,case when a.estado=0 then 'Inactivo' else 'Activo' end a...
+                              ^
+HINT:  Ningún operador coincide con el nombre y el tipo de los argumentos. Puede ser necesario agregar conversiones explícitas de tipos.
+2016-10-11 13:43:27 ERROR  : ERROR:  no existe la función coactivo.lst_auxiliarcoactivo(character varying, refcursor)
+2016-10-11 15:04:50 ERROR  : ERROR:  no existe la relación «coactivo.mcoten»
+LINE 2: select * from coactivo.mcoten where idsigma='0000000003'
+                      ^
+2016-10-11 15:12:28 ERROR  : ERROR:  no existe la columna «pddocumento»
+LINE 4: ... vadjunto FROM coactivo.madjunto WHERE ddocumento=pddocument...
+                                                             ^

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/6/trunk/titania/public/js/app/ckeditor
+END
+ckeditor.js
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/6/trunk/titania/public/js/app/ckeditor/ckeditor.js
+END
+config.js
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/6/trunk/titania/public/js/app/ckeditor/config.js
+END
+es.js
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/6/trunk/titania/public/js/app/ckeditor/es.js
+END
+contents.css
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/6/trunk/titania/public/js/app/ckeditor/contents.css
+END
+adapterJQuery.js
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/6/trunk/titania/public/js/app/ckeditor/adapterJQuery.js
+END

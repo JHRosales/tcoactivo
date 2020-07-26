@@ -1,0 +1,169 @@
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "
+     style="width: 99%;margin: 5px ; ">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <table border="0" width="100%" >
+            <tr>
+                <td width="3%">
+                    <a href="index">
+                        <img width="25" height="25" src="<?php echo $this->util()->getImage("home-icon.png");?>">
+                    </a>
+                   </td>
+                <td align="center" width="90%">
+                    <label style="font-size:12px;">P&Aacute;GINA PRINCIPAL</label>
+
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</div>
+<form method="post" action="../coactivo/index">
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 99%;margin: 5px ; ">
+        <table border="0"  width="50%">
+        <tr >
+            <td id="tdfec">
+                <table border="0" ><tr>
+                        <td><b>Desde:</b></td>
+                        <td>
+                            <input type="text" id="fecdesde" name="fecdesde" class="ui-text" style="text-align: left;width: 80px;"
+                                   value="<?php if($this->fechaini=="01/01/1989") { echo date('d/m/Y', strtotime('yesterday - 6 day')); } else { echo $this->fechaini;} ?>"/>
+                        </td>
+                         <td><b>Hasta:</b></td>
+                        <td>
+                            <input type="text" id="fechasta" name="fechasta" class="ui-text" style="text-align: left;width: 80px;"
+                                   value="<?php if($this->fechafin=="01/01/1989") { echo date('d/m/Y', strtotime('yesterday')); } else { echo $this->fechafin;} ?>"/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td rowspan="2" width="190px">  <button type="submit" id="btnbuscar">Buscar</button>  </td>
+        </tr>
+    </table>
+</div>
+</form>
+
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content"
+     style="width: 79%;margin: 5px ; overflow-y: auto;  height:500px">
+<?php
+$arr= json_decode($this->arrareas);
+for($i=0;$i<count($arr);$i++){
+?>
+    <div class="media search-media">
+        <table border="0" width="100%"><tr><td width="10%">
+        <div class="media-left">
+            <a href="#">
+                <img alt="Mang" class="media-object mangaImage" id="a6e191e8-9a6b-4a5e-b8f7-f30de15378da"
+                     src="<?php echo $this->util()->getImage("icons/Info.png");?>"
+                     style="min-height:40px;min-width:40px;height:52px;width:52px;">
+            </a>
+        </div>
+                </td>
+                <td>
+            <div class="media-body">
+
+                    <div>
+                        <h1 class="custom-h1-small media-heading blue">
+                            <b>Pagos realizados</b>
+                        </h1>
+
+                    </div>
+                    <p class="hidden-xs custom-p">
+                        <strong>
+                        El contribuyente <b><?php echo $arr[$i]->crazsoc; ?></b> con codigo de contribuyente <b><?php echo $arr[$i]->cidpers; ?></b> direcci&oacute;n fiscal <b><?php echo $arr[$i]->direccf; ?></b> realiz&oacute; el pago de <b><?php echo $arr[$i]->pago; ?></b>
+                            nuevos soles, en la fecha <b><?php  $originalDate = $arr[$i]->dfecpag;
+                              echo  $newDate = date("Y-m-d", strtotime($originalDate));
+                                ?></b>.
+                        </strong>
+                    </p>
+
+                <div class="search-actions text-center">
+                    <div  align="center">
+                        <span class="label label-success arrowed arrowed-in-right strong">&nbsp; Cancelado &nbsp;</span>
+                    </div>
+                    <br>
+                    <div class="blue xs-font-12"  align="center">
+                        <b> Monto: <?php echo $arr[$i]->pago; ?></b>
+                    </div>
+                    <a href="#cidpers=<?php echo $arr[$i]->cidpers; ?>" class="search-btn-action btn btn-sm btn-block btn-info" align="center">Ver</a>
+                </div>
+
+            </div>
+                </td>
+            </tr>
+        </table>
+        </div>
+    <?php
+}
+    ?>
+<!--
+    <div class="media search-media  ">
+        <table border="0" width="100%"><tr><td width="10%">
+        <div class="media-left">
+            <a href="">
+                <img alt="img" class="media-object mangaImage" id="92ef1c08-d79b-4485-ba5c-2588a7fd25b4"
+                     src="<?php echo $this->util()->getImage("icons/Info1.png");?>" style="min-height:72px;min-width:72px;height:72px;width:72px;">
+            </a>
+
+        </div>
+                </td>
+                <td>
+        <div class="media-body">
+            <a href="">
+                <div>
+                    <h1 class="custom-h1-small media-heading blue">
+                        <strong>Cancelo</strong>
+                    </h1>
+                </div>
+                <p class="hidden-xs custom-p">
+                    <strong>
+                    strongggg
+                    </strong>
+                </p>
+            </a>
+            <div class="search-actions text-center">
+                <div>
+                    <span class="label label-danger arrowed-in arrowed-in-right">Finalizado</span>
+                </div>
+                <br>
+                <div class="blue xs-font-12">
+                    <strong>Monto: 686</strong>
+                </div>
+                <a href="" class="search-btn-action btn btn-sm btn-block btn-info">Ver</a>
+            </div>
+        </div>
+                </td>
+            </tr>
+        </table>
+    </div>-->
+
+</div>
+<div id="dvbusqueda">
+    <div id="dvaccion"></div>
+    <br/>
+    <div id="panelResultmcajero">
+        <table id="tblResultmcajero"></table>
+        <div id="ptblResultmcajero"></div>
+    </div>
+    <br/>
+</div>
+<script type="text/javascript">
+    $("#fecdesde").datepicker({ showOn: "button", buttonImage: pathImage + "calendar.gif",
+        buttonImageOnly: true, numberOfMonths: 3,  changeMonth: true,
+        dateFormat: "dd/mm/yy",
+        onClose: function( selectedDate ) {
+            $("#fechasta").datepicker( "option", "minDate", selectedDate );
+        }
+    });
+    $("#fechasta").datepicker({ showOn: "button", buttonImage: pathImage + "calendar.gif",
+        numberOfMonths: 3,  buttonImageOnly: true,   changeMonth: true, dateFormat: "dd/mm/yy",
+        onClose: function( selectedDate ) {
+            $("#fecdesde").datepicker( "option", "maxDate", selectedDate );
+        } });
+    $("#btnbuscar").button({ icons: { primary: "ui-icon-search"} }).click(function() {
+       // buscar();
+    });
+
+     function buscar() {
+        window.open(path + "coactivo/index?fecha=99", "_self");
+    };
+</script>

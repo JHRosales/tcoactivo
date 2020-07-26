@@ -1,0 +1,157 @@
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 99%;margin: 5px ; ">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <table border="0" width="100%" >
+            <tr>
+                <td width="3%">
+                    <a href="index">
+                        <img width="25" height="25" src="<?php echo $this->util()->getImage("home-icon.png");?>">
+                    </a></td>
+                <td align="center" width="97%">
+                    <label style="font-size:12px !important;">CALIFICAR VALORES</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+	<input type="hidden" value="<?php echo $this->cidusuario?>"  id="hdcidusuario"/>
+    <table border="0" width="80%">
+        <tr >
+        </tr>
+    </table>
+</div>
+<div id="panelCostasProcesaless" >
+    <table id="tblCostasProcesales"></table><div id="ptblCostasProcesales"></div>
+</div>
+<div id="result" name="result"></div>
+<script type="text/javascript">
+    ProcesoBuscarCostasProcesales = function() {
+        parameters = {
+            "name": "tblCostasProcesales",
+            "procedure": "coactivo.lst_paracalificar",
+            "print": "true",
+            "parameters": '{' +
+            '}'
+        };
+        procesarProcedimientoJSON('panelCostasProcesaless','tblCostasProcesales',gridConfigDocsUser,parameters,null,navPanelCentroP);
+    };
+
+
+    $("#btnbuscarCostasProcesales").button({ icons: { primary: "ui-icon-search"} }).click(function() { ProcesoBuscarCostasProcesales(); });
+    $("#btnImprimir").button({ icons: { primary: "ui-icon-print"} }).click(function() {  });
+
+    gridConfigDocsUser = {
+        height:370,
+        width: 975,
+        colNames: ["Codigo","Nro Documento","Codigo Contrib.", "Contribuyente","Fecha Doc.","Calificado","calificar"],
+        colModel: [
+            { name: 'idsigma', index: 'idsigma', width: 10, align: 'center', hidden:true},
+            { name: 'vnrodocu', index: 'vnrodocu', width: 140, align: 'left'},
+            { name: 'mperson', index: 'mperson', width: 90, align: 'left' },
+            { name: 'contrib', index: 'contrib', width: 400, align: 'left' },
+            { name: 'dfecdocu', index: 'dfecdocu', width: 90, align: 'left' },
+            { name: 'flagcalificado', index: 'flagcalificado', width: 90, align: 'left' , hidden:true},
+            {name: 'btndocumt', index: 'btndocumt', width: 90, align: 'center', formatter: btncalificar, search: false}
+        ],
+        caption: "Calificar Valores",
+        rowNum: "9",
+        rownumbers: true,
+        viewrecords: true,
+        recordpos: 'right',
+        loadComplete: function (data) {
+            if (data.rows.length > 0) {
+            }
+        },
+        onSelectRow: function(id){
+        },
+        afterInsertRow: function(rowid, aData){
+            switch (aData.flagcalificado) {
+                case '1':
+                     jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'idsigma','',{color:'green',backgroundColor:'#CEF6D8'});
+                     jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'vnrodocu','',{color:'green',backgroundColor:'#CEF6D8'});
+                     jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'mperson','',{color:'green',backgroundColor:'#CEF6D8'});
+                     jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'contrib','',{color:'green',backgroundColor:'#CEF6D8'});
+                     jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'dfecdocu','',{color:'green',backgroundColor:'#CEF6D8'});
+                     jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'flagcalificado','',{color:'green',backgroundColor:'#CEF6D8'});
+                     jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'btndocumt','',{color:'green',backgroundColor:'#CEF6D8'});
+                    break;
+                case '0':
+                    jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'idsigma','',{color:'red',backgroundColor:'#F8E0E6'});
+                    jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'vnrodocu','',{color:'red',backgroundColor:'#F8E0E6'});
+                    jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'mperson','',{color:'red',backgroundColor:'#F8E0E6'});
+                    jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'contrib','',{color:'red',backgroundColor:'#F8E0E6'});
+                    jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'dfecdocu','',{color:'red',backgroundColor:'#F8E0E6'});
+                    jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'flagcalificado','',{color:'red',backgroundColor:'#F8E0E6'});
+                    jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'btndocumt','',{color:'red',backgroundColor:'#F8E0E6'});
+                    break;
+            }
+        }
+    };
+
+    function btncalificar(cellvalue, options, rowObject) {
+        options.rowId
+        return '<div align="center" class="fm-button" title="Documento" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtndocumt(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-circle-check"></span>Calificar</div></div>';
+
+    }
+    function accionbtndocumt(rowId) {
+        var rowdat = jQuery("#tblCostasProcesales").jqGrid('getRowData', rowId);
+
+        if (rowdat.st_recep2 === '0') {
+            openDialogWarning('Documento ' + rowdat.vnrodocu + ' no recepcionado.', 380, 150);
+            return false;
+
+        }
+
+        var paramtrs = {cidsigma: rowdat.idsigma, ctipjerar: '0000000131', mdocumento: rowdat.mdocumento};
+       // console.log(rowdat);
+        Calificar(rowdat.mperson);
+       // openDialogDataFunction1("documentos/ddocumento", paramtrs, "1000", "520", "Documentos ", null, {});
+    }
+
+
+    var navPanelCentroP = function() {
+        $("#tblCostasProcesales").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+    };
+
+function Calificar(idsigma){
+    $.ajax({
+        url: jQuery.scriptPath + "index.php/coactivo/calificar",
+        type: 'POST',
+        cache: false,
+        data: {idsigma:idsigma},
+        beforeSend : function(data) {
+            $('#result').html('Cargando...');
+        },
+        success : function(requestData) {
+           $("#result").html("");
+            //console.log(requestData);
+            var Data=JSON.parse(requestData);
+            //console.log(Data[0]);
+            ProcesoBuscarCostasProcesales();
+            openDialogInfo(Data[0]['b']);
+            ImprimirReporte(Data[0]);
+        },
+        error : function(requestData, strError, strTipoError) {
+            $("#result").html("Error " + strTipoError + ': ' + strError);
+        },
+        complete : function(requestData, exito) {
+        }
+    });
+}
+function ImprimirReporte(data){
+        console.log(data['cidpers']);
+    host = '<?php echo $this->util()->getPath(); ?>report/';
+    vParam = "cidpers="+data['cidpers'];
+    window.open(host+"MemorandumDevolucion.php?"+vParam,'_blank');
+
+   var vidsigmatrib='0000000273-0000000279-0000000283-0000007267-0000008509-0000000312-0000001260-1000003127';
+   var videstado='0-B-D-F-I-J-K-P-N';
+    host = '<?php echo $this->util()->getPath(); ?>report/';
+    vParam = "fechaProyectado=<?php echo $this->util()->getNow(); ?>&usuario="+'userlogin'+"&contrib="+data['cidpers'];
+    vParam = vParam +"&desde=1990&hasta=2025&tributo="+vidsigmatrib+"&estado="+videstado;
+    vParam = vParam +"&predio="+'0000000000'+"&p_userimpr="+'userlogin'; +"|DESDE^"+'1990'+"|HASTA^"+'2024'+"|FPROYE^<?php echo $this->util()->getNow(); ?>|TRIBUTO^"+vidsigmatrib+"|NESTADO^"+videstado+"|P_USERIMPR^"+'userlogin'
+    window.open(host+"estadoCuenta.php?"+vParam,'_blank');
+    }
+
+$(function(){
+    ProcesoBuscarCostasProcesales();
+});
+</script>

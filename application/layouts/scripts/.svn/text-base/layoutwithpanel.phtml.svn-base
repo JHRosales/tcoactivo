@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?php
+        echo $this->headMeta() . "\n";
+        echo $this->headTitle() . "\n";
+        ?>
+        <style type="text/css">
+            .printable {
+                border: 1px dotted #CCCCCC ;
+                padding: 10px 10px 10px 10px ;
+            }
+        </style>
+
+        <link href="<?php echo $this->util()->getPath(); ?>js/app/ckeditor/skins/v2/editor.css?t=C6HH5UF" rel="stylesheet" type="text/css" />
+        <link href="<?php echo $this->util()->getPath(); ?>theme/<?php echo $this->util()->getTheme();?>/jquery-ui.css" rel="stylesheet" type="text/css" id="jquery_theme_link" />
+        <?php echo $this->util()->getStyle(); ?>
+        <link href="<?php echo $this->util()->getImage("refbar.ico"); ?>" rel="shortcut icon" type="image/x-icon" />
+        <link href="<?php echo $this->util()->getImage("refbar.ico"); ?>" rel="icon" type="image/x-icon" />
+
+        <?php
+        echo $this->util()->getScript("js/app/ui");
+        echo $this->util()->getScript("js/app/common");
+        echo $this->util()->getScript("js/app/jqGrid");
+        echo $this->util()->getScript("js/app/tree");
+        echo $this->util()->getScript("js/app/graf");
+
+        $controller = $this->util()->getScriptJSController();
+        $controllerAction = $this->util()->getScriptJSControllerAction();
+        $leave = $this->util()->getScriptLeave();
+
+        if (strlen($controller) > 0) {
+            echo $controller;
+        }
+
+        if (strlen($controllerAction) > 0) {
+            echo $controllerAction;
+        }
+
+        if (strlen($leave) > 0) {
+            echo $leave;
+        }
+        ?>
+        
+        <?php echo $this->util()->isMap(); ?>        
+        <script type="text/javascript" src="<?php echo $this->util()->getPath(); ?>js/app/highcharts/highcharts.js"></script>
+        <script type="text/javascript" src="<?php echo $this->util()->getPath(); ?>js/app/ckeditor/ckeditor.js?t=C6HH5UF"></script>
+        <script type="text/javascript" src="<?php echo $this->util()->getPath(); ?>js/app/ckeditor/adapterJQuery.js?t=C6HH5UF"></script>
+        <script type="text/javascript" src="<?php echo $this->util()->getPath(); ?>js/app/ckeditor/es.js?t=C6HH5UF"></script>
+        <script type="text/javascript">
+            var path="<?php echo $this->util()->getPath(); ?>index.php/",
+	            pathImage="<?php echo $this->util()->getPath(); ?>img/",
+	            pathReport="<?php echo $this->util()->getPathReport(); ?>",
+	            imageInit="<?php echo $this->util()->getImage("alumnos0.jpg"); ?>",
+	            ajaxDialog=true;
+
+            $.jgrid.no_legacy_api = true; 
+            $.jgrid.useJSON = true; 
+
+            jQuery(document).ready(function () {
+                jQuery.scriptPath = "<?php echo $this->util()->getPath(); ?>";
+                jQuery.ajaxSettings.traditional = true;
+                jQuery.ajaxSetup({
+                    cache: false,
+                    error: function(request, status, error) {
+                    	if(request.status == 408)
+                    		window.open(obtenerContexto("view/common/log-out.jsp"), '_self');
+                    	else
+                    		openDialogError("<b>Error de comunicaci\u00F3n.</b> <br/>Estado: " + status + "<br/> Detalle: " + error + "");
+                    },
+                    beforeSend: function(xhr, settings) {
+                        switch (settings.type) {
+                            case "GET": settings.url += "&_ajaxcall_=1"; break;
+                            case "POST": settings.data += "&_ajaxcall_=1"; break;
+                        }
+                    }
+                });
+            });
+
+            $(document).ready(function(){
+                $(document).ajaxStart(function(){
+                    if(ajaxDialog) {
+                    	$('#jqDialogCargando').dialog('open');
+                    } else {
+                    	$('#jqCargando').css({"display": "inline"});
+                    }
+                });
+				
+                $(document).ajaxStop(function(){
+                	if(ajaxDialog) {
+                    	$('#jqDialogCargando').dialog('close');
+                	} else {
+	                	$('#jqCargando').css({"display": "none"});
+                	}
+                	ajaxDialog = true;
+                });
+            });
+
+            $(function(){
+                $("input:submit, input:button, input:reset, button").button();
+            });
+        </script>
+    </head>    
+    <body>
+        <table style="width: 100%; height: 100%; padding: 0px; margin: 0px;" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="background: url('<?php echo $this->util()->getImage("main-bg.gif"); ?>'); width: 10px;" rowspan="4">&nbsp;</td>
+                <td style="width: <?php echo $this->util()->getWidthLayout(); ?>; height: 42px; border-left: 1px solid #000;">
+                    <?php echo $this->render("northView.phtml"); ?>
+                </td>
+                <td style="background: url('<?php echo $this->util()->getImage("main-bg.gif"); ?>');border-right: 1px solid #000;" valign="top">
+                    <table class="barTitle" style="padding: 0px; margin: 0px; width: 100%;" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td class="right">&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="ui-widget-header" style="height: 30px; border-right: 1px solid #000; border-left: 1px solid #000;vertical-align: middle;" colspan="2">
+                    <table style="width: 100%;">
+                    	<tr>
+                    		<td><?php echo $this->render("menuView.phtml"); ?></td>
+                    		<td style="width: 70px;">
+                    			<table id="jqCargando" style="display: none;">
+                    				<tr>
+                    					<td><img src="<?php echo $this->util()->getImage("loading.gif"); ?>" dir="ltr" width="25px"/></td>
+                    					<td>&nbsp;&nbsp;Cargando...</td>
+                    				</tr>
+                    			</table>
+                    		</td>
+                    	</tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="height: 100%; border-left: 1px solid #000; vertical-align: top;">
+                    <div id="west" align="center">
+                        <?php echo $this->layout()->content; ?>
+                    </div>
+                </td>
+                <td style="border-right: 1px solid #000;" valign="top" align="center">
+                	<div id="layoutPanelInformativo"></div>
+                </td>
+            </tr>
+            <tr>
+                <td id="south" class="ui-state-default" style="height: 30px; border-right: 0px">
+                    <?php echo $this->render("southView.phtml"); ?>
+                </td>
+                <td style="height: 30px; border-left: 0px; border-right: 1px solid #000;" class="ui-state-default">&nbsp;</td>
+            </tr>
+        </table>
+        <?php echo $this->render("jqCargando.phtml"); ?>
+        <?php echo $this->render("jqConfirm.phtml"); ?>
+    </body>
+</html>
+<!-- http://jqueryui.com/download/?themeParams=%3FffDefault%253DTahoma%25252C%252BLucida%252BGrande%25252C%252BLucida%252BSans%25252C%252BArial%25252C%252Bsans-serif%2526fwDefault%253Dbold%2526fsDefault%253D1.1em%2526cornerRadius%253D5px%2526bgColorHeader%253D094fa4%2526bgTextureHeader%253D12_gloss_wave.png%2526bgImgOpacityHeader%253D55%2526borderColorHeader%253D306fbb%2526fcHeader%253Dffffff%2526iconColorHeader%253Dffffff%2526bgColorContent%253Dfcfdfd%2526bgTextureContent%253D06_inset_hard.png%2526bgImgOpacityContent%253D100%2526borderColorContent%253Da6c9e2%2526fcContent%253D222222%2526iconColorContent%253D469bdd%2526bgColorDefault%253D094fa4%2526bgTextureDefault%253D02_glass.png%2526bgImgOpacityDefault%253D20%2526borderColorDefault%253D094fa4%2526fcDefault%253Dffffff%2526iconColorDefault%253Dffffff%2526bgColorHover%253D3baae3%2526bgTextureHover%253D02_glass.png%2526bgImgOpacityHover%253D50%2526borderColorHover%253D2694e8%2526fcHover%253Dffffff%2526iconColorHover%253Dffffff%2526bgColorActive%253Dd0e5f5%2526bgTextureActive%253D02_glass.png%2526bgImgOpacityActive%253D80%2526borderColorActive%253D79b7e7%2526fcActive%253D1d5987%2526iconColorActive%253D217bc0%2526bgColorHighlight%253Dfbec88%2526bgTextureHighlight%253D02_glass.png%2526bgImgOpacityHighlight%253D55%2526borderColorHighlight%253Dfad42e%2526fcHighlight%253D363636%2526iconColorHighlight%253D2e83ff%2526bgColorError%253Dfef1ec%2526bgTextureError%253D02_glass.png%2526bgImgOpacityError%253D95%2526borderColorError%253Dcd0a0a%2526fcError%253Dcd0a0a%2526iconColorError%253Dcd0a0a%2526bgColorOverlay%253Daaaaaa%2526bgTextureOverlay%253D01_flat.png%2526bgImgOpacityOverlay%253D0%2526opacityOverlay%253D30%2526bgColorShadow%253Daaaaaa%2526bgTextureShadow%253D01_flat.png%2526bgImgOpacityShadow%253D0%2526opacityShadow%253D30%2526thicknessShadow%253D8px%2526offsetTopShadow%253D-8px%2526offsetLeftShadow%253D-8px%2526cornerRadiusShadow%253D8px -->

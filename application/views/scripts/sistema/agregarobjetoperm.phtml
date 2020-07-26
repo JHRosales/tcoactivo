@@ -1,0 +1,68 @@
+<form id="frmagregarusGrup">
+<table border="0">
+    <tr>
+        <td colspan="4">
+            <input type="hidden" id="idsigma" name="idsigma" value="<?php echo $this->idusu; ?>">
+            <input type="hidden" id="tipousu" name="tipousu" value="<?php echo $this->tipo; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Usuario</td>
+        <td>&nbsp;
+            <select id="cusuario" name="cusuario" style="width: 180px" ><?php echo $this->cusuarioHTML; ?></select>
+        </td>
+    </tr>
+    <?php if($this->opt==1){?>
+    <tr>
+        <td colspan="2">Estado:</td>
+        <td colspan="2">&nbsp;
+            <input type="checkbox" id="nestado" name="nestado"  value="1" offvalue="0" class="ui-text" <?php if($this->nestado!=''){if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>>
+        </td>
+    </tr>
+    <?php } else {?>
+        <input type="hidden" id="nestado" name="nestado" value="1">
+    <?php }?>
+</table>
+    <br/>
+<div id="result"></div>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="btnGuardar" type="button">Agregar</button>&nbsp;
+<button id="btnCancelar" type="button">Cancelar</button>
+</form>
+
+<script type="text/javascript">
+    $('#btnGuardar').button({ icons: {primary:'ui-icon-plus'} }).click(function (){grabar();});
+    $('#btnCancelar').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog2');});
+
+    themeComboBox();
+    themeTextBox();
+
+    function grabar(){
+        var correcto = true;
+        var form = $('#frmagregarusGrup');
+        if(correcto){
+                    $.ajax({
+                        url: jQuery.scriptPath + "index.php/sistema/usuariogruposave",
+                        type: 'POST',
+                        cache: false,
+                        data: form.serialize(),
+                        beforeSend: function (data) {
+                          //  $('#result').html('Cargando...');
+                        },
+                        success: function (requestData) {
+                            // $("#result").html(requestData);
+                            openDialogInfo(requestData,400);
+                            closeDialog("jqDialogConfirmacion2");
+                            closeDialog('jqDialog2');
+                            buscarUsugrup();
+
+                        },
+                        error: function (requestData, strError, strTipoError) {
+                            $("#result").html("Error " + strTipoError + ': ' + strError);
+                        },
+                        complete: function (requestData, exito) {
+                        }
+                    });
+        }
+    };
+</script>

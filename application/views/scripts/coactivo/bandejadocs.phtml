@@ -1,0 +1,979 @@
+<!--liz inicio obtener flglegal-->
+<?php
+$userdata = new Zend_Session_Namespace('datosuserlog');
+$vuserlegal =  $userdata->legal;
+?>
+<!--liz fin obtener flglegal-->
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all " style="width: 99.8%;margin-top:2px;margin-left : 0px;margin-right :0px;margin-bottom:2px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <table border="0" width="100%">
+            <tr>
+                <td width="3%">
+                    <A href="../coactivo/index">
+                        <img width="25" height="25" src="<?php echo $this->util()->getImage("home-icon.png"); ?>">
+                    </A></td>
+                <td align="center" width="97%">
+                    <label style="font-size:12px !important;">BANDEJA DE EXPEDIENTES</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <table border="0" width="30%">
+        <tr>
+            <td><b>Area</b></td>
+            <td align="left" colspan="2">
+                <select id="cboarea" style="text-align: left;width: 340px;"></select>
+            </td>
+            <td rowspan="2" width="300">
+                <button id="btnbuscardocs">Buscar</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table border="0">
+                    <tr>
+                        <td><b>Busqueda por:</b>
+                            <select id="cbo_bus">
+                                <option value="1">FECHA</option>
+                                <option value="2">Nº EXPEDIENTE</option>
+                                <option value="3">Nº DOCUMENTO ADJUNTO</option>
+                                <option value="4">Nº DOCUMENTO EXTERNO</option>
+                            </select>
+                        </td>
+                        <td>
+                            <table border="0" width="500">
+                                <tr class="selFiltroFecha">
+                                    <td align="center" width="50"><b>Desde</b></td>
+                                    <td>
+                                        <input type="text" id="fecdesde" class="ui-text" style="text-align: left;width: 100px;" />
+                                    </td>
+                                    <td align="center" width="50"><b>Hasta </b></td>
+                                    <td>
+                                        <input type="text" id="fechasta" class="ui-text" style="text-align: left;width: 100px;" />
+                                    </td>
+                                </tr>
+                                <tr class="selFiltroExped" style="display: none;">
+                                    <td width="50"><b>Nro Exp.</b></td>
+                                    <td>
+                                        <input type="text" id="id_nroExp" class="ui-text" style="text-align: left;width: 250px;" />
+                                    </td>
+                                </tr>
+                                <tr class="selFiltroDoc" style="display: none;">
+                                    <td width="50"><b>Nro Doc.</b></td>
+                                    <td>
+                                        <input type="text" id="id_nroDoc" class="ui-text" style="text-align: left;width: 250px;" />
+                                    </td>
+                                </tr>
+                                <tr class="selFiltroDocex" style="display: none;">
+                                    <td width="50"><b>Nro Doc.</b></td>
+                                    <td>
+                                        <input type="text" id="id_nroDocex" class="ui-text" style="text-align: left;width: 250px;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <!-- <tr><td colspan="5">&nbsp;</td></tr> -->
+    </table>
+
+</div>
+
+<div id="tabsBandeja" style="width: 99%;margin-top:2px;margin-left : 2px;margin-right :2px;margin-bottom:2px;">
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1" onclick="filtrarBandejaEntrada()">Entrada</a></li>
+            <li><a href="#tabs-2" onclick="filtrarBandejaSalida()">Salida</a></li>
+        </ul>
+        <div id="tabs-14" style="float:left">
+            <div id="panelRuta">
+                <table id="tblRuta"></table>
+                <div id="ptblRuta"></div>
+            </div>
+        </div>
+        <div id="tabs-1"></div>
+        <div id="tabs-2"></div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    var filtro = {
+        FECHA: "1",
+        EXPED: "2",
+        DOC: "3",
+        DOCEX: "4"
+    };
+
+    gridConfigRuta = {
+        height: 300,
+        width: '20%',
+        ignoreCase: true,
+        //colNames: [" ", "idsigma", "mdocumento", "Documento", "Remitente", "Detalle Asunto", "Recep", "st_recep2", "Fec. Envio", "Fec. Recepcion", "ccocsini", "Area Inicio", "ccocsdes", "Area Destino", "Origen/Destino", "vobserv", "ctipacc", "Accion", "Ruta", "mruta", "ctipasunto", "Adj.", "Docs.", "Cerrar", "Elim."], --modificado 0106
+        colNames: ["", "idsigma", "mdocumento", "Nro", "Administrado", "Asunto Detallado", "Recep", "st_recep2", "Fec. Envio", "Fec. Recepcion", "ccocsini", "Area Inicio", "ccocsdes", "Area Destino", "Origen", "vobserv", "ctipacc", "Accion", "Ruta", "mruta", "ctipasunto", "Adj.", "Docs.", "Cerrar", "Concluir", "stConcluir2", "ctiptram", '', "Elim."], //--modificado 0106
+        colModel: [{
+                name: 'bnd',
+                index: 'bnd',
+                width: 25,
+                align: 'center',
+                search: false,
+                stype: 'select',
+                editoptions: {
+                    value: ":Todos;E:Entrada;S:Salida"
+                }
+            },
+            {
+                name: 'idsigma',
+                index: 'idsigma',
+                align: 'center',
+                hidden: true
+            },
+            {
+                name: 'mdocumento',
+                index: 'mdocumento',
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'vnrodocu',
+                index: 'vnrodocu',
+                width: 130,
+                align: 'left'
+            },
+            {
+                name: 'remitente',
+                index: 'remitente',
+                width: 170,
+                align: 'left',
+                hidden: false
+            },
+            {
+                name: 'vasunto',
+                index: 'vasunto',
+                width: 265,
+                align: 'left',
+                formatter: formatoAsunto
+            },
+            {
+                name: 'st_recep',
+                index: 'st_recep',
+                width: 30,
+                align: 'center',
+                formatter: chkFormatrecep,
+                search: false
+            },
+            {
+                name: 'st_recep2',
+                index: 'st_recep2',
+                width: 60,
+                hidden: true
+            },
+            {
+                name: 'dfecenv',
+                index: 'dfecenv',
+                width: 100,
+                align: 'center',
+                search: true,
+                stype: 'text',
+                searchoptions: {
+                    dataInit: datePick,
+                    attr: {
+                        title: 'Seleccionar Fecha'
+                    }
+                }
+            },
+            {
+                name: 'dfecrecep',
+                index: 'dfecrecep',
+                width: 100,
+                align: 'center'
+            },
+            {
+                name: 'ccocsini',
+                index: 'ccocsini',
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'vcocsini',
+                index: 'vcocsini',
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'ccocsdes',
+                index: 'ccocsdes',
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'vcocsdes',
+                index: 'vcocsdes',
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'orgdes',
+                index: 'orgdes',
+                width: 210,
+                align: 'left'
+            },
+            {
+                name: 'vobserv',
+                index: 'vobserv',
+                width: 100,
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'ctipacc',
+                index: 'ctipacc',
+                width: 100,
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'vtipacc',
+                index: 'vtipacc',
+                width: 70,
+                align: 'left'
+            },
+            {
+                name: 'btnmruta',
+                index: 'btnmruta',
+                width: 30,
+                align: 'center',
+                formatter: btnruta,
+                search: false
+            },
+            {
+                name: 'mruta',
+                index: 'mruta',
+                width: 40,
+                hidden: true
+            },
+            {
+                name: 'ctipasunto',
+                index: 'ctipasunto',
+                width: 30,
+                hidden: true
+            },
+            {
+                name: 'btndocumt',
+                index: 'btndocumt',
+                width: 30,
+                align: 'center',
+                formatter: btndocumt,
+                search: false
+            },
+            {
+                name: 'btndocumall',
+                index: 'btndocumall',
+                width: 30,
+                align: 'center',
+                formatter: btndocumtall,
+                search: false
+            },
+            {
+                name: 'stcierre',
+                index: 'stcierre',
+                width: 30,
+                align: 'center',
+                formatter: chkFormatcierreenv,
+                search: false
+            },
+            {
+                name: 'stconcluido',
+                index: 'stconcluido',
+                width: 30,
+                align: 'center',
+                formatter: chkFormatconcluido,
+                search: false
+            }, //modificado 0206
+            {
+                name: 'stconcluido2',
+                index: 'stconcluido2',
+                width: 60,
+                hidden: true
+            }, //modificado 0206
+            {
+                name: 'ctiprtram',
+                index: 'ctiprtram',
+                width: 100,
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'btnexplegal',
+                index: 'btnexplegal',
+                width: 30,
+                align: 'center',
+                formatter: btnexplegal,
+                search: false
+            },
+            {
+                name: 'delete',
+                index: 'delete',
+                width: 30,
+                align: 'center',
+                formatter: chkFormatDelete,
+                search: false
+            }
+        ],
+        caption: " Bandeja ",
+        rowNum: 10,
+        rownumbers: false,
+        multiselect: true,
+        viewrecords: true,
+        recordpos: 'right',
+        afterInsertRow: function(rowid, aData) {
+            if (aData.bnd == 'E' && aData.st_recep2 == '0') { //Entrada y no recepcionado
+                jQuery("#tblRuta").jqGrid('setCell', rowid, 'vnrodocu', '', {
+                    'font-weight': 'bold'
+                });
+            }
+
+            //Asuntos importante se cambia de color
+            var ctipasuntoImportant = ["0000000647", "0000000652", "0000000649", "0000000654", "0000000653", "0000000648"];
+            if (ctipasuntoImportant.indexOf(aData.ctipasunto) > -1) {
+                $("tr.jqgrow#" + rowid).addClass("AsuntoImportante");
+            }
+
+        },
+        loadComplete: function(data) {
+            if (data.rows.length > 0) {
+                for (var i = 0; i < data.rows.length; i++) {
+                    if (data.rows[i].bnd == 'S') {
+                        $("#jqg_tblRuta_" + (i + 1)).css("visibility", "hidden");
+                        $("#chkcierreenv_" + (i + 1)).css("visibility", "hidden");
+                        $("#chkrecep_" + (i + 1)).attr("disabled", "disabled");
+                    }
+
+                    if (data.rows[i].bnd == 'S' || data.rows[i].st_recep == '0') {
+                        $("#chkconcluirexp_" + (i + 1)).css("visibility", "hidden");
+                    }
+                    if (data.rows[i].stcierre == '1') {
+                        $("#jqg_tblRuta_" + (i + 1)).css("visibility", "hidden");
+                    }
+
+                }
+            }
+        }
+    };
+    var _FiltroBandeja = 'E'
+
+    function filtrarBandejaSalida() {
+        _FiltroBandeja = 'S';
+        ProcesoBuscarRuta('S');
+    }
+
+    function filtrarBandejaEntrada() {
+        _FiltroBandeja = 'E';
+        ProcesoBuscarRuta('E');
+        //filtroes='Destino';
+    }
+
+    function formatoAsunto(cellvalue, options, rowObject) {
+        var resultValue = '';
+        var pini = new RegExp('<p>', 'g');
+        resultValue = cellvalue.replace(pini, '');
+        var pfin = new RegExp('</p>', 'g');
+        resultValue = resultValue.replace(pfin, '');
+        resultValue = resultValue.trim();
+        return resultValue;
+    }
+
+    function datePick(elem) {
+        return true;
+    }
+
+    function chkFormatDelete(cellvalue, options, rowObject) {
+        var _return = '';
+        if (rowObject.bnd == 'E' || rowObject.st_recep2 == '1') {
+            _return = ''
+        } else {
+            _return = '<div align="center" class="ui-pg-button " title="Eliminar Salida" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="changecheckboxDelete(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-trash"></span></div></div>';
+        }
+        return _return;
+    }
+
+    function changecheckboxDelete(rowId) {
+        var row = jQuery("#tblRuta").jqGrid('getRowData', rowId);
+
+
+        openDialogConfirm1(" Esta seguro de eliminar el paso seleccionado?", 350, {
+            "Si": function() {
+                var parmter = {};
+                parmter.pmruta = row.idsigma;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "documentos/mrutadelete", parmter, updChangeDelete, 'json');
+            },
+            "No": function() {
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+
+    }
+
+    function updChangeDelete(data) {
+        openDialogInfo(data.msj, "250", "150", null, function() {
+            ProcesoBuscarRuta('');
+        });
+    }
+
+
+    // <------- btndocumt
+    // -----> btndocumtall Boton que llama a los documentos del del expediente en general
+    function btndocumtall(cellvalue, options, rowObject) {
+        return '<div align="center" class="ui-pg-button " title="Documentos" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtndocumtall(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+    }
+
+    function accionbtndocumtall(rowId) {
+        var rowdat = jQuery("#tblRuta").jqGrid('getRowData', rowId);
+        var paramtrs = {
+            pmdocumento: rowdat.mdocumento
+        };
+
+        openDialogDataFunction3("documentos/lstdocumentos", paramtrs, "1000", "520", "Documentos", null, {});
+    }
+
+    // ----> ChkBox Cierre de Envio
+    function chkFormatcierreenv(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" title="Cerrar Envio" id="chkcierreenv_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
+            'onclick="changecheckboxcierreenv(' + options.rowId + ')" />';
+    }
+
+
+    function changecheckboxcierreenv(rowId) {
+        var row = jQuery("#tblRuta").jqGrid('getRowData', rowId);
+        if (row.st_recep2 === '0') {
+            $("#chkcierreenv_" + rowId).attr('checked', false);
+            openDialogWarning('Documento ' + row.vnrodocu + ' no recepcionado.', 380, 150);
+            return false;
+        }
+        if (row.stconcluido2 === '1') {
+            $("#chkcierreenv_" + rowId).attr('checked', false);
+            openDialogWarning('El documento ' + row.vnrodocu + ' esta concluido.', 380, 150);
+            return false;
+        }
+        openDialogConfirm1(" Cerrar el envio del Documento?", 350, {
+            "Si": function() {
+                var parmter = {};
+                parmter.pmruta = row.idsigma;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "documentos/cierreenvio", parmter, updCheckcierreenv, 'json');
+            },
+            "No": function() {
+                $("#chkcierreenv_" + rowId).attr('checked', false);
+                closeDialog("jqDialogConfirmacion1");
+            }
+        });
+    }
+
+    function updCheckcierreenv(data) {
+        openDialogInfo(data[0].msj, "250", "150", null, function() {
+            ProcesoBuscarRuta('');
+        });
+    }
+
+
+    //  ChkBox Cierre de Envio <----
+
+    var vuserlegal = "<?php echo $vuserlegal; ?>";
+
+    function btnexplegal(cellvalue, options, rowObject) {
+        if (vuserlegal == '1' && rowObject.ctiprtram == '0000000123') {
+            return '<div id="div_benexpe_' + rowObject.idsigma + '" align="center" class="ui-pg-button " title="Modificar datos legales" style="text-align:center;float: left; cursor: pointer; display: ' + (rowObject.st_recep == '1' ? 'block' : 'none') + ';" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnlegaledit(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-pencil"></span></div></div>';
+        } else {
+            return '';
+        }
+    }
+
+
+    function accionbtnlegaledit(rowId) {
+        var rowdat = $("#tblRuta").jqGrid('getRowData', rowId);
+        parameters = {
+            mdocumento: rowdat.mdocumento,
+            vnrodocu: rowdat.vnrodocu,
+            pmruta: rowdat.idsigma,
+            accion: ''
+        };
+        openDialogData1("tramite/explegal", parameters, 520);
+    }
+
+    function accionbtnexplegalrecep(rowId) {
+
+        var rowdat = $("#tblRuta").jqGrid('getRowData', rowId);
+        parameters = {
+            mdocumento: rowdat.mdocumento,
+            vnrodocu: rowdat.vnrodocu,
+            pmruta: rowdat.idsigma,
+            accion: 'recep'
+        };
+        openDialogData1("tramite/explegal", parameters, 520);
+    }
+
+
+    function chkFormatconcluido(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkconcluirexp_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
+            'onclick="changecheckboxcconcluirexp(' + options.rowId + ')" ' + (cellvalue == '1' ? ' disabled ' : '') + '/>';
+    }
+
+    function changecheckboxcconcluirexp(rowId) {
+        var row = jQuery("#tblRuta").jqGrid('getRowData', rowId);
+        openDialogConfirm1("Concluir el Documento?", 350, {
+            "Si": function() {
+                var parmter = {};
+                parmter.pmruta = row.idsigma;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "documentos/concluirexp", parmter, updCheckconcluir, 'json');
+            },
+            "No": function() {
+                //ProcesoBuscarRuta(''); chkrecep_5
+                $("#chkconcluirexp_" + rowId).attr('checked', false);
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+    }
+
+    function updCheckconcluir(data) {
+
+        openDialogInfo(data[0].msj, "250", "150", null, function() {
+            ProcesoBuscarRuta('');
+        });
+    }
+
+
+    var btnEnviarDoc = {
+        caption: "Enviar a Area&nbsp;&nbsp;",
+        title: "Enviar Documento a un Area",
+        buttonicon: "ui-icon-transfer-e-w",
+        onClickButton: function() {
+
+            gsrr = jQuery("#tblRuta").jqGrid('getGridParam', 'selarrrow');
+            var msjrecep = '';
+            for (var i = 0; i < gsrr.length; i++) {
+                var row = jQuery("#tblRuta").jqGrid('getRowData', gsrr[i]);
+                //console.log($(row.stcierre).is(':checked'));
+                if ($(row.stcierre).is(':checked')) {
+                    jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
+                    openDialogWarning('El Documento Nro. ' + row.vnrodocu + ' se encuentra cerrado.', 380, 150);
+                    return false;
+                }
+                if (row.bnd == 'S') {
+                    jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
+                    openDialogWarning('El Documento Nro. ' + row.vnrodocu + ' ya fue enviado a ' + row.orgdes + '.', 380, 150);
+                    return false;
+                }
+                if (row.st_recep2 == '0') {
+                    //msjrecep +='Documento '+row.vnrodocu +' no recepcionado.<br>';
+                    jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
+                    openDialogWarning('Documento ' + row.vnrodocu + ' no recepcionado.', 380, 150);
+                    return false;
+
+                }
+                if (row.stconcluido2 == '1') {
+                    //msjrecep +='Documento '+row.vnrodocu +' no recepcionado.<br>';
+                    jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
+                    openDialogWarning('El documento ' + row.vnrodocu + ' esta concluido.', 380, 150);
+                    return false;
+                }
+            }
+
+            gsrr = jQuery("#tblRuta").jqGrid('getGridParam', 'selarrrow');
+
+            if (gsrr.length > 0) {
+                var mrutaenvio = [];
+                for (var i = 0; i < gsrr.length; i++) {
+                    var row = jQuery("#tblRuta").jqGrid('getRowData', gsrr[i]);
+                    mrutaenvio[i] = {
+                        pidsigma: row.idsigma,
+                        pmdocumento: row.mdocumento,
+                        pccocsini: $('#cboarea').val(),
+                        pmruta: row.mruta
+                    };
+                }
+
+                var paramtrs = {
+                    mdocumentos: JSON.stringify(mrutaenvio)
+                }
+
+                openDialogDataFunction1("documentos/enviodocumento", paramtrs, "970", "520", "Enviar Documento", null, {
+                    'Aceptar': function() {
+                        EnviardocumentoSave();
+                    },
+                    'Cancelar': function() {
+                        closeDialog("jqDialog1");
+                    }
+                });
+            } else {
+                openDialogWarning("Seleccione Documentos a Enviar.", 380, 150);
+            }
+        }
+    };
+
+
+    var btnEnviarUsuarioDoc = {
+        caption: "Enviar a Usuario&nbsp;&nbsp;",
+        title: "Enviar Documento a un Usuario",
+        buttonicon: "ui-icon-person",
+        onClickButton: function() {
+
+            var gsrr = jQuery("#tblRuta").jqGrid('getGridParam', 'selarrrow');
+            var msjrecep = '';
+            for (var i = 0; i < gsrr.length; i++) {
+                var row = jQuery("#tblRuta").jqGrid('getRowData', gsrr[i]);
+                //console.log(row);
+                if (row.bnd == 'S') {
+                    jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
+                    openDialogWarning('El Documento Nro. ' + row.vnrodocu + ' ya fue enviado a ' + row.orgdes + '.', 380, 150);
+                    return false;
+                }
+                if (row.st_recep2 == '0') {
+                    jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
+                    openDialogWarning('Documento ' + row.vnrodocu + ' no recepcionado.', 380, 150);
+                    return false;
+                }
+                if (row.stconcluido2 == '1') {
+                    jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
+                    openDialogWarning('El documento ' + row.vnrodocu + ' esta concluido.', 380, 150);
+                    return false;
+                }
+            }
+
+
+            var gsrr = jQuery("#tblRuta").jqGrid('getGridParam', 'selarrrow');
+
+            if (gsrr.length > 0) {
+                var mrutaenvio = [];
+                for (var i = 0; i < gsrr.length; i++) {
+                    var row = jQuery("#tblRuta").jqGrid('getRowData', gsrr[i]);
+                    //console.log(row);
+                    mrutaenvio[i] = {
+                        pidsigma: row.idsigma,
+                        pmdocumento: row.mdocumento,
+                        pccocsini: $('#cboarea').val()
+                    };
+                }
+                var paramtrs = {
+                    mdocumentos: JSON.stringify(mrutaenvio),
+                    cidarea: $('#cboarea').val()
+                };
+                openDialogDataFunction1("documentos/enviousuariodocumento", paramtrs, "370", "520", "Enviar Documento a Usuario", null, {
+                    'Aceptar': function() {
+                        EnviarUsuariodocumentoSave();
+                    },
+                    'Cancelar': function() {
+                        closeDialog("jqDialog1");
+                    }
+                });
+            } else {
+                openDialogWarning("Seleccione Documentos a Enviar.", 380, 150);
+            }
+        }
+    };
+    var btnNuevoExpInterno = {
+        caption: "Nuevo Exp.",
+        title: "Nuevo Expediente Coactivo",
+        buttonicon: "ui-icon-plus",
+        onClickButton: function() {
+            window.open(path + "tramite/expediente?tiptram=0000000620", "_self");
+        }
+    };
+
+    function navPanelRuta() {
+        $("#tblRuta").jqGrid('navGrid', '#ptblRuta', {
+            edit: false,
+            add: false,
+            del: false,
+            search: false,
+            refresh: false
+        });
+
+        $("#tblRuta").jqGrid('navButtonAdd', '#ptblRuta', btnNuevoExpInterno);
+        $("#tblRuta").jqGrid('navSeparatorAdd', '#ptblRuta');
+        $("#tblRuta").jqGrid('navButtonAdd', '#ptblRuta', btnEnviarDoc);
+        $("#tblRuta").jqGrid('navSeparatorAdd', '#ptblRuta');
+        $("#tblRuta").jqGrid('navButtonAdd', '#ptblRuta', btnEnviarUsuarioDoc);
+
+    };
+
+    function ProcesoBuscarRuta(opdefaultbus) {
+        opdefaultbus = _FiltroBandeja;
+
+        var fecdesde = $("#fecdesde").val();
+        var fechasta = $("#fechasta").val();
+        var id_nroExp = $("#id_nroExp").val();
+        var id_nroDoc = $("#id_nroDoc").val();
+        var id_nroDocex = $("#id_nroDocex").val();
+        var _sp = "coactivo.mruta_get";
+        switch ($("#cbo_bus").val()) {
+            case filtro.FECHA:
+                id_nroExp = "";
+                id_nroDoc = "";
+                id_nroDocex = "";
+                break;
+            case filtro.EXPED:
+                fecdesde = "";
+                fechasta = "";
+                id_nroDocex = "";
+                break;
+            case filtro.DOC:
+                fecdesde = "";
+                fechasta = "";
+                id_nroExp = "";
+                id_nroDocex = "";
+                _sp = "coactivo.mruta_get_busDoc";
+                break;
+            case filtro.DOCEX:
+                fecdesde = "";
+                fechasta = "";
+                id_nroExp = "";
+                _sp = "coactivo.mruta_get_busDocEx";
+                break;
+            default:
+                alert("...");
+        }
+
+        var paramtrs = '{' +
+            '"pccosto":"' + $('#cboarea').val() + '",' +
+            '"pfdesde":"' + fecdesde + '",' +
+            '"pfhasta":"' + fechasta + '",' +
+            '"pvnroexp":"' + id_nroExp + '",' +
+            '"pvnrodocu":"' + id_nroDoc + '",' +
+            '"pvnrodocuex":"' + id_nroDocex + '",' +
+            '"popbusdefault":"' + opdefaultbus + '",' +
+            '"pcidusuario":"<?php echo $this->cidusuario; ?>"' +
+            '}';
+
+        parameters = {
+            "name": "tblRuta",
+            "procedure": _sp,
+            "print": "true",
+            "parameters": paramtrs
+        };
+
+        procesarConsultaSubProceso('registrar', parameters, procesoRuta, 'json');
+    };
+
+    function procesoRuta(request) {
+        var records = (request == null ? 0 : request.length),
+            gridConfigRuta2 = $.extend(gridConfigRuta, {
+                data: request,
+                datatype: "local",
+                gridComplete: function() {
+                    isGridComplete = true;
+                }
+            });
+
+        $("#panelRuta").html('<table id="tblRuta"></table><div id="ptblRuta"></div>');
+        inicializarGrid("tblRuta", gridConfigRuta2, {});
+        navPanelRuta();
+        $("#tblRuta").jqGrid('filterToolbar', {
+            stringResult: true,
+            searchOnEnter: false,
+            defaultSearch: 'cn',
+            ignoreCase: true
+        });
+        if (_FiltroBandeja == 'S') {
+            $("#tblRuta").jqGrid('setLabel', "orgdes", "Destino");
+        } else {
+            $("#tblRuta").jqGrid('setLabel', "orgdes", "Origen");
+        }
+    };
+
+    // -----> btnruta
+    function btnruta(cellvalue, options, rowObject) {
+
+        return '<div class="ui-pg-button " title="Ver Ruta" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnruta(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-search"></span></div></div>';
+    }
+
+    function accionbtnruta(rowId) {
+        var rowdat = jQuery("#tblRuta").jqGrid('getRowData', rowId);
+        var paramtrs = {
+            mruta: rowdat.mruta
+        };
+        openDialogDataFunction1("documentos/hojaruta", paramtrs, "1200", "625", "Hoja de Ruta ", null, {});
+    }
+
+    function btndocumt(cellvalue, options, rowObject) {
+        if (rowObject.bnd == 'S') {
+            return '';
+        } else if (rowObject.bnd == 'E') {
+            return '<div align="center" class="ui-pg-button " title="Documento" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtndocumt(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+        }
+    }
+
+    function accionbtndocumt(rowId) {
+        var rowdat = jQuery("#tblRuta").jqGrid('getRowData', rowId);
+        //
+
+        if (rowdat.st_recep2 === '0') {
+            openDialogWarning('Documento ' + rowdat.vnrodocu + ' no recepcionado.', 380, 150);
+            return false;
+
+        }
+
+
+
+        var paramtrs = {
+            cidsigma: rowdat.idsigma,
+            ctipjerar: '0000000131',
+            mdocumento: rowdat.mdocumento
+        };
+        openDialogDataFunction1("documentos/ddocumento", paramtrs, "1000", "520", "Documentos ", null, {});
+    }
+
+    function chkFormatrecep(cellvalue, options, rowObject) {
+        //console.log(cellvalue,rowObject);
+        return '<input  type="checkbox" id="chkrecep_' + rowObject.idsigma + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
+            'onclick="changecheckboxrecep(' + options.rowId + ')" ' + (cellvalue == '1' ? ' disabled ' : '') + '/>';
+    }
+
+    function changecheckboxrecep(rowId) {
+
+        var row = jQuery("#tblRuta").jqGrid('getRowData', rowId);
+
+        if (vuserlegal == '1' && row.ctiprtram == '0000000123') {
+            accionbtnexplegalrecep(rowId);
+        } else {
+            openDialogConfirm1("Recepcionar el Documento?", 350, {
+                "Si": function() {
+
+
+                    var parmter = {};
+                    parmter.pmruta = row.idsigma;
+                    closeDialog("jqDialogConfirmacion1");
+                    $.post(path + "documentos/rutarecepcion", parmter, updCheckrecep, 'json');
+
+                },
+                "No": function() {
+                    //ProcesoBuscarRuta(''); chkrecep_5
+                    $("#chkrecep_" + rowId).attr('checked', false);
+                    closeDialog("jqDialogConfirmacion1");
+
+                }
+            });
+        }
+    }
+
+
+
+    function updCheckrecep(data) {
+
+        openDialogInfo(data[0].msj, "250", "150", null, function() {
+            ProcesoBuscarRuta('');
+        });
+    }
+
+
+    $(document).ready(function() {
+        $("#btnbuscardocs").button({
+            icons: {
+                primary: "ui-icon-search"
+            }
+        }).click(function() {
+            ProcesoBuscarRuta('');
+        });
+
+        $("#fecdesde").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+        $("#fechasta").datepicker({
+            showOn: "button",
+            buttonImage: pathImage + "calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
+
+
+
+        inicializarGrid("tblRuta", gridConfigRuta);
+        navPanelRuta();
+        ProcesoBuscarRuta('<?php echo $this->opBusDefault; ?>');
+        if ("<?php echo $this->ntramite; ?>" != "1") {
+            $('#cboarea').combobox('disable');
+        }
+        //
+
+        $("#cbo_bus").combobox({
+            selected: function(event, ui) {
+                $(".selFiltroFecha").hide();
+                $(".selFiltroExped").hide();
+                $(".selFiltroDoc").hide();
+                $(".selFiltroDocex").hide();
+
+                switch ($("#cbo_bus").val()) {
+                    case filtro.FECHA:
+                        $(".selFiltroFecha").show();
+                        break;
+                    case filtro.EXPED:
+                        $(".selFiltroExped").show();
+                        break;
+                    case filtro.DOC:
+                        $(".selFiltroDoc").show();
+                        break;
+                    case filtro.DOCEX:
+                        $(".selFiltroDocex").show();
+                        break;
+                    default:
+                        alert("...");
+                }
+            }
+        });
+
+        $("#tabs").tabs();
+        //$("#tabsBandeja").tabs();
+        // $("#tabsBandeja").tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
+        //$("#tabsBandeja li").removeClass("ui-corner-top").addClass("ui-corner-left");
+
+
+    });
+</script>
+
+
+<style>
+    .ui-tabs-vertical {
+        width: 100%;
+    }
+
+    .ui-tabs-vertical .ui-tabs-nav {
+        padding: .2em .1em .2em .2em;
+        float: left;
+        width: 10em;
+    }
+
+    .ui-tabs-vertical .ui-tabs-nav li {
+        clear: left;
+        width: 100%;
+        border-bottom-width: 1px !important;
+        border-right-width: 0 !important;
+        margin: 0 -1px .2em 0;
+    }
+
+    .ui-tabs-vertical .ui-tabs-nav li a {
+        display: block;
+    }
+
+    .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+        padding-bottom: 0;
+        padding-right: .1em;
+        border-right-width: 1px;
+    }
+
+    .ui-tabs-vertical .ui-tabs-panel {
+        /*padding: 1em;*/
+        float: right;
+        /*width: 40em;*/
+    }
+</style>

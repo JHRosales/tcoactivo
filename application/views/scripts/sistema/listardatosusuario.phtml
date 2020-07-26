@@ -1,0 +1,394 @@
+<form id="frmCentro">
+
+    <table border="0"><tr><td>
+    <table border="0" cellspacing="5">
+        <tr>
+            <td colspan="2">
+                <input type="hidden" id="cidusuari" name="cidusuari" value="<?php echo $this->cidusuario;?>">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">Area:</td>
+            <td colspan="3">&nbsp;
+                <select id="cidarea" name="cidarea" style="width: 180px" ><?php echo $this->cidareaHTML; ?></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Cod Persona:</td>
+            <td>&nbsp;
+                <input type="text" id="cidperson" name="cidperson" class="ui-text"  size="35"  maxlength="10" value="<?php echo $this->mperson; ?>">
+            </td>
+            </tr><tr>
+            <td>Nombre Persona:</td>
+            <td>
+                <input type="text" id="nomusuario" name="nomusuario" class="ui-text" disabled="disabled" size="42px" value="<?php echo $this->vnombre; ?>">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">Tipo Usuario:</td>
+            <td colspan="3">&nbsp;
+                <select id="tipou" name="tipou" style="width: 180px"><?php echo $this->tipoUHTML; ?></select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">Usuario:</td>
+            <td colspan="3">&nbsp;
+                <input type="text" id="usuari" name="usuari"  class="ui-text" size="35"  maxlength="25" value="<?php echo $this->usuario; ?>">
+            </td>
+         </tr>
+       <?php if($this->opt==1){?>
+        <tr>
+            <td colspan="1">Clave:</td>
+            <td colspan="3">&nbsp;
+                <input type="password" id="clave" name="clave" class="ui-text" size="35px" maxlength="25" value="<?php echo $this->clave; ?>">
+            </td>
+        </tr>
+       <?php } else {}?>
+        <tr>
+            <td colspan="1">Fecha Inicio:</td>
+            <td colspan="3">&nbsp;
+                <input type="text" id="fechaini" name="fechaini" class="ui-text" size="35px" maxlength="10" value="<?php echo $this->fechaini; ?>"></td>
+          </tr><tr>
+            <td colspan="1">Fecha Fin:</td>
+            <td colspan="3">&nbsp;
+                <input type="text" id="fechafin" name="fechafin" class="ui-text" size="35px" maxlength="10" value="<?php echo $this->fechafin; ?>"></td>
+
+        </tr>
+        <tr>
+            <td colspan="1">Fecha Vencimiento:</td>
+            <td colspan="3">&nbsp;
+                <input type="text" id="fechavenc" name="fechavenc" class="ui-text" size="35px" maxlength="10" value="<?php echo $this->fechavenc; ?>"></td>
+          </tr><tr>
+            <td colspan="1">Nro Caja:</td>
+            <td colspan="3">&nbsp;
+                <input type="text" id="nrocaja" name="nrocaja" class="ui-text"  size="35"  maxlength="20" value="<?php echo $this->nrocaja; ?>"></td>
+        </tr>
+        <tr>
+            <td colspan="1">Estado:</td>
+            <td colspan="3">&nbsp;
+                <input type="checkbox" id="nestado" name="nestado"  value="1" offvalue="0" class="ui-text" <?php if($this->nestado!=''){if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>>
+            </td>
+        </tr>
+    </table>
+    </td>
+            <?php if($this->opt==1){?>
+                <td valign="top">
+                    <div class="ui-widget ui-widget-content ui-corner-all" style="width: 400px; height: 280px;">
+                        <div align="left" class="ui-widget ui-state-default ui-corner-top ui-title">
+                            <label>Usuarios o Grupo</label>
+                        </div>
+                        <div id="PanellistaObservaciones">Guardar Usuario Para Agregar (Usuario o Grupo)</div>
+                        <div id="PanelDetalleDeclaracion"></div>
+                        </div>
+                    <div align="left" class="ui-widget ui-state-default ui-corner-bottom ui-title">
+                        <label> + Agregar | - Editar </label>
+                    </div>
+                </td>
+            <?php } else { ?>
+                <td style="width: 350px;  height:300px;">
+        <table style="width: 100%" border="0">
+            <tr>
+                <td valign="top" style="width: 1%; padding-right: 2px">
+                    <div id="panelResultUsuarioGru">
+                        <table id="tblResultUsuarioGru"></table>
+                        <div id="ptblResultUsuarioGru"></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </td>
+        <?php } ?>
+    </tr>
+    </table>
+
+
+
+    <br/>
+    <div id="result"></div>
+    <table>
+        <tr>
+            <td width="40"></td>
+            <td><button id="btnGuardarUsu" type="button">Guardar</button></td>
+            <td width="10"></td>
+            <td><button id="btnCancelarUsu" type="button">Cancelar</button></td>
+        </tr>
+    </table>
+    <br/><br/>
+</form>
+<script>
+    $('#btnGuardarUsu').button({ icons: {primary:'ui-icon-disk'} }).click(function(){grabar();});
+    $('#btnCancelarUsu').button({ icons: {primary:'ui-icon-closethick'}}).click(function(){closeDialog('jqDialog1');});
+
+    themeComboBox();
+    themeTextBox();
+
+    $("#cidperson").keypress(function(e){
+        if(e.which == 13) {
+
+            var vnmper= $('#cidperson').val();
+            var vobjmper = $('#cidperson');
+            if(trim(vnmper).length > 0){
+                vnmper = LPad(vnmper, 10, '0');
+            }
+            vobjmper.val(vnmper);
+            $.ajax({
+                dataType:'json',
+                url: jQuery.scriptPath + "index.php/mantenimientos/buscarpersonaajax",
+                type: 'POST',
+                data: {
+                    mperson:vnmper
+                },
+                beforeSend : function(data) {
+                    // $('#result').html('Cargando...');
+                },
+                success : function(requestData) {
+                    //console.log(requestData);
+                    //console.log(requestData[0]);
+                    // console.log(requestData[1]);
+                    $('#nomusuario').val(requestData[1]);
+                    if(requestData=null){
+                        openDialogInfo('Usuario no Existe en la BD ',300);
+                        $('#nomusuario').val("");
+                    }
+                },
+                error : function(requestData, strError, strTipoError) {
+                    openDialogInfo('Usuario no Existe en la BD ',300);
+                    $('#nomusuario').val("");
+                    if(requestData=null){
+                        openDialogInfo('Usuario no Existe en la BD ',300);
+                        $('#nomusuario').val("");
+                    }
+                },
+                complete : function(requestData, exito) {
+                }
+            });
+        }
+    });
+
+
+
+    $("#cidperson").numeric({
+        decimal: false,
+        negative: false
+    }, function() {
+        openDialogWarning("Solo Numeros Enteros Positivos.", 150, 90);
+        this.value = "";
+        this.focus();
+    });
+    $("#fechaini,#fechafin,#fechavenc").datepicker({
+        dateFormat : "dd-mm-yy",
+        changeMonth:false,
+        changeYear:false,
+        showOn: "button",
+        buttonImage: jQuery.scriptPath + "img/calendar.gif",
+        buttonImageOnly: true
+    });
+
+    function grabar(){
+        var correcto = true;
+        var form = $('#frmCentro');
+
+         if($("#tipou").val()=="9999999999"){
+            openDialogWarning("Datos Incompletos : Seleccione el Tipo de Usuario",300);
+            correcto = false;
+        } else if($("#usuari").val()==""){
+            openDialogWarning("Datos Incompletos : Ingrese Usuario",300);
+            correcto = false;
+        }
+        else if($("#fechaini").val()==""||$("#fechafin").val()==""){
+            openDialogWarning("Datos Incompletos : Ingrese fecha",300);
+            correcto = false;
+        }
+
+        if(correcto){
+            openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?", 350, {
+                "Si" : function() {
+                    $.ajax({
+                    url: jQuery.scriptPath + "index.php/sistema/usuariosave",
+                        type: 'POST',
+                        cache: false,
+                        data: form.serialize(),
+                        success: function (requestData) {
+                           // $("#result").html(requestData);
+                            closeDialog("jqDialogConfirmacion1");
+
+                            if(requestData=='Actualizado Correctamente' || requestData=='Guardado Correctamente'){
+                                closeDialog('jqDialog1');
+                                buscarUsuario();
+                            }
+                            openDialogInfo(requestData,400);
+                        },
+                        error: function (requestData, strError, strTipoError) {
+                            $("#result").html("Error " + strTipoError + ': ' + strError);
+                        },
+                        complete: function (requestData, exito) {
+                        }
+                    });
+                },
+                "No" : function() {
+                    closeDialog("jqDialogConfirmacion1");
+                }
+            });
+        }
+    };
+
+    newUsug=function(){
+       var idusuario=$("#cidusuario").val();
+        var tipo=$("#tipo").val();
+        openDialogDataFunction2("sistema/agregarusuariogrupo",{idusuario:idusuario,cidgrupo:idusuario,opt:'0',tipousu:tipo},"325", "150", "Agregar Usuario o Grupo");
+    }
+    editUsug=function(){
+        rowid= jQuery("#tblResultUsuarioGru").jqGrid('getGridParam','selrow');
+        if (rowid == undefined){
+            openDialogInfo("Seleccione una fila",300);
+            return false;
+        }
+        row = $("#tblResultUsuarioGru").jqGrid('getRowData', rowid);
+        var tipo=$("#tipo").val();
+        openDialogDataFunction2("sistema/agregarusuariogrupo",{opt:'1',idusuario:row.cidusuario,cidgrupo:row.cidgrupo,tipousu:tipo,nestado:row.estado},"315", "150", "Modificar Usuario o Grupo");
+    }
+    btnAgregaUsuag = {
+        caption: '&nbsp;Agregar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+        title: 'Agregar Dpaso',
+        buttonicon: 'ui-icon-plusthick',
+        onClickButton: function () {
+            newUsug();
+        }
+    };
+
+    btnEditarUsuag = {
+        caption: '&nbsp; Editar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+        title: 'Editar Dpaso',
+        buttonicon: 'ui-icon-pencil',
+        onClickButton: function () {
+            editUsug();
+        }
+    };
+
+    var navPanelUsuag = function() {
+        $("#tblResultUsuarioGru").jqGrid('navGrid', '#ptblResultUsuarioGru', {edit: false, add: false, del: false, search: false, refresh: false});
+        $("#tblResultUsuarioGru").jqGrid('navButtonAdd', '#ptblResultUsuarioGru', btnAgregaUsuag);
+        $("#tblResultUsuarioGru").jqGrid('navSeparatorAdd', '#ptblResultUsuarioGru');
+        $("#tblResultUsuarioGru").jqGrid('navButtonAdd', '#ptblResultUsuarioGru', btnEditarUsuag);
+        $("#tblResultUsuarioGru").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+    };
+
+    xmanteUpdateusug = function(numberrow,_row){
+        if(numberrow == undefined || numberrow == null) {
+            row = _row
+        }else{
+            row = $(this).getRowData(numberrow);
+        }
+        row.action='update';
+        editUsug(row);
+    };
+    bindkeysUsuag = {"onEnter": xmanteUpdateusug};
+    buscarUsugrup = function() {
+        valid = true;
+        if(valid==true) {
+            var params = {
+                "name": "tblResultUsuarioGru",
+                "procedure": "seguridad.buscar_usuariogrupo",
+                "print": "true",
+                "parameters": '{' +
+                '"p_idsigma":"<?php echo $this->cidusuario; ?>",' +
+                '"p_tipou":"<?php echo $this->tipousu; ?>"' +
+                '}'
+            };
+            optionUsuag.caption = "<table border='0', width='200'><tr><td>" +
+            "Usuarios o Grupos <br>" +
+            "Codigo: <?php echo $this->cidusuario; ?>"  +
+            "</td><td width='10'></td><td><input id='cidusuario' name='cidusuario' type='hidden' value='<?php echo $this->cidusuario; ?>'><input id='tipo' name='tipo' type='hidden' value='<?php echo $this->tipousu; ?>'></td></tr>" +
+            "</table>";
+            procesar = function(requestData){
+                options = $.extend(optionUsuag, {
+                    data: requestData,
+                    datatype: "local",
+                    gridComplete: function(){
+                        isGridComplete = true;
+                        $("#tblResultUsuarioGru").jqGrid('setSelection', 1, true);
+                        //$('#buscartodos').button({ icons: {primary:'ui-icon-search'} }).click(function (){buscarUsugrup()});
+                        navPanelUsuag();
+                    }
+                });
+                procesarProcedimientoJSON('panelResultUsuarioGru', 'tblResultUsuarioGru', optionUsuag, params, bindkeysUsuag,null);
+            };
+            procesarConsultaSubProceso("registrar", params, procesar, 'json');
+
+            //para que la grilla no se distorcione cuando se guarda pero no funciona el select por defecto de la primera fila cuando carga
+            /*  proceso = function(requestData){
+             /*  options = $.extend(optionUsuag, {
+             data: requestData,
+             datatype: "local",
+             gridComplete: function () {
+             isGridComplete = true;
+             $("#tblResultUsuarioGru").jqGrid('setSelection', 1, true);
+             //$('#buscartodos').button({ icons: {primary:'ui-icon-search'} }).click(function (){buscarUsugrup()});
+             navPanelUsuag();
+             }
+             });*\/
+             $("#panelResultUsuarioGru").html(requestData);
+             records = $("#tblResultUsuarioGru").val();
+
+             actualizarGrid("tblResultUsuarioGru", optionUsuag, bindkeysUsuag);
+             navPanelUsuag();
+             };
+             procesarConsultaSubProceso('registrar', params, proceso);*/
+        } else {
+            openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+        }
+    };
+
+    optionUsuag = {
+        editurl: "save",
+        height: 200,
+        width: 400,
+        rowNum:9999,
+        colNames: ["C\u00F3digo","Usuario","Cidgrupo.", "Grupo" ,"Estado","vusernm", "vhostnm", "vdatetm"],
+        colModel: [
+            {name:'cidusuario', index:'cidusuario', width:67},
+            {name:'usuario', index:'usuario', width:90,editable: true,search: true,align: 'center'},
+            {name:'cidgrupo', index:'cidgrupo', width:67,hidden:false,align: 'center'},
+            {name:'grupo', index:'grupo', width:80,hidden:false,align: 'center'},
+            {name:'estado', index:'estado', width:50,hidden:false,editable: true,search: false,align:"center",edittype:"checkbox",editoptions:{value:"1:0",defaultValue:"1"},formatter:'checkbox'},
+            {name:'estacion', index:'estacion', width:1,hidden:true},
+            {name:'usuario_registro', index:'usuario_registro', width:1,hidden:true},
+            {name:'fecha_registro', index:'fecha_registro', width:1,hidden:true}
+        ],
+        onSelectRow: function(){
+            var grid = $("#tblResultUsuarioGru");
+            var rowid = grid.jqGrid('getGridParam','selrow');
+            var row = grid.jqGrid('getRowData', rowid);
+            //   buscarDformatocargo('No hay Datos');
+            //    buscarDformatoreq(row.idsigma);
+            closeDialog("jqDialogCargando");
+        },
+        caption:"<table border='0', width='300'><tr><td>Permisos</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!--<button type='button' id='buscartodos'>Todos</button>--></td></tr></table> ",
+        ignoreCase:true,
+        viewrecords: false,
+        scroll:true,
+        pagerpos:"right",
+        multiselect: false,
+        cellEdit:false,
+        toppager:false,
+        ondblClickRow: editUsug,
+        //  hidegrid: true,
+        afterInsertRow: function(rowid, aData){
+            switch (aData.estado) {
+                case '1':
+                    break;
+                case '0':
+                    jQuery("#tblResultUsuarioGru").jqGrid('setCell',rowid,'cidusuario','',{color:'red'});
+                    jQuery("#tblResultUsuarioGru").jqGrid('setCell',rowid,'usuario','',{color:'red'});
+                    jQuery("#tblResultUsuarioGru").jqGrid('setCell',rowid,'cidgrupo','',{color:'red'});
+                    jQuery("#tblResultUsuarioGru").jqGrid('setCell',rowid,'grupo','',{color:'red'});
+                    jQuery("#tblResultUsuarioGru").jqGrid('setCell',rowid,'estado','',{color:'red'});
+                    break;
+            }
+        }
+    };
+
+    $(function(){
+    buscarUsugrup();
+    });
+</script>

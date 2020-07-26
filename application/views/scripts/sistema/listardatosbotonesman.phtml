@@ -1,0 +1,118 @@
+<form id="frmBotonesa">
+<table border="0" >
+    <tr>
+        <td colspan="4">
+            <input type="hidden" id="cidobjeto" name="cidobjeto" value="<?php echo $this->idsigma; ?>">
+        </td>
+    </tr>
+    <tr>
+
+        <td colspan="2">Nombre</td>
+        <td>&nbsp;
+            <input type="text" id="vobjeto" name="vobjeto" class="ui-text" style="text-transform: none" size="28px" value="<?php echo $this->vobjeto; ?>">
+
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">Padre</td>
+        <td>&nbsp;
+            <input type="text" id="cidobjetopadre" name="cidobjetopadre" class="ui-text" size="28px" readonly value="<?php echo $this->cidpadre; ?>"> <!--001  -->
+        </td>
+    </tr>
+    <!--<tr>
+        <td colspan="2">Accion</td>
+        <td>&nbsp;
+            <input type="text" id="accion" name="accion" class="ui-text" size="28px" value="<?php echo $this->accion; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Orden</td>
+        <td>&nbsp;
+            <input type="text" id="orden" name="orden"  class="ui-text" size="28px" value="<?php echo $this->orden; ?>">
+        </td>
+    </tr>-->
+    <tr>
+        <td colspan="2">Id Objeto</td>
+        <td>&nbsp;
+            <input type="text" id="txt_decimal" name="txt_decimal" class="ui-text" size="28px" style="text-transform: none" value="<?php echo $this->objid; ?>">
+        </td>
+    </tr>
+   <tr>
+        <td colspan="2">Estado</td>
+        <td colspan="3">&nbsp;
+            <input type="checkbox" id="nestado" name="nestado"  value="1" offvalue="0" class="ui-text" <?php if ($this->nestado!=''){ if($this->nestado==1){echo 'checked';}}else{echo 'checked';} ?>>
+        </td>
+    </tr>
+</table>
+    <br/>
+<div id="result"></div>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="btnGuardar" type="button">Guardar</button>&nbsp;
+<button id="btnCancelar" type="button">Cancelar</button>
+
+</form>
+
+<script type="text/javascript">
+    $('#btnGuardar').button({ icons: {primary:'ui-icon-disk'} }).click(function (){grabar();});
+    $('#btnCancelar').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog2');});
+
+    themeComboBox();
+    themeTextBox();
+
+    $("#orden").numeric({
+        decimal: false,
+        negative: false
+    }, function() {
+        openDialogWarning("Solo Numeros Enteros Positivos.", 150, 90);
+        this.value = "";
+        this.focus();
+    });
+
+    function grabar(){
+        var correcto = true;
+        var form = $('#frmBotonesa');
+         if($("#cnroact").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#cnroact").focus();
+            correcto = false;
+        } else if($("#ccajdes").val()==""){
+            openDialogWarning("Datos Incompletos",300);
+            $("#ccajdes").focus();
+            correcto = false;
+        }
+        if(correcto){
+            openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?", 350, {
+                "Si" : function() {
+                $.ajax({
+                    url: jQuery.scriptPath + "index.php/sistema/botonesobjsave",
+                    type: 'POST',
+                    cache: false,
+                    data: form.serialize(),
+
+                    beforeSend : function(data) {
+                        $('#result').html('Cargando...');
+                    },
+                    success : function(requestData) {
+                        //$("#result").html(requestData);
+                        closeDialog("jqDialogConfirmacion1");
+                        closeDialog('jqDialog2');
+                        buscarbotonesobj($("#cidobjetopadre").val());
+                    },
+                    error : function(requestData, strError, strTipoError) {
+                        $("#result").html("Error " + strTipoError + ': ' + strError);
+                    },
+                    complete : function(requestData, exito) {
+                    }
+                 });
+
+                },
+                "No" : function() {
+                    closeDialog("jqDialogConfirmacion1");
+                }
+            });
+        }
+    }
+
+</script>
+

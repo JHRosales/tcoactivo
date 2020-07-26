@@ -1,0 +1,363 @@
+<div id="panelMantenimientoDAsunto"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 480px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Asunto - Detalle</label>
+    </div>
+    <div id="asuntotabs">
+        <ul>
+            <li><a href="#tabDAsunto">Detalle Asunto</a></li>
+            <li><a href="#tabDAsuntoReq">Requisitos</a></li>
+        </ul>
+        <div id="tabDAsunto" style="height: 220px;">
+            <table border="0" class="ui-table-panelLayout">
+                <tr>
+                    <td style="text-align: left">C&oacute;digo</td>
+                    <td style="text-align: left">
+                        &nbsp;<input class="editable ui-text"
+                               style="background-color: #e4e4e4;"
+                               type="text"
+                               id="txtidsigma_dasunto"
+                               name="txtidsigma_dasunto"
+                               value="<?php echo $this->idsigma; ?>"
+                               readonly="readonly"/>
+                        <input type="hidden" id="hdnestado_dasunto" name="hdnestado_dasunto" value="<?php echo $this->nestado; ?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">
+                        <label for="txtconten_tipoasunto">Tipo asunto</label>
+                    </td>
+                    <td style="text-align: left">
+                        <table cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <input type="hidden"
+                                           id="hidconten_tipoasunto"
+                                           name="hidconten_tipoasunto"
+                                           value="<?php echo $this->ctipasunto;?>"/>
+                                    <textarea class="ui-text"
+                                              style="width:250px;"
+                                              id="txtconten_tipoasunto"
+                                               readonly="readonly"
+                                              name="txtconten_tipoasunto"><?php  echo $this->dtipoasunto;?></textarea>
+                                </td>
+                                <td>
+                                    <button id="btnFindContenAsunto">Search</button>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">
+                        D&iacute;as
+                    </td>
+                    <td style="text-align: left">
+                        &nbsp;<input class="editable ui-text"
+                               style="width:50px;"
+                               type="text"
+                               id="txtndias"
+                               name="txtndias"
+                               value="<?php echo $this->ndias;?>" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">
+                        Area responsable
+                    </td>
+                    <td style="text-align: left">
+                        &nbsp;<select id="cboctipccos" name="cboctipccos" style="width:250px;">
+                            <?php echo $this->util()->getComboContenedor('0000000001',$this->ctipccos); ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left">
+                        Tipo de tramite
+                    </td>
+                    <td style="text-align: left">
+                        &nbsp;<select id="cboctiptra" name="cboctiptra" style="width:250px;">
+                            <?php echo $this->util()->getComboContenedorTramite('0000000002',$this->ctiptra); ?>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="tabDAsuntoReq" style="height: 220px;">
+            <div id="panelListaReq" align="center" style="width: 99%;margin: 3px;">
+                <table id="tblListaReq"></table>
+                <div id="ptblListaReq"></div>
+            </div>
+        </div>
+        <hr/>
+        <button type="button" style="width:120px;" id="btnguardardasunto" name="btnguardardasunto" onclick="guardarDasunto()">
+            Aceptar
+        </button>
+        <button type="button" style="width:120px;" id="btncanceldasunto" name="btncanceldasunto" onclick="cancelarDasunto();">
+            Cancelar
+        </button>
+    </div>
+</div>
+<script>
+    $('#btnFindContenAsunto').button({
+        text : false,
+        icons : { primary : 'ui-icon-search'}
+    }).bind('click', function(){
+        openDialogDataFunction3(
+            'conten/tipoasunto',
+            {
+                showNavPanel : 'add'
+            },
+            720,
+            350,
+            'Seleccionar Asunto',
+            function(){
+                $('.ui-dialog-buttonpane').find('button:contains("Aceptar")').button({
+                    icons: {primary: 'ui-icon-check'}
+                });
+            },
+            {
+                'Aceptar ' : function(){
+                    var row = buscadorConten.getSelectedRow();
+                    if (row.idsigma == null || row.idsigma == undefined){
+                        openDialogInfo('Seleccione un registro.');
+                        return;
+                    }
+                    $('#hidconten_tipoasunto').val(row.idsigma);
+                    $('#txtconten_tipoasunto').val(row.vdescri);
+                    closeDialog('jqDialog3');
+                }
+            }
+        )
+    });
+
+
+    optionReq = {
+        width: 430,
+        height: 150,
+        colNames: [
+            'idsigma',
+            'dasunto',
+            'vtipasunto',
+            'ctipdoc',
+            'Tipo Documento',
+            'nestado',
+            'Estado',
+            'vobserv',
+            'vhostnm',
+            'vusernm',
+            'ddatetm'
+        ],
+        colModel: [
+            {name: 'idsigma', index:'idsigma', hidden: true},
+            {name: 'dasunto', index:'dasunto', hidden: true},
+            {name: 'vtipasunto', index:'vtipasunto', hidden: true},
+            {name: 'ctipdoc', index:'ctipdoc', hidden: true},
+            {name: 'vtipdoc', index:'vtipdoc', width: 200},
+            {name: 'nestado', index:'nestado', hidden: true},
+            {name: 'vestado', index:'vestado', width: 80},
+            {name: 'vobserv', index:'vobserv', hidden: true},
+            {name: 'vhostnm', index:'vhostnm', hidden: true},
+            {name: 'vusernm', index:'vusernm', hidden: true},
+            {name: 'ddatetm', index:'ddatetm', hidden: true}
+        ],
+        caption: "Requisitos",
+        onSelectRow: function(id) {
+            row = $(this).getRowData(id);
+        },
+        gridComplete: function() {
+        }
+    };
+    function buttonsGridReq(){
+        $("#tblListaReq")
+            .navGrid('#ptblListaReq', {edit:false,add:false,del:false,search:false,refresh:false},{},{},{},{multipleSearch:true})
+            .navButtonAdd('#ptblListaReq',{
+             caption:"",
+             buttonicon:"ui-icon-plus",
+             onClickButton: function(){
+
+                //$("#formRequisito").dialog("open");
+                 openDialogDataFunction3(
+                     'tramite/nrequisito',
+                     null,
+                     420,
+                     120,
+                     'Requisito',
+                     function(){
+                         $("#reqaccion").val("I");
+                         $("#txtidsigma_req").val("");
+                     },
+                     null
+                 )
+             },
+             position:"last"
+             })
+             .navSeparatorAdd()
+             .navButtonAdd('#ptblListaReq',{
+             caption:"",
+             buttonicon:"ui-icon-pencil",
+             onClickButton: function(){
+
+
+                 //$("#formRequisito").dialog("open");
+                 openDialogDataFunction3(
+                     'tramite/nrequisito',
+                     null,
+                     420,
+                     120,
+                     'Requisito',
+                     function(){
+                         $("#reqaccion").val("U");
+                         var selr = $('#tblListaReq').jqGrid('getGridParam','selrow');
+                         var row = $("#tblListaReq").jqGrid('getRowData', selr);
+
+                         $("#txtidsigma_req").val(row.idsigma);
+
+                         $this = $("#cboctipdoc");
+                         $this.combobox("destroy");
+                         $("option:selected", $this).removeAttr("selected");
+                         $("option[value='"+row.ctipdoc+"']", $this).attr("selected","selected");
+                         $this.combobox();
+                     },
+                     null
+                 )
+             },
+             position:"last"
+             })
+        ;
+    }
+    buscarReq = function() {
+        var xdasunto = $("#txtidsigma_dasunto").val();
+        if (trim(xdasunto) == ""){
+            xdasunto = "X";
+        }
+
+        var params = '['+
+            '["@p_idsigma",""],' +
+            '["@p_dasunto","'+xdasunto+'"]' +
+            ']';
+
+        var parameters = {
+            "name": "tblListaReq",
+            "procedure": "tramite.listar_dasunto_req",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaReq"
+            , "tblListaReq"
+            , optionReq
+            , parameters
+            , null
+            , buttonsGridReq);
+    };
+
+    function guardarDasunto(){
+        var listErrors = "";
+
+        var d_idsigma = $("#txtidsigma_dasunto").val();
+        var d_masunto = $("#txtidsigma_masunto").val();
+
+        //var d_ctipasunto = $("#cboctipasunto").val();
+        var d_ctipasunto = $('#hidconten_tipoasunto').val();
+
+        var d_ctipccos = $("#cboctipccos").val();
+        var d_ctiptra = $("#cboctiptra").val();
+        var d_nestado = $("#hdnestado_dasunto").val();
+        var d_masunto_estado = $("#hdnestado").val();
+
+        //var d_dtipoasunto = $("#cboctipasunto option:selected").html();
+        var d_dtipoasunto = $('#txtconten_tipoasunto').val();
+
+        var d_ndias = $("#txtndias").val();
+        var d_dtipccos = $("#cboctipccos option:selected").html();
+
+        if(d_ctipasunto == ""){
+            openDialogInfo(
+                'Seleccionar Asunto',
+                300,
+                300,
+                null,
+                function(){
+                    $('#btnFindContenAsunto').focus();
+                }
+            );
+            return;
+            //listErrors += "- Seleccione el asunto<br/>";
+        }
+        if(d_ctipccos == "9999999999"){
+            listErrors += "- Seleccione el centro de costo<br/>";
+        }
+        if(d_ctiptra == "9999999999"){
+            listErrors += "- Seleccione el tipo de tramite<br/>";
+        }
+        if(d_ndias == ""){
+            listErrors += "- Ingrese días de tramite<br/>";
+        }
+        if(listErrors !== "" ){
+            openDialogWarning(listErrors);
+            return;
+        }
+
+        var req_rows = $("#tblListaReq").jqGrid('getRowData');
+        var d_requisitos = JSON.stringify(req_rows);
+
+        var dasuntorowdata = {
+            idsigma: d_idsigma,
+            masunto: d_masunto,
+            masunto_descri:'',
+            ctipasunto: d_ctipasunto,
+            ctipccos: d_ctipccos,
+            ctiptra: d_ctiptra,
+            nestado: d_nestado,
+            estacion:'',
+            usuario_registro:'',
+            fecha_registro:'',
+            masunto_estado: d_masunto_estado,
+            dtipoasunto: d_dtipoasunto,
+            ndias: d_ndias,
+            dtipccos: d_dtipccos,
+            requisitos:d_requisitos
+        };
+        if($("#txtidsigma_dasunto").val() == ""){
+            var nrowid = $("#tblListaDAsunto").jqGrid('getGridParam', 'records') + 1;
+            $("#tblListaDAsunto").addRowData(nrowid, dasuntorowdata);
+        }else{
+            var nrowid = $('#tblListaDAsunto').jqGrid('getGridParam','selrow');
+            $("#tblListaDAsunto").setRowData(nrowid, dasuntorowdata);
+        }
+        closeDialog("jqDialog2");
+    }
+    function cancelarDasunto(){
+        closeDialog("jqDialog2");
+    }
+
+    $(document).ready(function() {
+        //themeComboBox("#cboctipasunto");
+        themeComboBox("#cboctipccos");
+        themeComboBox("#cboctiptra");
+        themeComboBox("#cboctipdoc");
+
+        $("#btnguardardasunto").button({icons:{primary:'ui-icon-disk'},text:true});
+        $("#btncanceldasunto").button({icons:{primary:'ui-icon-close'},text:true});
+
+        $("#btnaceptarReq").button({icons:{primary:'ui-icon-check'},text:true});
+        $("#btncancelarReq").button({icons:{primary:'ui-icon-close'},text:true});
+
+        $("#formRequisito").dialog({
+            modal:true,
+            autoOpen:false,
+            width:480,
+            heigth:480
+        });
+
+        $("#asuntotabs").tabs();
+        buscarReq();
+    });
+
+</script>

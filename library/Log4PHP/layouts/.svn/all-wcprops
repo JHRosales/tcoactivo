@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/layouts
+END
+LoggerLayoutSerialized.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/layouts/LoggerLayoutSerialized.php
+END
+LoggerLayoutPattern.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/layouts/LoggerLayoutPattern.php
+END
+LoggerLayoutTTCC.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/layouts/LoggerLayoutTTCC.php
+END
+LoggerLayoutXml.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/layouts/LoggerLayoutXml.php
+END
+LoggerLayoutHtml.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/layouts/LoggerLayoutHtml.php
+END
+LoggerLayoutSimple.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/6/trunk/titania/library/Log4PHP/layouts/LoggerLayoutSimple.php
+END

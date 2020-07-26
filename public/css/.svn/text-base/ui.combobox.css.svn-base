@@ -1,0 +1,46 @@
+.ui-autocomplete-category {
+    font-weight: bold;
+    padding: .2em .4em;
+    margin: .8em 0 .2em;
+    line-height: 1.5;
+}
+    
+.ui-combobox {
+    position: relative;
+    display: inline-block;
+}
+.ui-combobox tbody tr td {
+    padding: 0 !important;
+}
+.ui-combobox-toggle {
+    display: inline-block !important;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+    line-height: 18px;
+    height: 18px;
+    /* adjust styles for IE 6/7 */
+    *height: 1.7em;
+    *top: 0.1em;
+}
+.ui-combobox-input,
+.ui-combobox-input-highlight{
+    margin: 0;
+    padding: 0;
+    padding-left: 0.3em;
+    border: 1px solid #327e04; /*094fa4 Skin Azul*/
+    line-height: 18px;
+    height: 18px;
+    vertical-align: middle;
+    text-transform: uppercase;
+}
+.ui-combobox-input-highlight {
+	/*
+    background: #fbec88 url('../theme/blue_explora/images/ui-bg_glass_55_fbec88_1x400.png') 50% 50% repeat-x;
+    */
+    border: 1px solid #fcd113;
+    -webkit-box-shadow: 0 0 5px #fcd113;
+	box-shadow: 0 0 5px #fcd113;
+    color: #915608;
+}

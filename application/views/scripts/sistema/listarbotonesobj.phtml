@@ -1,0 +1,185 @@
+<table border='0' align="center">
+    <!--<tr>
+        <td valign="top" style="width: 425px"><div id="PanellistaMperson"><table id="tblListaMperson"></table>
+        <div id="ptblListaMperson"></diviv></td>
+        <!--<td valign="top">
+            <div class="ui-widget ui-widget-content ui-corner-all" style="width: 272px; height: 220px;">
+                <div align="center" class="ui-widget ui-state-default ui-corner-top ui-title">
+                    <label>Observaciones</label>
+                </div>
+                <div id="PanellistaObservaciones"></div>        <div id="PanelDetalleBotones"></div>
+            </div>
+        </td>
+    </tr>-->
+
+    <tr>
+    <td>
+<div id="PanelDetalleBotones">
+	<table id="tblDetalleBotones"></table>
+	<div id="ptblDetalleBotones"></div>
+</div>
+	</td>
+</tr>
+
+</table>
+
+<script type="text/javascript">
+
+	isGridComplete = false;
+	/*
+buscarBotones=function(){
+    row = $("#tblResultseries").jqGrid('getRowData',0);
+    openDialogDataFunction2("mantenimientos/buscarpersonadreq",{idsigma: '', ccajero:row.ccajero},"335", "155", "Buscar Personas");
+	}*/
+
+
+    agregarbotonesman=function(_parameters){
+/*
+   rowid= jQuery("#tblDetalleBotones").jqGrid('getGridParam','selrow');
+    if (rowid == undefined){ openDialogInfo("Seleccione una fila",300); return false;}
+    row = $("#tblDetalleBotones").jqGrid('getRowData', rowid);*/
+  openDialogDataFunction2("sistema/listardatosbotonesman",{
+  padre:'<?php echo $this->idsigm;?>'
+  },"280", "220", "Agregar Botones al Objeto");
+}
+
+
+    editarbotonesman=function(_parameters){
+    rowid= jQuery("#tblDetalleBotones").jqGrid('getGridParam','selrow');
+    if (rowid == undefined){ openDialogInfo("Seleccione una fila",300); return false;}
+    row = $("#tblDetalleBotones").jqGrid('getRowData', rowid);
+  openDialogDataFunction2("sistema/listardatosbotonesman",{
+  idsigma:row.idsigma
+  ,vobjeto:row.vdescri
+  ,padre:row.cidtabl
+  ,accion:row.vobserv
+  ,orden:row.nlongit
+  ,objid:row.ndecima
+  ,nestado:row.nestado
+  },"280", "220", "Editar Botones");
+}
+
+
+	buscarbotonesobj = function() {
+	    parameters = {
+	        "name": "tblDetalleBotones",
+	        "procedure": "seguridad.obt_objetosman",
+	        "print": "true",
+	        "parameters": '{' +
+	        '"p_idsigma":"",' +
+            '"p_objpadre":"<?php echo $this->idsigm; ?>",' +
+	        '"p_tipo":"0000000002"' +
+	        '}'
+	    };
+
+        optionBotonesobj.caption = "&nbsp;&nbsp;&nbsp;Listado de Botones, Objeto Nro. <?php echo $this->idsigm; ?>";
+	  procesar = function(requestData){
+            options = $.extend(optionBotonesobj, {
+                data: requestData,
+                datatype: "local",
+                gridComplete: function(){
+                    isGridComplete = true;   
+				$("#tblDetalleBotones").jqGrid('setSelection', 1, true);
+				//navPanelReqPerson();
+                }
+            });
+            procesarProcedimientoJSON('PanelDetalleBotones', 'tblDetalleBotones', optionBotonesobj, parameters, bindkeysBotonesobj,navPanelReqPerson);
+        };
+        procesarConsultaSubProceso("registrar", parameters, procesar, 'json');
+		
+	};
+
+
+    xmanteUpdateBot = function(numberrow,_row){
+//alert("Hola ");
+}
+bindkeysBotonesobj = {"onEnter": xmanteUpdateBot};
+    btnAgregaBotonesobj = {
+    caption: '&nbsp; Agregar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+    title: 'Agregar Botones',
+    id:'btnnuevo',
+    buttonicon: 'ui-icon-plusthick',
+    onClickButton: function () {
+       agregarbotonesman();
+    }
+};
+
+    btnEditarBotonesobj = {
+    caption: '&nbsp; Editar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+    title: 'Editar Botones',
+    buttonicon: 'ui-icon-pencil',
+    onClickButton: function () {
+      editarbotonesman();
+    }
+};
+
+	var navPanelReqPerson = function() {
+    $("#tblDetalleBotones").jqGrid('navGrid', '#ptblDetalleBotones', {edit: false, add: false, del: false, search: false, refresh: false});
+    $("#tblDetalleBotones").jqGrid('navButtonAdd', '#ptblDetalleBotones',btnAgregaBotonesobj);
+    $("#tblDetalleBotones").jqGrid('navSeparatorAdd', '#ptblDetalleBotones');
+    $("#tblDetalleBotones").jqGrid('navButtonAdd', '#ptblDetalleBotones', btnEditarBotonesobj);
+    $("#tblDetalleBotones").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+}
+	
+
+	optionBotonesobj = {
+        height: 200,
+        width: 450,
+        rowNum: 999,
+        colNames: ['ID', 'Nombre','cidtipo', 'idpadre', 'Accion', 'Orden',  'Idobj','Estado', 'vhostnm', 'ddatetm'],
+        colModel: [
+			{name: 'idsigma', index:'idsigma', width: 100, align: 'center',edit:true},
+			{name: 'vdescri', index:'vdescri', width: 140, hidden: false},
+            {name: 'cidtabl', index:'cidtabl', width: 100, hidden: true,search: false},
+			{name: 'ctipdat', index:'ctipdat', width: 110, align:'center', hidden: true,search: false},
+			{name: 'vobserv', index:'vobserv', width: 160, hidden: true,search: false},
+            {name: 'nlongit', index:'nlongit', width: 60, align:'center', hidden: true,search: false},
+            {name: 'ndecima', index:'ndecima', width: 100, align:'center', hidden: false,search: false},
+			{name: 'nestado', index:'nestado', width: 60,editable: true,search: false,align:"center",edittype:"checkbox",editoptions:{value:"1:0",defaultValue:"1"},formatter:'checkbox'},
+			{name: 'vhostnm', index:'vhostnm', width: 1, hidden: true},
+            {name: 'ddatetm', index:'ddatetm', width: 1, hidden: true}
+		],		
+		 ignoreCase:true,
+
+        hidegrid: true,
+        multiselect:false,
+        scroll:false,
+        pagerpos:"right",
+        recordtext: "{0} - {1} de {2} Dreqperson",
+        viewrecords: false,
+      //  multiselect:true,
+		caption: "&nbsp;&nbsp;&nbsp;fgh",
+		//ondblClickRow: verPredioDeclaracion,
+       gridComplete: function() {
+            var _rows = $("#tblDetalleBotones").find(".jqgrow");
+            for (var i = 0; i < _rows.length; i++) {
+                if(parseInt(_rows[i].childNodes[6].textContent) == 0) {
+                    _rows[i].attributes["class"].value += " nivel5";
+                }
+            }
+        },
+        afterInsertRow: function(rowid, aData){
+            switch (aData.nestado) {
+                case '1':
+                    break;
+                case '0':
+                    jQuery("#tblDetalleBotones").jqGrid('setCell',rowid,'idsigma','',{color:'red'});
+                    jQuery("#tblDetalleBotones").jqGrid('setCell',rowid,'vdescri','',{color:'red'});
+                    jQuery("#tblDetalleBotones").jqGrid('setCell',rowid,'cidtipo','',{color:'red'});
+                    jQuery("#tblDetalleBotones").jqGrid('setCell',rowid,'vobserv','',{color:'red'});
+                    jQuery("#tblDetalleBotones").jqGrid('setCell',rowid,'accion','',{color:'red'});
+                    jQuery("#tblDetalleBotones").jqGrid('setCell',rowid,'nlongit','',{color:'red'});
+                    jQuery("#tblDetalleBotones").jqGrid('setCell',rowid,'ndecima','',{color:'red'});
+                    jQuery("#tblDetalleBotones").jqGrid('setCell',rowid,'nestado','',{color:'red'});
+                    break;
+            }
+        }
+    };
+
+
+
+
+	$(document).ready(function(){
+        buscarbotonesobj();
+	});
+</script>

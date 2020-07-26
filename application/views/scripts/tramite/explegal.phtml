@@ -1,0 +1,1289 @@
+<div id="panelMantenimientoExpLegal"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 500px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento Expediente Legal</label>
+    </div>
+
+    <table border="0" class="ui-table-panelLayout">
+        <tr>
+            <td style="text-align: left">
+                <input type="hidden" id="hdmdocumento" name="hdmdocumento" value="<?php echo $this->mdocumento; ?>" readonly="readonly"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                N&uacute;mero
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text" style="background-color: #e4e4e4;" size="25" type="text" id="txtvnrodocu" name="txtvnrodocu" value="<?php echo $this->vnrodocu; ?>" readonly="readonly"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 100px">
+                Nro. Expediente Judicial
+            </td>
+            <td style="text-align: left; width: 400px">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtvexpjud"
+                       name="txtvexpjud"
+                       value="<?php echo $this->vexpjud; ?>"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 100px">
+                Nro. Cedula
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtvcedula"
+                       name="txtvcedula"
+                       value="<?php echo $this->vcedula; ?>"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Especialidad
+            </td>
+            <td style="text-align: left">
+                <select id="cbocidespe" name="cbocidespe" style="width:250px;">
+                    <?php echo $this->util()->getComboContenedorTramite('0000000123',$this->cidespe); ?>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Materia
+            </td>
+            <td style="text-align: left">
+                <select id="cbocidmateria" name="cbocidmateria" style="width:250px;">
+                    <?php echo $this->util()->getComboContenedorMateriaLegal($this->cidespe,$this->cidmateria); ?>
+                </select>
+            </td>
+        </tr>
+        <tr class="solopenal">
+            <td style="text-align: left" colspan="2">
+                Presuntos Delitos</br>
+                <textarea style="width:480px;height:50px;text-transform: uppercase;" id="txtvpdelitos" name="txtvpdelitos"><?php echo $this->vpdelitos; ?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 100px">
+                Organo Juridisccional
+            </td>
+            <td style="text-align: left">
+                <select id="cbocidjuzgado" name="cbocidjuzgado" style="width:250px;">
+                    <?php echo $this->util()->getComboContenedorJuzgadoLegal($this->cidespe,$this->cidjuzgado); ?>
+                </select>
+            </td>
+        </tr>
+        <!--<tr>
+            <td style="width: 100px">
+                Demandante
+            </td>
+            <td style="text-align:left;" colspan="3">
+                
+                <input type="hidden" id="hddemandante" name="hddemandante" value="<?php echo $this->ciddemandante; ?>"/>
+                <input class="editable ui-text" type="text" id="txtvdemandante" name="txtvdemandante" size="50" value="<?php echo $this->vdemandante; ?>"  readonly="readonly"/>
+                <button type="button"
+                        id="btnbuscardemandante"
+                        name="btnbuscardemandante"
+                        onclick="seleccionarDemandante()"> Buscar </button>
+                <button type="button"
+                        id="btnquitardemandante"
+                        name="btnquitardemandante"
+                        onclick="quitarDemandante()"> Quitar </button>
+            </td>
+        </tr>
+        <tr class="xdefault">
+            <td style="width: 100px">
+                Demandado
+            </td>
+            <td style="text-align:left;" colspan="3">
+                <input type="hidden" id="hddenunciado" name="hddenunciado" value="<?php echo $this->ciddenunciado; ?>"/>
+                <input class="editable ui-text" type="text" id="txtvdenunciado" name="txtvdenunciado" size="50" value="<?php echo $this->vdenunciado; ?>"  readonly="readonly"/>
+                <button type="button"
+                        id="btnbuscardenunciado"
+                        name="btnbuscardenunciado"
+                        onclick="seleccionarDenunciado()"> Buscar </button>
+                <button type="button"
+                        id="btnquitardenunciado"
+                        name="btnquitardenunciado"
+                        onclick="quitarDenunciado()"> Quitar </button>
+            </td>
+        </tr>-->
+        <tr>
+            <td colspan="3" >
+            <div id="panelResultDoc1" >
+                <table id="tblResultDoc1">
+                </table>
+                <div id="ptblResultDoc1">
+                </div>
+                <input type="hidden" id="ctblResultDoc1" name="ctblResultDoc1" value="" />
+            </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" >
+                <div id="panelResultDem" >
+                    <table id="tblResultDem">
+                    </table>
+                    <div id="ptblResultDem">
+                    </div>
+                    <input type="hidden" id="ctblResultDem" name="ctblResultDem" value="" />
+                </div>
+            </td>
+        </tr>
+       <!-- <tr  class="xdefault">
+            <td style="width: 100px">
+                Quejante
+            </td>
+            <td style="text-align:left;" colspan="3">
+
+                <input type="hidden" id="hdquejante" name="hdquejante" value="<?php echo $this->ciddemandante; ?>"/>
+                <input class="editable ui-text" type="text" id="txtvquejante" name="txtvquejante" size="50" value="<?php echo $this->vdemandante; ?>"  readonly="readonly"/>
+                <button type="button"
+                        id="btnbuscarquejante"
+                        name="btnbuscarquejante"
+                        onclick="seleccionarQuejante()"> Buscar </button>
+                <button type="button"
+                        id="btnquitarquejante"
+                        name="btnquitarquejante"
+                        onclick="quitarQuejante()"> Quitar </button>
+            </td>
+        </tr>-->
+        <tr class="soloqueja">
+            <td style="text-align: left">
+                Proceso
+            </td>
+            <td style="text-align: left">
+                <select id="cboproceso" name="cboproceso" style="width:250px;">
+                    <?php echo $this->util()->getComboContenedorTramite('0000015170',$this->cidespe); ?>
+                </select>
+            </td>
+        </tr>
+        <tr class="solopenal">
+            <td style="width: 100px">
+                Agraviado
+            </td>
+            <td style="text-align:left;" colspan="3">
+                <input type="hidden" id="hdagraviado" name="hdagraviado" value="<?php echo $this->cidagraviado; ?>"/>
+                <input class="editable ui-text" type="text" id="txtvagraviado" name="txtvagraviado" size="50" value="<?php echo $this->vagraviado; ?>"  readonly="readonly"/>
+                <button type="button"
+                        id="btnbuscaragraviado"
+                        name="btnbuscaragraviado"
+                        onclick="seleccionarAgraviado()"> Buscar </button>
+                <button type="button"
+                        id="btnquitaragraviado"
+                        name="btnquitaragraviado"
+                        onclick="quitarAgraviado()"> Quitar </button>
+            </td>
+        </tr>
+        <tr class="soloafp">
+            <td style="width: 100px">
+               Monto Demandado
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtnmontodem"
+                       name="txtnmontodem"
+                       value="<?php echo $this->nmontodem; ?>"/>
+            </td>
+        </tr>
+        <tr class="exceptopenal">
+            <td style="width: 100px">
+               Monto Ejecutado
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtnmontoejec"
+                       name="txtnmontoejec"
+                       value="<?php echo $this->nmontoejec; ?>"/>
+            </td>
+        </tr>
+        <tr class="soloafp">
+            <td style="width: 100px">
+               Intereses
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtninteres"
+                       name="txtninteres"
+                       value="<?php echo $this->ninteres; ?>"/>
+            </td>
+        </tr>
+        
+        <tr class="soloafp">
+            <td style="width: 100px">
+               Monto Amortizado
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtnmontoamor"
+                       name="txtnmontoamor"
+                       value="<?php echo $this->nmontoamor; ?>"/>
+            </td>
+        </tr>
+        <tr class="soloafp">
+            <td style="width: 100px">
+               Interes Amortizado
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtninteresamor"
+                       name="txtninteresamor"
+                       value="<?php echo $this->ninteresamor; ?>"/>
+            </td>
+        </tr>
+        <tr class="soloafp">
+            <td style="width: 100px">
+               Monto Pendiente
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtnmontopend"
+                       name="txtnmontopend"
+                       value="<?php echo $this->nmontopend; ?>"
+                       readonly="readonly"/>
+            </td>
+        </tr>
+        <tr class="soloafp">
+            <td style="text-align: left">
+                <span id="lbldfecprog">Fecha Req. Pago.</span>
+            </td>
+            <td>
+                    <input class="editable ui-text"
+                           type="text" 
+                           size="25"
+                           id="txtdfecreqpago"
+                           name="txtdfecreqpago"
+                           value="<?php if($this->dfecreqpago=="01/01/1989") {echo date('d/m/Y');} else { echo $this->dfecreqpago;} ?>" />
+            </td>
+        </tr>
+        <tr class="soloafp">
+            <td style="text-align: left">
+                <span id="lbldfecpag">Fecha de Pago.</span>
+            </td>
+            <td>
+                    <input class="editable ui-text"
+                           type="text" 
+                           size="25"
+                           id="txtdfecpago"
+                           name="txtdfecpago"
+                           value="<?php if($this->dfecpago=="01/01/1989") {echo date('d/m/Y');} else { echo $this->dfecpago ;} ?>" />
+            </td>
+        </tr>
+
+        <tr class="soloqueja">
+            <td style="width: 100px">
+                Entidad
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtventidad"
+                       name="txtventidad"
+                       value="<?php echo $this->xxx; ?>"/>
+            </td>
+        </tr>
+        <tr class="soloqueja">
+            <td style="width: 100px">
+                Instancia
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtvinstancia"
+                       name="txtvinstancia"
+                       value="<?php echo $this->xxx; ?>"/>
+            </td>
+        </tr>
+        <tr class="soloqueja">
+            <td style="width: 100px">
+                Despacho Contralor
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtvdcontralor"
+                       name="txtvdcontralor"
+                       value="<?php echo $this->xxx; ?>"/>
+            </td>
+        </tr>
+
+        <tr class="soloqueja">
+            <td style="text-align: left">
+                <span id="lbldfecinicio">Fecha de Inicio.</span>
+            </td>
+            <td>
+                <input class="editable ui-text"
+                       type="text"
+                       size="25"
+                       id="txtdfecinicio"
+                       name="txtdfecinicio"
+                       value="<?php if($this->dfecpago=="01/01/1989") {echo date('d/m/Y');} else { echo $this->dfecpago ;} ?>" />
+            </td>
+        </tr>
+        <tr class="soloqueja">
+            <td style="width: 100px">
+              Distrito Judicial
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtvdjudicial"
+                       name="txtvdjudicial"
+                       value="<?php echo $this->xxx; ?>"/>
+            </td>
+        </tr>
+        <tr class="soloqueja">
+            <td style="width: 100px">
+                Despacho Quejado
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtvdquejado"
+                       name="txtvdquejado"
+                       value="<?php echo $this->xxx; ?>"/>
+            </td>
+        </tr>
+        <tr class="xdefault">
+            <td style="text-align: left" colspan="2">
+                Observaciones</br>
+                <textarea style="width:480px;height:50px;text-transform: uppercase;" id="txtvobserv" name="txtvobserv"><?php echo $this->vobserv; ?></textarea>
+            </td>
+        </tr>
+        <tr class="soloqueja">
+            <td style="text-align: left" colspan="2">
+                Motivo de Queja</br>
+                <textarea style="width:480px;height:50px;text-transform: uppercase;" id="txtvmqueja" name="txtvmqueja"><?php echo $this->xxx; ?></textarea>
+            </td>
+        </tr>
+        <tr class="xdefault">
+            <td style="width: 100px">
+               Codigo Interno
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       size="25"
+                       style=""
+                       type="text"
+                       id="txtcodinterno"
+                       name="txtcodinterno"
+                       value="<?php echo $this->ncodinterno; ?>"
+                       />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <button type="button" style="width:120px;" id="btnguardarexplegal" name="btnguardarexplegal" onclick="guardarExpLegal()">
+                    Guardar
+                </button>
+                <button type="button" style="width:120px;" id="btncancelexplegal" name="btncancelexplegal" onclick="cerrarExpLegal()">
+                    Cancelar
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    
+    
+    
+
+    themeComboBox("#cbocidespe");
+    themeComboBox("#cboproceso");
+    themeComboBox("#cbocidmateria");
+    themeComboBox("#cbocidjuzgado");
+    
+    $("#btnbuscardemandante").button({icons:{primary:'ui-icon-search'},text:false});
+    $("#btnquitardemandante").button({icons:{primary:'ui-icon-trash'},text:false});
+    $("#btnbuscardenunciado").button({icons:{primary:'ui-icon-search'},text:false});
+    $("#btnquitardenunciado").button({icons:{primary:'ui-icon-trash'},text:false});
+    $("#btnbuscarquejante").button({icons:{primary:'ui-icon-search'},text:false});
+    $("#btnquitarquejante").button({icons:{primary:'ui-icon-trash'},text:false});
+    $("#btnbuscaragraviado").button({icons:{primary:'ui-icon-search'},text:false});
+    $("#btnquitaragraviado").button({icons:{primary:'ui-icon-trash'},text:false});
+
+    $("#btnguardarexplegal").button({
+        icons:{primary:'ui-icon-disk'},
+        text:true
+    });
+
+    $("#btncancelexplegal").button({
+        icons:{primary:'ui-icon-close'},
+        text:true
+    });
+
+    
+   $("#cbocidespe").combobox({
+        selected: function(event, ui){
+
+            //materia
+            reiniCombo('cbocidmateria');
+            $("#cbocidmateria").combobox();    
+                       
+            getMateriaLegal($("#cbocidespe").val(), "cbocidmateria");
+           
+           //juzgado
+            reiniCombo('cbocidjuzgado');
+            $("#cbocidjuzgado").combobox();    
+                       
+            getJuzgadoLegal($("#cbocidespe").val(), "cbocidjuzgado");
+           
+           //otro
+            validarEspecialidad($("#cbocidespe").val());
+        }
+    });
+    
+    
+    function reiniCombo(celement){
+        var xelem = $("#" + celement);
+        xelem.combobox("destroy");
+        $("option:selected",xelem).removeAttr("selected");
+        $("option[value='9999999999']",xelem).attr("selected", "selected");
+        //xelem.combobox();
+    }
+    
+    function getMateriaLegal(cidespe, celement){
+        if (cidespe == "9999999999" || cidespe == ""){
+            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
+            $("#" + celement).val("9999999999");
+        }else{
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "tramite/obtenermaterialegal/",
+                data: "cidespe="+cidespe,
+                success: function(requestData){ 	//Llamada exitosa)
+                    $("#" + celement).html(requestData);
+                },
+                error: function(requestData, errNumber, errMessage){
+                }
+            });
+        }
+
+    }
+
+    function getJuzgadoLegal(cidespe, celement){
+        if (cidespe == "9999999999" || cidespe == ""){
+            $("#" + celement).html("<option value='9999999999'>SELECCIONE</option>");
+            $("#" + celement).val("9999999999");
+        }else{
+            $.ajax({
+                dataType: "html",
+                type: "POST",
+                url: path + "tramite/obtenerjuzgadolegal/",
+                data: "cidespe="+cidespe,
+                success: function(requestData){     //Llamada exitosa)
+                    $("#" + celement).html(requestData);
+                },
+                error: function(requestData, errNumber, errMessage){
+                }
+            });
+        }
+
+    }
+    
+    var especialidad = {
+        AFP : "0000014804",
+        CIVIL : "0000014805",
+        ACA : "0000014806",
+        LABORAL : "0000014807",
+        CONSTITUCIONAL : "0000014808",
+        PENAL : "0000014809",
+        QUEJA:'0000015160'
+    };
+    
+    validarEspecialidad($("#cbocidespe").val());
+   
+   
+    
+    function validarEspecialidad(espe){
+        switch(espe){
+            
+            case especialidad.AFP : // LEGAL
+                $(".soloafp").show();
+                $(".exceptopenal").show();
+                $(".solopenal").hide();
+                $(".xdefault").show();
+                $(".soloqueja").hide();
+
+                $("#txtvpdelitos").val("");
+                $("#hdagraviado").val("");
+                $("#txtvagraviado").val("");
+                break;
+            case especialidad.CIVIL : // LEGAL
+                $(".exceptopenal").show();
+                $(".solopenal").hide();
+                $(".soloafp").hide();
+                $(".xdefault").show();
+                $(".soloqueja").hide();
+
+                $("#txtvpdelitos").val("");
+                $("#hdagraviado").val("");
+                $("#txtvagraviado").val("");
+                $("#txtninteres").val("");
+                $("#txtdfecreqpago").val("");
+                break;
+            case especialidad.ACA : // LEGAL
+                $(".exceptopenal").show();
+                $(".solopenal").hide();
+                $(".soloafp").hide();
+                $(".xdefault").show();
+                $(".soloqueja").hide();
+
+                $("#txtvpdelitos").val("");
+                $("#hdagraviado").val("");
+                $("#txtvagraviado").val("");
+                $("#txtninteres").val("");
+                $("#txtdfecreqpago").val("");
+                break;   
+            case especialidad.LABORAL : // LEGAL
+                $(".exceptopenal").show();
+                $(".solopenal").hide();
+                $(".soloafp").hide();
+                $(".xdefault").show();
+                $(".soloqueja").hide();
+
+                $("#txtvpdelitos").val("");
+                $("#hdagraviado").val("");
+                $("#txtvagraviado").val("");
+                $("#txtninteres").val("");
+                $("#txtdfecreqpago").val("");
+                break; 
+            case especialidad.CONSTITUCIONAL : // LEGAL
+                $(".exceptopenal").show();
+                $(".solopenal").hide();
+                $(".soloafp").hide();
+                $(".xdefault").show();
+                $(".soloqueja").hide();
+
+                $("#txtvpdelitos").val("");
+                $("#hdagraviado").val("");
+                $("#txtvagraviado").val("");
+                $("#txtninteres").val("");
+                $("#txtdfecreqpago").val("");
+                break;
+            case especialidad.PENAL : // LEGAL
+                $(".exceptopenal").hide();
+                $(".solopenal").show();
+                $(".soloafp").hide();
+                $(".xdefault").show();
+                $(".soloqueja").hide();
+
+                $("#txtnmontoejec").val("");
+                $("#txtnmontopend").val("");
+                $("#txtninteres").val("");
+                $("#txtdfecreqpago").val("");
+                break;
+            case especialidad.QUEJA :
+                $(".exceptopenal").hide();
+                $(".solopenal").hide();
+                $(".soloafp").hide();
+                $(".xdefault").hide();
+                $(".soloqueja").show();
+
+                break;
+            default:
+                $(".exceptopenal").hide();
+                $(".solopenal").hide();
+                $(".soloafp").hide();
+                $(".xdefault").show();
+                $(".soloqueja").hide();
+                break;
+        }
+        switch(espe){
+            case especialidad.QUEJA :
+                ProcesoBuscarDoc();
+                gridConfigDoc.caption = "Quejado(s)";
+                ProcesoBuscarDem();
+                gridConfigDem.caption = "Quejante(s)";
+                break;
+        }
+
+    }
+    
+    function seleccionarDemandante(){
+        dobleclickPersona = function(row){
+            $("#hddemandante").val(row.cidpers);
+            $("#txtvdemandante").val(row.crazsoc);
+            closeDialog("jqDialog2");
+        }
+        openDialogData2("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione...");
+    }
+    function seleccionarQuejante(){
+        dobleclickPersona = function(row){
+            $("#hdquejante").val(row.cidpers);
+            $("#txtvquejante").val(row.crazsoc);
+            closeDialog("jqDialog2");
+        }
+        openDialogData2("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione...");
+    }
+    function quitarDemandante(){
+        $("#hddemandante").val("");
+        $("#txtvdemandante").val("");
+    }
+    function quitarQuejante(){
+        $("#hdquejante").val("");
+        $("#txtvquejante").val("");
+    }
+       
+    function seleccionarDenunciado(){
+        dobleclickPersona = function(row){
+            $("#hddenunciado").val(row.cidpers);
+            $("#txtvdenunciado").val(row.crazsoc);
+            closeDialog("jqDialog2");
+        }
+        openDialogData2("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione...");
+    }
+    function quitarDenunciado(){
+        $("#hddenunciado").val("");
+        $("#txtvdenunciado").val("");
+    }
+    
+    function seleccionarAgraviado(){
+        dobleclickPersona = function(row){
+            $("#hdagraviado").val(row.cidpers);
+            $("#txtvagraviado").val(row.crazsoc);
+            closeDialog("jqDialog2");
+        }
+        openDialogData2("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione...");
+    }
+    function quitarAgraviado(){
+        $("#hdagraviado").val("");
+        $("#txtvagraviado").val("");
+    }
+    
+    function cerrarExpLegal(){
+        closeDialog("jqDialog1");
+    }
+
+    function seleccionarPersonaDem(){
+        dobleclickPersona = function(row){
+            var mpers=row.cidpers;
+            guardarDemQuej(mpers,1);
+            closeDialog("jqDialog2");
+        }
+        openDialogData2("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione...");
+    }
+    function seleccionarPersonaDem2(){
+        dobleclickPersona = function(row){
+            var mpers=row.cidpers;
+            guardarDemQuej(mpers,2);
+            closeDialog("jqDialog2");
+        }
+        openDialogData2("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione...");
+    }
+
+    function guardarDemQuej(mperson,flag){
+        var mdocumento = $("#hdmdocumento").val();
+        var mperson = mperson;
+        var flag = flag;
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: path + "tramite/guardardemquej/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data: "mdocumento="+mdocumento
+            +"&mperson="+mperson
+            +"&flag="+flag
+            ,
+            success: function(rData){ 	//Llamada exitosa)
+                var id_ruta ="<?php echo $this->pmruta; ?>";
+                if(rData.computed =='ok' ){
+                    //cerrarExpLegal();
+                    openDialogInfo("Registrado correctamente");
+                    ProcesoBuscarDoc();
+                    ProcesoBuscarDem();
+                   // $("#div_benexpe_"+id_ruta).css("display","block");
+                }else{
+                    openDialogInfo("Error en la ejecucion, comuniquese con el area de sistemas.");
+                }
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+
+    function guardarExpLegal(){
+
+        var mdocumento = $("#hdmdocumento").val();
+        var vexpjud = $("#txtvexpjud").val();
+        var vcedula = $("#txtvcedula").val();
+        var cidespe = $("#cbocidespe").val();
+        var cidmateria = $("#cbocidmateria").val();
+        var vpdelitos = $("#txtvpdelitos").val();
+        var cidjuzgado = $("#cbocidjuzgado").val();
+
+        var ciddemandante = "";//$("#hddemandante").val();
+        var ciddemandado = "";//$("#hddenunciado").val();
+
+        var cidagraviado = $("#hdagraviado").val();
+        var nmontoejec = $("#txtnmontoejec").val();
+        var ninteres = $("#txtninteres").val();
+        //var nmontopend = $("#txtnmontopend").val();
+        var dfecreqpago = $("#txtdfecreqpago").val();
+        var vobserv = $("#txtvobserv").val();
+        var dfecpago = $("#txtdfecpago").val();
+        var nmontodem= $("#txtnmontodem").val();
+        var nmontoamor= $("#txtnmontoamor").val();
+        var ninteresamor= $("#txtninteresamor").val();
+        var ncodinterno=$("#txtcodinterno").val();
+        /*JR*/
+        //var vquejante = $("#hdquejante").val();
+        var proceso = $("#cboproceso").val();
+        var entidad = $("#txtventidad").val();
+        var instancia = $("#txtvinstancia").val();
+        var dcontralor = $("#txtvdcontralor").val();
+        var dfechinicio= $("#txtdfecinicio").val();
+        var djudicial= $("#txtvdjudicial").val();
+        var dquejado= $("#txtvdquejado").val();
+        var mqueja=$("#txtvmqueja").val();
+
+       
+       /*
+        var dfecact = $("#txtfecact").val();
+        var fecha1= new Date(dfecprog).format("d.m.y");
+        var fecha2= new Date(dfecact).format("d.m.y");*/
+       
+        
+        if($.trim(vexpjud) == ""){
+           openDialogError("Ingrese el número de expediente judicial", "250", "150", function() {
+                $("#txtvexpjud").focus();
+            })
+            return;
+        }
+        if($.trim(vcedula) == ""){
+           openDialogError("Ingrese el número de cédula", "250", "150", function() {
+                $("#txtvcedula").focus();
+            })
+            return;
+        }
+        if($.trim(cidespe) == "" || $.trim(cidespe) == "9999999999"){
+           openDialogError("Seleccione la especialidad", "250", "150", function() {
+                $("#cbocidespe").focus();
+            })
+            return;
+        }
+        if($.trim(cidmateria) == "" || $.trim(cidmateria) == "9999999999"){
+           openDialogError("Seleccione la materia", "250", "150", function() {
+                $("#cbocidmateria").focus();
+            })
+            return;
+        }
+        if($.trim(cidjuzgado) == "" || $.trim(cidjuzgado) == "9999999999"){
+           openDialogError("Seleccione el Organo Juridisccional", "250", "150", function() {
+                $("#cbocidjuzgado").focus();
+            })
+            return;
+        }
+
+
+     /*   if($.trim(cidespe) != "0000015160")
+        {
+            if($.trim(ciddemandante) == ""){
+                openDialogError("Ingrese los datos del demandante", "250", "150", function() {
+                    $("#hddemandante").focus();
+                })
+                return;
+            }
+            if($.trim(ciddemandado) == ""){
+                openDialogError("Ingrese los datos del demandado", "250", "150", function() {
+                    $("#hddenunciado").focus();
+                })
+                return;
+            }
+        }*/
+
+
+        if($.trim(cidespe) == "0000014809")
+        {
+            if($.trim(vpdelitos) == ""){
+               openDialogError("Ingrese los presuntos delitos", "250", "150", function() {
+                    $("#txtvpdelito").focus();
+                })
+                return;
+            }
+            if($.trim(cidagraviado) == ""){
+               openDialogError("Ingrese los datos del agraviado", "250", "150", function() {
+                $("#hdagraviado").focus();
+                })
+                return;
+            }
+        }
+
+        
+        if($.trim(cidespe) == "0000014804")
+        {
+            
+            if($.trim(dfecreqpago) == ""){
+               openDialogError("Ingrese la fecha del requerimiento de pago", "250", "150", function() {
+                $("#txtdfecreqpago").focus();
+                })
+                return;
+            }
+            /*if($.trim(nmontoejec) == ""){
+               openDialogError("Ingrese el monto ejecutado", "250", "150", function() {
+                    $("#txtnmontoejec").focus();
+                })
+                return;
+            }
+            if($.trim(ninteres) == ""){
+               openDialogError("Ingrese el monto de interés", "250", "150", function() {
+                    $("#txtninteres").focus();
+                })
+                return;
+            }
+            if($.trim(nmontoamor) == ""){
+               openDialogError("Ingrese el monto de amortizado", "250", "150", function() {
+                    $("#txtninteres").focus();
+                })
+                return;
+            }
+            if($.trim(ninteresamor) == ""){
+               openDialogError("Ingrese el monto de interés amortizado", "250", "150", function() {
+                    $("#txtninteres").focus();
+                })
+                return;
+            }
+            if($.trim(dfecpago) == ""){
+               openDialogError("Ingrese la fecha de pago", "250", "150", function() {
+                $("#txtdfecreqpago").focus();
+                })
+                return;
+            }*/
+        }
+        
+        /*if($.trim(cidespe) != "0000014809")
+        {
+                
+            if($.trim(nmontodem) == ""){
+               openDialogError("Ingrese el monto de demandado", "250", "150", function() {
+                    $("#txtninteres").focus();
+                })
+                return;
+            }
+        }*/
+        if($.trim(cidespe) == "0000015160")
+        {
+          /*  if($.trim(vquejante) == ""){
+                openDialogError("Ingrese quejante", "250", "150", function() {
+                    $("#txtvquejante").focus();
+                })
+                return;
+            }*/
+            if($.trim(dfechinicio) == ""){
+                openDialogError("Ingrese Fecha de Inicio", "250", "150", function() {
+                    $("#txtdfecinicio").focus();
+                })
+                return;
+            }
+            if($.trim(proceso) == "" || $.trim(proceso) == "9999999999"){
+                openDialogError("Seleccione Proceso", "250", "150", function() {
+                    $("#cboproceso").focus();
+                })
+                return;
+            }
+            if($.trim(mqueja) == ""){
+                openDialogError("Ingrese Motivo de Queja", "250", "150", function() {
+                    $("#txtvmqueja").focus();
+                })
+                return;
+            }
+        }
+
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: path + "tramite/guardarexplegal/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data: "mdocumento="+mdocumento
+                +"&vexpjud="+vexpjud
+                +"&vcedula="+vcedula
+                +"&cidespe="+cidespe
+                +"&cidmateria="+cidmateria
+                +"&vpdelitos="+vpdelitos
+                +"&cidjuzgado="+cidjuzgado
+                +"&ciddemandante="+ciddemandante
+                +"&ciddemandado="+ciddemandado
+                +"&cidagraviado="+cidagraviado
+                +"&nmontoejec="+nmontoejec
+                +"&ninteres="+ninteres
+                //+"&nmontopend="+nmontopend
+                +"&dfecreqpago="+dfecreqpago
+                +"&vobserv="+vobserv
+                +"&dfecpago="+dfecpago
+                +"&nmontodem="+nmontodem
+                +"&nmontoamor="+nmontoamor
+                +"&ninteresamor="+ninteresamor
+                +"&ncodinterno="+ncodinterno
+                /*JR*/
+                //+"&vquejante="+vquejante
+                +"&proceso="+proceso
+                +"&entidad="+entidad
+                +"&instancia="+instancia
+                +"&dcontralor="+dcontralor
+                +"&dfechinicio="+dfechinicio
+                +"&djudicial="+djudicial
+                +"&dquejado="+dquejado
+                +"&mqueja="+mqueja
+        ,
+            success: function(rData){ 	//Llamada exitosa)
+                var id_ruta ="<?php echo $this->pmruta; ?>";
+                if(rData.msj ==='ok' ){
+                    cerrarExpLegal();
+                    openDialogInfo("Registrado correctamente");
+                    $("#div_benexpe_"+id_ruta).css("display","block");
+                    if("<?php echo $this->accion; ?>" == 'recep'){
+                        var parmter = {};
+                        parmter.pmruta = id_ruta;
+                        $.post(path + "documentos/rutarecepcion", parmter, function(){
+                            $("#chkrecep_"+id_ruta).attr("disabled","disabled");
+                        }, 'json');
+                    }
+                }else{
+                    openDialogInfo("Error en la ejecucion, comuniquese con el area de sistemas.");
+                }
+
+                //ProcesoBuscarRuta('');
+                
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+
+
+    /**********
+     *Demandado - quejado
+     *********************/
+    function navPanelDocumentos() {
+        $("#tblResultDoc1").jqGrid('navGrid', '#ptblResultDoc1', {edit: false, add: false, del: false, search: false, refresh: false});
+        if (isEditable=='1'){
+            $("#tblResultDoc1").jqGrid('navButtonAdd', '#ptblResultDoc1', btnInsertarDoc1);
+            $("#tblResultDoc1").jqGrid('navSeparatorAdd', '#ptblResultDoc1');
+            $("#tblResultDoc1").jqGrid('navButtonAdd', '#ptblResultDoc1', btnEditarDoc);
+        }
+
+        //$("#tblResultDoc1").jqGrid('navSeparatorAdd', '#ptblResultDoc1');
+        //$("#tblResultDoc1").jqGrid('navButtonAdd', '#ptblResultDoc1', btnEliminarDoc);
+        //$("#tblResultDoc1").jqGrid('navSeparatorAdd', '#ptblResultDoc1');
+        //$("#tblResultDoc1").jqGrid('navButtonAdd', '#ptblResultDoc1', btnActualizarDoc);
+    }
+    var btnInsertarDoc1 = {
+            caption: "",
+            title: "Agregar Documento",
+            buttonicon: "ui-icon-plus",
+           onClickButton: function() {
+               seleccionarPersonaDem2();
+            }
+        },
+
+        btnEditarDoc = {
+            caption: "",
+            title: "Editar Documento seleccionado",
+            buttonicon: "ui-icon-pencil",
+            onClickButton: function() {
+                var gsr = $("#tblResultDoc1").jqGrid('getGridParam', 'selrow');
+                if (gsr) {
+                    var row = jQuery("#tblResultDoc1").jqGrid('getRowData', gsr);
+                    openDialogDataFunction3("documentos/ddocumentomante", {type: "M", mdocumento: $('#mdocumento').val(), ddocument: row.idsigma, cidsigma: $('#cidsigma').val(), ctipjerar: $('#ctipjerar').val()}, "980", "630", "Modificar Documento " + row.dstipdocu, null, {'Aceptar': function() {
+                        DdocumentoSave('M');
+                    }, 'Cancelar': function() {
+                        closeDialog("jqDialog3");
+                    }});
+                } else {
+                    openDialogWarning("Seleccione la fila a editar.", 380, 150);
+                }
+            }
+        }
+    function ProcesoBuscarDoc() {
+
+        var paramtrs1 = '[' +
+            '["@mdocumento","<?php echo $this->mdocumento; ?>"],'
+            + '["@flag","2"]'
+            + ']';
+
+        parameters = {
+            "name": "tblResultDoc1",
+            "procedure": "LEGAL.getlegaldem",
+            "print": "true",
+            "parameters": paramtrs1
+        };
+
+        procesarConsultaSubProceso('registrar', parameters, procesoDoc, 'json');
+    }
+    function procesoDoc(request) {
+        var
+            records = (request === null ? 0 : request.length),
+            bindkeysDoc = {"onEnter": OnEnterKeyDoc},
+            gridConfigdoc2 = $.extend(gridConfigDoc, {
+                data: request,
+                datatype: "local"
+            });
+
+        $("#panelResultDoc1").html('<table id="tblResultDoc1"></table><div id="ptblResultDoc1"></div><input type="hidden" id="ctblResultDoc1" name="ctblResultDoc1" value="' + records + '" />');
+        inicializarGrid("tblResultDoc1", gridConfigdoc2, bindkeysDoc);
+        navPanelDocumentos();
+
+    };
+
+    OnEnterKeyDoc = function() {};
+
+    gridConfigDoc = {
+        height: 60,
+        width: 480,
+        //MODIFICADO 0106 --LINEA 101 SE AUMENTA EN EL CAMPO FOLIO
+        colNames: ["Cod. Documento", "Ap. Paterno", "Ap. Materno", "Nombres",""],
+        colModel: [
+            {name: 'idsigma', index: 'idsigma', width: 120, align: 'center', hidden: true},
+            {name: 'vpatern', index: 'vpatern', width: 120, align: 'left'},
+            {name: 'vmatern', index: 'vmatern', width: 120, align: 'left'},
+            {name: 'nombres', index: 'nombres', width: 180, align: 'left'},
+            {name: 'trash', index: 'trash', width: 20, hidden: true}
+        ],
+        caption: "Demandado(s)",
+        rowNum: 2,
+        rownumbers: true,
+        onSelectRow: function(id) {
+            var row = jQuery("#tblResultDoc1").jqGrid('getRowData', id);
+            //ProcesoBuscarDocAdjunto(row.idsigma);
+            //$("#divobservacion").html(row.vobserv);
+        },
+        gridComplete: function() {
+            isGridComplete = true;
+            $("#tblResultDoc1").jqGrid('setSelection', 1, true);
+
+            var ids = jQuery("#tblResultDoc1").jqGrid('getDataIDs');
+            if (isEditable=='1'){
+                for (var i = 0; i < ids.length; i++) {
+                    var cl = ids[i];
+                    var rowdat = jQuery("#tblResultDoc1").jqGrid('getRowData', cl);
+                    butttrash = '<div title="Eliminar ' + rowdat.dstipdocu + ' - ' + rowdat.vnrodocu + '" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\')" onclick="eliminarDDocumento(\'' + rowdat.idsigma + '\');"><span class="ui-icon ui-icon-trash"></span></div>';
+
+                    jQuery("#tblResultDoc1").jqGrid('setRowData', ids[i], {trash: butttrash});
+                }
+            }
+
+        }
+    };
+    /**
+     * FIN demandado
+     *
+     */
+
+    /**********
+     *demandante-quejante
+     *********************/
+    function navPanelDem() {
+        $("#tblResultDem").jqGrid('navGrid', '#ptblResultDem', {edit: false, add: false, del: false, search: false, refresh: false});
+        if (isEditable=='1'){
+            $("#tblResultDem").jqGrid('navButtonAdd', '#ptblResultDem', btnInsertarDem);
+            $("#tblResultDem").jqGrid('navSeparatorAdd', '#ptblResultDem');
+            $("#tblResultDem").jqGrid('navButtonAdd', '#ptblResultDem', btnEditarDem);
+        }
+
+        //$("#tblResultDem").jqGrid('navSeparatorAdd', '#ptblResultDem');
+        //$("#tblResultDem").jqGrid('navButtonAdd', '#ptblResultDem', btnEliminarDoc);
+        //$("#tblResultDem").jqGrid('navSeparatorAdd', '#ptblResultDem');
+        //$("#tblResultDem").jqGrid('navButtonAdd', '#ptblResultDem', btnActualizarDoc);
+    }
+    var btnInsertarDem = {
+            caption: "",
+            title: "Agregar Documento",
+            buttonicon: "ui-icon-plus",
+            onClickButton: function() {
+                seleccionarPersonaDem();
+            }
+        },
+
+        btnEditarDem = {
+            caption: "",
+            title: "Editar Documento seleccionado",
+            buttonicon: "ui-icon-pencil",
+            onClickButton: function() {
+                var gsr = $("#tblResultDem").jqGrid('getGridParam', 'selrow');
+                if (gsr) {
+                    var row = jQuery("#tblResultDem").jqGrid('getRowData', gsr);
+                    openDialogDataFunction3("documentos/ddocumentomante", {type: "M", mdocumento: $('#mdocumento').val(), ddocument: row.idsigma, cidsigma: $('#cidsigma').val(), ctipjerar: $('#ctipjerar').val()}, "980", "630", "Modificar Documento " + row.dstipdocu, null, {'Aceptar': function() {
+                        DdocumentoSave('M');
+                    }, 'Cancelar': function() {
+                        closeDialog("jqDialog3");
+                    }});
+                } else {
+                    openDialogWarning("Seleccione la fila a editar.", 380, 150);
+                }
+            }
+        }
+    function ProcesoBuscarDem() {
+
+        var paramtrs = '[' +
+            '["@mdocumento","<?php echo $this->mdocumento; ?>"],'
+            + '["@flag","1"]'
+            + ']';
+
+        parameters = {
+            "name": "tblResultDem",
+            "procedure": "LEGAL.getlegaldem",
+            "print": "true",
+            "parameters": paramtrs
+        };
+
+        procesarConsultaSubProceso('registrar', parameters, procesoDem, 'json');
+    }
+    function procesoDem(request) {
+        var
+            records = (request === null ? 0 : request.length),
+            bindkeysDoc = {"onEnter": OnEnterKeyDem},
+            gridConfigdoc2 = $.extend(gridConfigDem, {
+                data: request,
+                datatype: "local"
+            });
+
+        $("#panelResultDem").html('<table id="tblResultDem"></table><div id="ptblResultDem"></div><input type="hidden" id="ctblResultDem" name="ctblResultDem" value="' + records + '" />');
+        inicializarGrid("tblResultDem", gridConfigdoc2, bindkeysDoc);
+        navPanelDem();
+
+    };
+
+    OnEnterKeyDem = function() {};
+
+    gridConfigDem = {
+        height: 80,
+        width: 480,
+        //MODIFICADO 0106 --LINEA 101 SE AUMENTA EN EL CAMPO FOLIO
+        colNames: ["Cod.", "Ap. Paterno", "Ap. Materno", "Nombres",""],
+        colModel: [
+            {name: 'idsigma', index: 'idsigma', width: 100, align: 'center', hidden: true},
+            {name: 'vpatern', index: 'vpatern', width: 120, align: 'left'},
+            {name: 'vmatern', index: 'vmatern', width: 130, align: 'left'},
+            {name: 'nombres', index: 'nombres', width: 180, align: 'left'},
+            {name: 'trash', index: 'trash', width: 20, hidden: true}
+        ],
+        caption: "Demandante(s)",
+        rowNum: 3,
+        rownumbers: true,
+        onSelectRow: function(id) {
+            var row = jQuery("#tblResultDem").jqGrid('getRowData', id);
+            //ProcesoBuscarDocAdjunto(row.idsigma);
+            //$("#divobservacion").html(row.vobserv);
+        },
+        gridComplete: function() {
+            isGridComplete = true;
+            $("#tblResultDem").jqGrid('setSelection', 1, true);
+
+            var ids = jQuery("#tblResultDem").jqGrid('getDataIDs');
+            if (isEditable=='1'){
+                for (var i = 0; i < ids.length; i++) {
+                    var cl = ids[i];
+                    var rowdat = jQuery("#tblResultDem").jqGrid('getRowData', cl);
+                    butttrash = '<div title="Eliminar ' + rowdat.dstipdocu + ' - ' + rowdat.vnrodocu + '" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\')" onclick="eliminarDDocumento(\'' + rowdat.idsigma + '\');"><span class="ui-icon ui-icon-trash"></span></div>';
+
+                    jQuery("#tblResultDem").jqGrid('setRowData', ids[i], {trash: butttrash});
+                }
+            }
+
+        }
+    };
+    /**
+     * FIN demandante-quejante
+     *
+     */
+
+    var isEditable ='1';//"<?php echo $this->editable; ?>";
+    $(document).ready(function() {
+        $("#txtdfecreqpago").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat:"dd/mm/yy",
+            onClose: function( selectedDate ) {
+                $( "#txtdfecreqpago" ).datepicker( "option", "Date", selectedDate );
+            }
+        });
+        $("#txtdfecpago").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat:"dd/mm/yy",
+            onClose: function( selectedDate ) {
+                $( "#txtdfecpago" ).datepicker( "option", "Date", selectedDate );
+            }
+        });
+        $("#txtdfecinicio").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat:"dd/mm/yy",
+            onClose: function( selectedDate ) {
+                $( "#txtdfecinicio" ).datepicker( "option", "Date", selectedDate );
+            }
+        });
+
+
+        $('#txtnmontoejec').autoNumeric('init', {aSign: "S/. "});
+        $('#txtninteres').autoNumeric('init', {aSign: "S/. "});
+        $('#txtnmontopend').autoNumeric('init', {aSign: "S/. "});
+        $('#txtnmontodem').autoNumeric('init', {aSign: "S/. "});
+        $('#txtnmontoamor').autoNumeric('init', {aSign: "S/. "});
+        $('#txtninteresamor').autoNumeric('init', {aSign: "S/. "});
+
+/*Demandado-quejado*/
+        inicializarGrid("tblResultDoc1", gridConfigDoc);
+        navPanelDocumentos();
+        ProcesoBuscarDoc();
+/*Demandante-quejante*/
+        inicializarGrid("tblResultDem", gridConfigDem);
+        navPanelDem();
+        ProcesoBuscarDem();
+
+    });
+
+</script>

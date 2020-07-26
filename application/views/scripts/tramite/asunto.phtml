@@ -1,0 +1,303 @@
+
+<div id="panelMantenimientoAsunto"
+     align="center"
+     class="ui-widget ui-widget-content ui-corner-top"
+     style="width: 980px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Asunto</label>
+    </div>
+    <table border="0" class="ui-table-panelLayout" style="margin: 10px;width:750px;" cellspacing="0" cellpadding="0">
+        <tr>
+            <td style="text-align: left">Codigo</td>
+            <td style="text-align: left">
+                <input class="editable ui-text"
+                       style="background-color: #e4e4e4;"
+                       type="text"
+                       id="txtidsigma_masunto"
+                       name="txtidsigma_masunto"
+                       value="<?php echo $this->idsigma; ?>" readonly="readonly"/>
+                <input type="hidden" id="hdnestado" name="hdnestado" value="<?php echo $this->nestado; ?>" />
+            </td>
+            <td style="text-align: left">
+                Fecha Inicio
+            </td>
+            <td style="text-align: left" >
+                <input class="editable ui-text dtpickerfecha"
+                       style=""
+                       type="text"
+                       id="txtdfecini"
+                       name="txtdfecini"
+                       value="<?php echo $this->dfecini; ?>" />
+            </td>
+            <td style="text-align: left">
+                Fecha Termino
+            </td>
+            <td style="text-align: left">
+                <input class="editable ui-text dtpickerfecha"
+                       style=""
+                       type="text"
+                       id="txtdfecfin"
+                       name="txtdfecfin"
+                       value="<?php echo $this->dfecfin; ?>" />
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Descripción
+            </td>
+            <td style="text-align: left" colspan="5">
+                <input class="editable ui-text"
+                       style="width:620px;"
+                       type="text"
+                       id="txtvdescri"
+                       name="txtvdescri"
+                       value="<?php echo $this->vdescri; ?>" />
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                Artículo
+            </td>
+            <td style="text-align: left" colspan="5">
+                <input class="editable ui-text"
+                       style="width:620px;"
+                       type="text"
+                       id="txtvarticulo"
+                       name="txtvarticulo"
+                       value="<?php echo $this->varticulo;?>" />
+            </td>
+        </tr>
+    </table>
+    <div id="panelListaDAsunto" align="center" style="width: 99%;margin: 3px;">
+        <table id="tblListaDAsunto"></table>
+        <div id="ptblListaDAsunto"></div>
+    </div>
+    <br/>
+    <button type="button" style="width:120px;" id="btnguardarasunto" name="btnguardarasunto" onclick="guardarMasunto()">
+        Guardar
+    </button>
+    <button type="button" style="width:120px;" id="btncancelasunto" name="btncancelasunto" onclick="cancelarMasunto();">
+        Cancelar
+    </button>
+    <br/>
+    <br/>
+</div>
+<script>
+    $("#btnguardarasunto").button({icons:{primary:'ui-icon-disk'},text:true});
+    $("#btncancelasunto").button({icons:{primary:'ui-icon-close'},text:true});
+
+    function guardarMasunto(){
+		
+        var listErrors = "";
+
+        var idsigma = $("#txtidsigma_masunto").val();
+        var vdescri = $("#txtvdescri").val();
+        var dfecini = $("#txtdfecini").val();
+        var dfecfin = $("#txtdfecfin").val();
+        var varticulo = $("#txtvarticulo").val();
+        var nestado = $("#hdnestado").val();
+
+		
+        if($.trim(vdescri) == ""){
+            listErrors += "- Ingrese descripción<br/>";
+        }
+		
+        if(dfecini == ""){
+            listErrors += "- Seleccione la fecha de inicio<br/>";
+        }
+        if(dfecfin == ""){
+            listErrors += "- Seleccione la fecha de termino<br/>";
+        }
+        if(listErrors !== "" ){
+            openDialogWarning(listErrors);
+            return;
+        }
+		
+        var dasunto_rows = $("#tblListaDAsunto").jqGrid('getRowData');
+
+		
+		
+        $.ajax({
+            dataType: "html",
+            type: "POST",
+            url: path + "tramite/guardarasunto/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data: {
+                "idsigma":idsigma,
+                "vdescri":vdescri,
+                "dfecini":dfecini,
+                "dfecfin":dfecfin,
+                "varticulo":varticulo,
+                "nestado":nestado,
+                "dasuntodata": JSON.stringify(dasunto_rows)
+            },
+            success: function(requestData){ 	//Llamada exitosa)
+                buscarAsunto();
+                closeDialog("jqDialog1");
+                $("#jqDialog1").html("");
+            },
+            error: function(requestData, errNumber, errMessage){
+                if(errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber +': ' + errMessage);
+                }
+            }
+        });
+    }
+    function cancelarMasunto(){
+        closeDialog("jqDialog1");
+    }
+
+
+
+    function nuevoDasunto(){
+        datamasunto = {
+            "idsigma": '##########'
+        };
+
+        openDialogData2("tramite/dasunto",datamasunto,510,400, "Nuevo detalle asunto");
+    }
+    function verDasunto(){
+        var selr = $('#tblListaDAsunto').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaDAsunto").jqGrid('getRowData', selr);
+        datamasunto = {
+            "idsigma": row.idsigma
+        };
+
+        openDialogData2("tramite/dasunto",datamasunto,510,400,"Editar detalle asunto");
+    }
+
+    function buttonsGridDAsunto(){
+
+        var grid = $('#tblListaDAsunto');
+        var pane = '#ptblListaDAsunto';
+
+        grid.jqGrid(
+            'navGrid',
+            pane, {edit: false, add: false, del: false, search: false, refresh: false}
+        );
+        grid.jqGrid('navButtonAdd', pane, {
+            caption:"Agregar&nbsp;&nbsp;",
+            buttonicon:"ui-icon-plus",
+            onClickButton: function(){
+                nuevoDasunto();
+            },
+            position:"last"
+        });
+        grid.jqGrid('navSeparatorAdd', pane);
+        grid.jqGrid('navButtonAdd', pane, {
+            caption:"Editar&nbsp;&nbsp;",
+            buttonicon:"ui-icon-pencil",
+            onClickButton: function(){
+                verDasunto();
+            },
+            position:"last"
+        });
+        grid.jqGrid(
+            'filterToolbar',
+            {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: true, defaultSearch: 'cn'}
+        );
+    }
+    optionDAsunto = {
+        width: 900,
+        height: 230,
+        ignoreCase: true,
+        rownumbers:true,
+        colNames: [
+            'idsigma',
+            'masunto',
+            'masunto_descri',
+            'ctipasunto',
+
+            'ctipccos',
+
+            'ctiptra',
+            'nestado',
+
+            'estacion',
+            'usuario_registro',
+            'fecha_registro',
+
+            'masunto_estado',
+
+            'Asunto',
+            'Dias',
+            'Centro de costo',
+            'requisitos',
+            'Tipo'
+        ],
+        colModel: [
+            {name: 'idsigma', index:'idsigma', hidden: true},
+            {name: 'masunto', index:'masunto', hidden: true},
+            {name: 'masunto_descri', index:'masunto_descri', hidden: true},
+            {name: 'ctipasunto', index:'ctipasunto', hidden: true},
+            {name: 'ctipccos', index:'ctipccos', hidden:true},
+            {name: 'ctiptra', index:'ctiptra', hidden:true},
+            {name: 'nestado', index:'nestado', hidden:true},
+            {name: 'estacion', index:'estacion', hidden:true},
+            {name: 'usuario_registro', index:'usuario_registro', hidden:true},
+            {name: 'fecha_registro', index:'fecha_registro', hidden:true},
+            {name: 'masunto_estado', index:'masunto_estado', hidden:true},
+            {
+                name: 'dtipoasunto',
+                index:'dtipoasunto',
+                width: 470
+            },
+            {name: 'ndias', index:'ndias', width: 30},
+            {name: 'dtipccos', index:'dtipccos', width: 250},
+            {name: 'requisitos', index:'requisitos', hidden: true},
+            {name: 'vtiptra', index:'vtiptra', hidden: false, width:100}
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Detalle de asuntos registrados",
+        ondblClickRow: function(id){
+            verDasunto();
+        },
+        onSelectRow: function(id){
+        }
+    };
+
+    buscarDAsunto = function() {
+        var params = '['
+            + '["@p_masunto_estado","%"],'
+            + '["@p_idsigma","%"],'
+            + '["@p_masunto", "'+ $("#txtidsigma_masunto").val() + '"]'
+        +']';
+        parameters = {
+            "name": "tblListaDAsunto",
+            "procedure": "TRAMITE.listar_dasunto",
+            "print": "true",
+            "parameters": params
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaDAsunto"
+            , "tblListaDAsunto"
+            , optionDAsunto
+            , parameters
+            , null
+            , buttonsGridDAsunto);
+            //, buttonsGridDetalleAsunto);
+    };
+
+    $(document).ready(function() {
+        $("#txtdfecini").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat:"dd/mm/yy",
+            onClose: function( selectedDate ) {
+                $("#txtdfecfin").datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $("#txtdfecfin").datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat:"dd/mm/yy",
+            onClose: function( selectedDate ) {
+                $( "#txtdfecini" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+        buscarDAsunto();
+    });
+</script>

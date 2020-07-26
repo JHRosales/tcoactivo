@@ -1,0 +1,679 @@
+<?php
+    $userdata= new Zend_Session_Namespace('datosuserlog');
+    $niveltramite = $userdata->ntramite;
+?>
+
+        <div id="panelExpediente">
+            <div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  
+            style="width: 1250px;margin-top:5px;margin-left : 20px;margin-right :20px;margin-bottom:15px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                    <label style="font-size:15px !important;">CARPETA DOCUMENTARIA</label>
+                </div>
+                <table style="margin: 5px;width:98%;" border="0">
+                    <tr>
+                        <td style="width: 100px;">
+                            Busqueda por :
+                        </td>
+                        <td style="width: 260px;">
+                            <select id="cbofiltro_exp" name="cbofiltro_exp" style="width: 230px;">
+                                <option value="1">Nº EXPEDIENTE</option>
+                                <option value="2">FECHA</option>
+                                <option value="3">ADMINISTRADO</option>
+                                <option value="4">PERSONA QUE ENTREGA EL TRAMITE</option>
+                                <option value="5">Nº DOCUMENTO ADJUNTO</option>
+								<option value="6">Nº DOCUMENTO EXTERNO</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button id="btnFiltrarExpedientes" onclick="buscarExpedientes()">
+                                Buscar
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                <hr/>
+                <table class="selFiltroExped" style="margin: 5px;width:98%;">
+                    <tr style="height: 30px;">
+                        <td style="width: 100px;">Expediente : </td>
+                        <td>
+                            <input type="text"
+                                   id="find_expediente"
+                                   name="find_expediente"
+                                   value="<?php echo $this->vnrodoc; ?>"
+                                   class="editable ui-text"
+                                />
+                        </td>
+                    </tr>
+                </table>
+                <table class="selFiltroFecha" style="margin: 5px;width:98%;display: none;">
+                    <tr style="height: 30px;">
+                        <td style="width: 100px;">Desde : </td>
+                        <td style="width: 130px;">
+                            <input class="editable ui-text"
+                                   type="text" id="find_dtini"
+                                   name="find_dtini"
+                                   style="width: 90px;"
+                                   value="<?php echo date('d/m/Y'); ?>" />
+                        </td>
+                        <td style="width: 100px;">Hasta : </td>
+                        <td>
+                            <input class="editable ui-text"
+                                   type="text"
+                                   id="find_dtfin"
+                                   name="find_dtfin"
+                                   style="width: 90px;"
+                                   value="<?php echo date('d/m/Y'); ?>" />
+                        </td>
+                    </tr>
+                </table>
+                <table class="selFiltroAdmin" style="margin: 5px;width:98%;display: none;">
+                    <tr style="height: 30px;">
+                        <td style="width: 100px;">Administrado : </td>
+                        <td>
+                            <input type="hidden" id="find_administrado" name="find_administrado" value="" />
+                            <input type="text"
+                                   id="show_administrado"
+                                   name="show_administrado"
+                                   value=""
+								   disabled
+                                   class="editable ui-text"
+                                   style="width:360px;"
+                                   readonly="readonly"
+                                />
+                            <button type="button" id="btnbuscarAdministrado" name="btnbuscarAdministrado" onclick="buscarAdministrado()">
+                                &nbsp;
+                            </button>
+                            <button type="button" id="btnquitaradm" name="btnquitaradm" onclick="quitarAdministrado()">
+                                &nbsp;
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                <table class="selFiltroEntrega" style="margin: 5px;width:98%;display: none;">
+                    <tr style="height: 30px;">
+                        <td style="width: 180px;">Persona que entrega el tramite : </td>
+                        <td >
+                            <input type="hidden" id="find_entrega" name="find_entrega" value="" />
+                            <input type="text"
+                                   id="show_entrega"
+                                   name="show_entrega"
+                                   value=""
+                                   class="editable ui-text"
+                                   style="width:360px;"
+                                   readonly="readonly"
+                                />
+
+                            <button type="button" id="btnbuscarEntrega" name="btnbuscarEntrega" onclick="buscarEntrega()">
+                                &nbsp;
+                            </button>
+                            <button type="button" id="btnquitarentrega" name="btnquitarentrega" onclick="quitarEntrega()">
+                                &nbsp;
+                            </button>
+                        </td>
+                    </tr>
+
+                </table>
+                <table class="selFiltroDocumento" style="margin: 5px;width:98%;display: none;">
+                    <tr style="height: 30px;">
+                        <td style="width: 100px;">
+                            Documento :
+                        </td>
+                        <td>
+                            <input type="text"
+                                   id="find_documento"
+                                   name="find_documento"
+                                   value=""
+                                   class="editable ui-text"
+                                />
+                        </td>
+                    </tr>
+                </table>
+				<table class="selFiltroDocumentoex" style="margin: 5px;width:98%;display: none;">
+                    <tr style="height: 30px;">
+                        <td style="width: 100px;">
+                            Documento Externo:
+                        </td>
+                        <td>
+                            <input type="text"
+                                   id="find_documentoex"
+                                   name="find_documentoex"
+                                   value=""
+                                   class="editable ui-text"
+                                />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="panelListaExp" align="center"  style="margin-left : 20px;margin-right :20px;">
+                <table id="tblListaExp"></table>
+                <div id="ptblListaExp"></div>
+            </div>
+            <div id="container" style="display: none; min-width: 400px; height: 150px; margin: 0 auto"></div>
+        </div>
+        <script type="text/javascript">
+        var filtro = {
+            EXPED : "1",
+            FECHA : "2",
+            PADMIN: "3",
+            PENTRE: "4",
+            DOC : "5",
+			DOCEX : "6"
+        };
+
+        function quitarAdministrado(){
+            $("#show_administrado").val("");
+            $("#find_administrado").val("");
+        }
+        function quitarEntrega(){
+            $("#show_entrega").val("");
+            $("#find_entrega").val("");
+        }
+
+        function buscarAdministrado(){
+            dobleclickPersona = function(row){
+                $("#find_administrado").val(row.cidpers);
+                $("#show_administrado").val(row.cidpers + '  ' + row.crazsoc);
+                closeDialog("jqDialog1");
+				buscarExpedientes();
+            }
+            openDialogData1("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione al administrado...");
+        }
+        function buscarEntrega(){
+            dobleclickPersona = function(row){
+                $("#find_entrega").val(row.cidpers);
+                $("#show_entrega").val(row.cidpers + '  ' + row.crazsoc);
+                closeDialog("jqDialog1");
+            }
+            openDialogData1("mantenimientos/buscarpersona", null, "1000", "500", "Seleccione al administrado...");
+        }
+        optionExp = {
+            height: 300,
+            width: 1250 ,
+            ignoreCase : true,
+            colNames: ['idsigma',
+                'dasunto_ccos',
+                'dasunto_tiptra',
+                'mruta',
+                'Nro',
+                'Fecha',
+                'Administrado',
+                'Folios',
+                'Nro Documento',
+				'Asunto',
+                'Asunto',
+                'Asunto Detallado',
+                'Observaciones',
+                'dasunto',
+				'',
+				'',
+				'',
+                'Ruta',
+                'Adj',
+                'Docs',
+                'Imp',
+				''
+            ],
+            colModel: [
+                {name: 'idsigma', index:'idsigma', hidden:true},
+
+                {name: 'dasunto_ccos', index:'dasunto_ccos', hidden:true},
+                {name: 'dasunto_tiptra', index:'dasunto_tiptra', hidden:true},
+                {name: 'mruta', index:'mruta', hidden:true},
+                {name: 'vnrodocu', index:'vnrodocu', width: 120},
+                {name: 'dfecdocu', index:'dfecdocu', width: 100, align: 'center'},
+                {name: 'vperson', index:'vperson', width: 200},
+                
+                {name: 'nfolios', index:'nfolios', width: 35, align: 'center' ,search:false},
+                {name: 'vnrodocini', index:'vnrodocini', width: 80, align: 'center' },
+
+                {name: 'masunto', index:'masunto', width:100,hidden:true},
+				{name: 'dasunto_tipasunto', index:'dasunto_tipasunto', width: 180, hidden:false},
+                {name: 'vasunto', index:'vasunto', width: 300, formatter:formatoAsunto},
+                {name: 'vobserv', index:'vobserv', hidden:true},
+                {name: 'dasunto', index:'dasunto', hidden:true},
+				
+				{name: 'idsigamrutaultimo', index:'idsigamrutaultimo', hidden:true},
+				{name: 'ccocsiniultimaruta', index:'ccocsiniultimaruta', hidden:true},
+				{name: 'mrutaultimo', index:'mrutaultimo', hidden:true},
+				   
+				
+                { name: 'btnmruta', index: 'btnmruta', width: 30, align: 'center' ,formatter : btnruta,search:false},
+                { name: 'btndocumt', index: 'btndocumt', width: 30,search:false, align: 'center' <?php if($this->cidareauser== '0000000200'){?>   ,formatter :  btndocumt<?php }?>},
+                { name: 'btndocumall', index: 'btndocumall', width: 40, align: 'center' ,formatter : btndocumtall,search:false},
+                { name: 'btnprint', index: 'btnprint', width: 30, align: 'center' ,formatter : btnprint,search:false},
+				{ name: 'btnenviar', index: 'btnenviar', width: 30, align: 'center' ,formatter : btnenviar,search:false}
+            ],
+            caption: "&nbsp;&nbsp;&nbsp;Carpeta Documentaria",
+            ondblClickRow: function(){
+                if ("<?php echo $this->vestado;?>" == ""){
+                    verExpediente();
+                }else{
+                    var selr = $('#tblListaExp').jqGrid('getGridParam','selrow');
+                    var row = $("#tblListaExp").jqGrid('getRowData', selr);
+                    $("#hdmdocumento").val(row.idsigma);
+                    $("#txtmdocumento").val(row.vnrodocu);
+                    closeDialog("jqDialog2");
+                }
+            },
+            onSelectRow: function(id){
+                var row = $(this).getRowData(id);
+            },
+            gridComplete: function() {
+                var _rows = $("#tblListaExp").find(".jqgrow");
+                for (var i = 0; i < _rows.length; i++) {
+                    if(parseInt(_rows[i].childNodes[0].textContent) == 0) {
+                        _rows[i].attributes["class"].value += " nivel5";
+                    }
+                }
+            }
+        };
+
+          function formatoAsunto (cellvalue, options, rowObject)
+        {
+            var resultValue = '';
+            var pini = new RegExp('<p>', 'g');
+            resultValue = cellvalue.replace(pini, '');
+            var pfin = new RegExp('</p>', 'g');
+            resultValue = resultValue.replace(pfin, '');
+            resultValue = resultValue.trim();
+            return resultValue;
+        }
+
+        // -----> btnruta
+        function btnruta(cellvalue, options, rowObject){
+            return '<div class="ui-pg-button " title="Ver Ruta" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnruta(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-search"></span></div></div>';
+        }
+        function accionbtnruta(rowId){
+            var rowdat = jQuery("#tblListaExp").jqGrid('getRowData',rowId);
+            var paramtrs ={
+                mruta : rowdat.mruta
+            };
+            openDialogDataFunction1(
+                "documentos/hojaruta",
+                paramtrs,
+                "1200",
+                "625",
+                "Hoja de Ruta",
+                null,
+                {}
+            );
+        }
+        // <------  btnruta
+
+        // -----> btndocumt Boton que llama a los documentos del documento
+        function btndocumt(cellvalue, options, rowObject){
+            return '<div align="center" class="ui-pg-button " title="Adjuntos" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtndocumt(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+        }
+
+        // todo : Revisar
+        function accionbtndocumt(rowId){
+            var rowdat = jQuery("#tblListaExp").jqGrid('getRowData',rowId);
+            var paramtrs = {
+                cidsigma :rowdat.idsigma ,
+                ctipjerar: '0000000130',
+                mdocumento:rowdat.idsigma,
+                dasunto: rowdat.dasunto
+            };
+            openDialogDataFunction1(
+                "documentos/ddocumento",
+                paramtrs,
+                "1000",
+                "520",
+                "Adjuntos",
+                null,
+                {}
+            );
+        }
+
+        // <------- btndocumt
+        // -----> btndocumtall Boton que llama a los documentos del del expediente en general
+        function btndocumtall(cellvalue, options, rowObject){
+
+            return '<div align="center" class="ui-pg-button " title="Documentos" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtndocumtall(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+        }
+
+        function accionbtndocumtall(rowId){
+            var rowdat = jQuery("#tblListaExp").jqGrid('getRowData',rowId);
+
+            var paramtrs ={ pmdocumento :rowdat.idsigma }
+
+            openDialogDataFunction3("documentos/lstdocumentos", paramtrs, "1000", "520", "Documentos" , null, {});
+        }
+
+        // <------- btndocumtall
+
+        // -----> btnprint Boton que llama a los documentos del del expediente en general
+        function btnprint(cellvalue, options, rowObject){
+
+            return '<div align="center" class="ui-pg-button " title="Hoja de tramite" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnprint(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
+        }
+        function accionbtnprint(rowId){
+            var rowdat = $("#tblListaExp").jqGrid('getRowData',rowId);
+            window.open(pathRpt + "tipo=pdf&nombrereporte=hoja_tramite&param=P_MDOCUMENTO^"+rowdat.idsigma+"|P_USUARIO^<?php echo $this->cusuario; ?>");
+        }
+
+        // <------- btnprint
+		
+		// -----> btnenviar Boton que envia el documento seleccinado a mi bandeja
+        function btnenviar(cellvalue, options, rowObject){
+			
+			//console.log(rowObject);
+		//modificado 0106 condicina q se visualize para aquellos exp q en el ultimo paso tengan como destino 9999999999 (sistema anterior)
+            if (rowObject.ccocsiniultimaruta != '9999999999') {
+                return '';
+            } else if (rowObject.ccocsiniultimaruta == '9999999999') {
+                return '<div align="center" class="ui-pg-button " title="Enviar el documento a mi bandeja" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnenviar(\''+ options.rowId +'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-arrowreturnthick-1-s"></span></div></div>';
+            }	
+            
+        }
+        function accionbtnenviar(rowId){
+
+            
+			openDialogConfirm1("Esta seguro de derivar este documento a su Area?<br/><br/> <span style='color:red;'>* Esta accion se realiza bajo su resposabilidad. </span>", 350, {
+            "Si": function() {
+				var rowdat = $("#tblListaExp").jqGrid('getRowData',rowId);
+				//console.log(rowdat);
+                areaenvio =[];
+				mrutaenvio=[];
+				areaenvio[0] = {parea: '<?php echo $userdata->cidarea; ?>', jqcboaccion: '0000000140', vobserv: 'Envio Directo'};
+				mrutaenvio[0] = {
+							pidsigma: rowdat.idsigamrutaultimo
+									, pmdocumento: rowdat.idsigma
+									, pccocsini: rowdat.ccocsiniultimaruta
+									, pmruta: rowdat.mrutaultimo};
+				var parmter = {};
+				parmter.pccocsdes = '<?php echo $userdata->cidarea; ?>';
+				parmter.pctipacc = '0000000140';
+				parmter.pmdocumentos = JSON.stringify(mrutaenvio);
+				parmter.pvobserv = 'Envio Directo';
+				parmter.pareadestino = JSON.stringify(areaenvio);
+				parmter.ptodos = true;
+				$.post(path + "documentos/enviodocumentosave", parmter, function(data){
+					openDialogInfo(data[0].msj, "250", "150", null, function() {
+						closeDialog("jqDialogConfirmacion1");
+					});
+				}, 'json');
+			
+            },
+            "No": function() {
+                //ProcesoBuscarRuta(''); chkrecep_5
+                closeDialog("jqDialogConfirmacion1");
+
+            }
+        });
+			
+			
+        }
+
+        // <------- btnprint
+
+        nuevoExpediente = function(){
+            parameters = {
+                "idsigma": '0000000000',
+                "dstitulo":'Nuevo Expediente'
+            };
+            var _post = $.post(path + "tramite/expediente", parameters);
+            _post.success(function(request){
+                $("#panelExpediente").html(request);
+            });
+        };
+        verExpediente = function() {
+            if ("<?php echo $this->vestado;?>" == ""){
+                var selr = $('#tblListaExp').jqGrid('getGridParam','selrow');
+                var row = $("#tblListaExp").jqGrid('getRowData', selr);
+                
+                if(row.idsigma == undefined || row.idsigma == null){
+                    alert('Seleccione un registro para editar');
+                    return;
+                }
+                
+                parameters = {
+                    "idsigma": row.idsigma,
+                    "dstitulo": 'Carpeta Documentaria'
+                };
+
+                _post = $.post(path + "tramite/expediente", parameters);
+                _post.success(function(request){
+                    $("#panelExpediente").html(request);
+                });
+            }
+        };
+        verDocs = function(){
+            var selr = $('#tblListaExp').jqGrid('getGridParam','selrow');
+            var row = $("#tblListaExp").jqGrid('getRowData', selr);
+            var data = "ctipjerar=0000000113&cidsigma=" + row.idsigma;
+
+            openDialogData1("documentos/ddocumento", data, "1000", "600", "Documentos del expediente");
+
+        };
+
+        function buttonsGridExp(){
+            if ("<?php echo $this->vestado;?>" == ""){
+                $("#tblListaExp")
+                    .navGrid('#ptblListaExp', {edit:false,add:false,del:false,search:false,refresh:false})
+                    <?php #if($niveltramite == '2' || $niveltramite == '3'){?>
+                    <?php if($this->cidareauser== '0000000200'){?>
+                    .navButtonAdd('#ptblListaExp',{
+                        caption:"Agregar&nbsp;&nbsp;",
+                        buttonicon:"ui-icon-plus",
+                        onClickButton: function(){
+                            nuevoExpediente();
+                        },
+                        position:"last"
+                    })
+                    .navSeparatorAdd()
+                    .navButtonAdd('#ptblListaExp',{
+                        caption:"Editar&nbsp;&nbsp;",
+                        buttonicon:"ui-icon-pencil",
+                        onClickButton: function(){
+                            verExpediente();
+                        },
+                        position:"last"
+                    })
+                    <?php } ?>
+                    .navSeparatorAdd()
+                ;
+            }
+        }
+
+        buscarExpedientes = function() {
+            var storeListaExp = "coactivo.listar_expedientes_1";
+            var f_expediente = $("#find_expediente").val();
+            var f_administrado = $("#find_administrado").val();
+            var f_entrega = $("#find_entrega").val();
+
+            var f_dtini = $("#find_dtini").val();
+            var f_dtfin = $("#find_dtfin").val();
+            var f_documento = $("#find_documento").val();
+			var f_documentoex = $("#find_documentoex").val();
+
+            switch ($("#cbofiltro_exp").val()){
+                case filtro.EXPED:
+                    f_administrado = "";
+                    f_entrega = "";
+                    f_dtini = "";
+                    f_dtfin = "";
+                    if(f_expediente !== ""){
+                        storeListaExp = "coactivo.listar_expedientes_1";
+                    }
+                    break;
+                case filtro.FECHA:
+                    f_expediente = "";
+                    f_administrado = "";
+                    f_entrega = "";
+                    storeListaExp = "coactivo.listar_expedientes_1";
+                    break;
+                case filtro.PADMIN:
+                    f_expediente = "";
+                    f_entrega = "";
+                    f_dtini = "";
+                    f_dtfin = "";
+                    
+                    if(f_administrado !== ""){
+                        storeListaExp = "coactivo.listar_expedientes_1";
+                    }
+                    break;
+                case filtro.PENTRE:
+                    f_expediente = "";
+                    f_administrado = "";
+                    f_dtini = "";
+                    f_dtfin = "";
+                    if(f_entrega!==""){
+                        storeListaExp = "coactivo.listar_expedientes_1";
+                    }
+                    break;
+                                case filtro.DOC:
+                    f_expediente = "";
+                    f_entrega = "";
+                    f_administrado = "";
+                    f_dtini = "";
+                    f_dtfin = "";
+					f_documentoex="";
+                    if(f_documento!==""){
+                        storeListaExp = "coactivo.listar_expedientes_1";
+                    }
+                    break;
+					case filtro.DOCEX:
+                    f_expediente = "";
+                    f_entrega = "";
+                    f_administrado = "";
+                    f_dtini = "";
+                    f_dtfin = "";
+					f_documento="";
+                    if(f_documentoex!==""){
+                        storeListaExp = "coactivo.listar_expedientes_1";
+                    }
+                    break;
+            }
+
+            var params = '['+
+                '["@p_idsigma",""],'+
+                '["@p_ccosdes","<?php echo $this->cidarea;?>"],'+
+                '["@p_vestado","<?php echo $this->vestado;?>"],' +
+                '["@p_vnrodocu","'+ f_expediente +'"],' +
+                '["@p_mperson","'+ f_administrado +'"],' +
+                '["@p_centrega","'+ f_entrega +'"],' +
+                '["@p_dtini","'+ f_dtini +'"],' +
+                '["@p_dtfin","'+ f_dtfin +'"],' +
+                '["@p_documento","'+f_documento+'"],'+
+				'["@p_documentoext","'+f_documentoex+'"]'+
+                ']';
+
+            parameters = {
+                "name": "tblListaExp",
+                "procedure": storeListaExp,
+                "print": "true",
+                "parameters": params
+            };
+            procesarConsultaSubProceso('registrar', parameters, function(request){
+                var records = (request == null ? 0 : request.length)
+                var optionExp2 = $.extend(optionExp, {
+                                data: request,
+                                datatype: "local"
+                            });
+                $("#panelListaExp").html('<table id="tblListaExp"></table><div id="ptblListaExp"></div>');
+                inicializarGrid("tblListaExp", optionExp2, {});
+                buttonsGridExp();
+                $("#tblListaExp").jqGrid(
+                    'filterToolbar',
+                    { stringResult: true, searchOnEnter: false, defaultSearch: 'cn', ignoreCase: true });
+             }, 'json');
+           /* procesarProcedimientoJSON(
+                "panelListaExp"
+                , "tblListaExp"
+                , optionExp
+                , parameters
+                , null
+                , buttonsGridExp);*/
+          
+
+
+        };
+
+        $(document).ready(function() {
+            $("#btnquitaradm").button({
+                icons:{primary:'ui-icon-trash'},
+                text:false
+            });
+
+            $("#btnquitarentrega").button({
+                icons:{primary:'ui-icon-trash'},
+                text:false
+            });
+
+            //themeComboBox("#cbofiltro_exp");
+
+            $("#btnFiltrarExpedientes").button({
+                icons:{primary:'ui-icon-search'},
+                text:true
+            });
+            $("#cbofiltro_exp").combobox({
+                selected: function(event, ui){
+                    $(".selFiltroExped").hide();
+                    $(".selFiltroFecha").hide();
+                    $(".selFiltroAdmin").hide();
+                    $(".selFiltroEntrega").hide();
+                    $(".selFiltroDocumento").hide();
+					$(".selFiltroDocumentoex").hide();
+
+                    switch($("#cbofiltro_exp").val()){
+                        case filtro.EXPED:
+                            $(".selFiltroExped").show();
+                            break;
+                        case filtro.FECHA:
+                            $(".selFiltroFecha").show();
+                            break;
+                        case filtro.PADMIN:
+                            $(".selFiltroAdmin").show();
+                            break;
+                        case filtro.PENTRE:
+                            $(".selFiltroEntrega").show();
+                            break;
+                        case filtro.DOC:
+                            $(".selFiltroDocumento").show();
+                            break;
+						case filtro.DOCEX:
+						$(".selFiltroDocumentoex").show();
+						break;
+                        default:
+                            alert("Revision");
+                    }
+                }
+            })
+
+            $("#find_dtini").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat:"dd/mm/yy",
+                onClose: function( selectedDate ) {
+                    $("#find_dtfin").datepicker( "option", "minDate", selectedDate );
+                }
+            });
+            $("#find_dtfin").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                dateFormat:"dd/mm/yy",
+                onClose: function( selectedDate ) {
+                    $( "#find_dtini" ).datepicker( "option", "maxDate", selectedDate );
+                }
+            });
+
+            $("#btnbuscarAdministrado").button({
+                icons:{
+                    primary:'ui-icon-search'
+                },
+                text:false
+            });
+            $("#btnbuscarEntrega").button({
+                icons:{
+                    primary:'ui-icon-search'
+                },
+                text:false
+            });
+            //$("#cbofiltro_exp").change();
+            buscarExpedientes();
+            //$("#txtfiltro_exp").css("width", "180px");
+        });
+    </script>

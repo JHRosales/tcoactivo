@@ -1,0 +1,133 @@
+10
+
+dir
+0
+https://titania-psql.googlecode.com/svn/trunk/titania/application/views/scripts/documentos
+https://titania-psql.googlecode.com/svn
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+0873af1b-8edf-947b-ccef-b5089aa5ee3c
+
+bandejadocs.phtml
+file
+
+
+
+add
+
+bandejadocsuser.phtml
+file
+
+
+
+add
+
+ddocumento.phtml
+file
+
+
+
+add
+
+ddocumentomante.phtml
+file
+
+
+
+add
+
+docvencidos.phtml
+file
+
+
+
+add
+
+enviodocumento.phtml
+file
+
+
+
+add
+
+enviousuariodocumento.phtml
+file
+
+
+
+add
+
+hojaruta.phtml
+file
+
+
+
+add
+
+iframedocumentupload.phtml
+file
+
+
+
+add
+
+index.phtml
+file
+
+
+
+add
+
+lstdocumentos.phtml
+file
+
+
+
+add
+
+obsbigpanel.phtml
+file
+
+
+
+add
+
+panelobsenvio.phtml
+file
+
+
+
+add
+
+uploadddocuments.phtml
+file
+
+
+
+add
+
+visordocs.phtml
+file
+
+
+
+add
+

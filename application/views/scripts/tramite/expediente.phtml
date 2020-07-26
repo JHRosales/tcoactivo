@@ -1,0 +1,414 @@
+﻿<?php
+$userdata = new Zend_Session_Namespace('datosuserlog');
+?>
+<input type="hidden" id="cusuario_registro" name="cusuario_registro" value="<?php echo $this->usuarioregistro; ?>" />
+<input type="hidden" id="cusuario_actual" name="cusuario_actual" value="<?php echo $this->usuarioactual; ?>" />
+
+<table border="0">
+    <tr>
+        <td>
+            <div id="panelRegistro" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 500px;margin: 3px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                    <label><?php echo $this->dstitulo; ?></label>
+                </div>
+                <br/>
+                <table class="ui-table-panelLayout">
+
+                    <tr>
+                        <td style="text-align:left;">
+                            N&uacute;mero<br/>
+                            <input type="hidden" id="hdidsigma" name="hdidsigma" value="<?php echo $this->idsigma; ?>" />
+                            <input class="editable ui-text" style="background-color: #e4e4e4;" type="text" id="txtvnrodocu" name="txtvnrodocu" value="<?php echo $this->vnrodocu; ?>" readonly="readonly"/>
+                        </td>
+                        <td style="text-align:left;">
+                            Fecha<br/>
+                            <input class="editable ui-text" style="background-color: #e4e4e4;" type="text" id="txtdfecdocu" name="txtdfecdocu" value="<?php echo $this->dfecdocu; ?>" readonly="readonly"/>
+                        </td>
+                        <td>
+                            <button id="btnguardarexp" type="button" onclick="guardarExpediente()" >Guardar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;">
+                            Tipo<br/>
+                            <select id="cboctiprtram" name="cboctiprtram" style="width:100px;" >
+                                <?php
+                                //if ($userdata->cidarea != '0000000200') {
+                                    echo $this->util()->getComboContenedorCoactivo('0000000619', $this->ctiprtram);
+                               // } else {
+                               //     echo $this->util()->getComboContenedorCoactivo('0000000002', $this->ctiprtram);
+                               // }
+                                ?>
+                            </select>
+                        </td>
+                        <td style="text-align:left;">
+                            Folios<br/>
+                            <input class="editable ui-text" type="text" id="txtnfolios" name="txtnfolios" pattern="[0-9]{8}" value="<?php echo $this->nfolios; ?>"/>
+                        </td>
+                        <td style="width:120px;">
+                            <button id="btncancelarexp" type="button" onclick="retornar()" >Cancelar</button>
+                        </td>
+                    </tr>
+                    <tr  <?php if ($userdata->cidarea != '0000000200') echo 'style="display:none;"'; ?>>
+                        <td style="text-align:left;" colspan="2">
+                            Carpeta Documentaria precedente(Referente)<br/>
+                            <input type="hidden" id="hdmdocumento" name="hdmdocumento" value="<?php echo $this->mdocumento; ?>" />
+                            <input class="editable ui-text"
+                                   style="background-color: #e4e4e4;"
+                                   type="text"
+                                   id="txtmdocumento"
+                                   name="txtmdocumento"
+                                   value="<?php echo $this->vmdocumento; ?>"
+                                   readonly="readonly"/>
+
+                            <button type="button" id="btnbuscaexped" name="btnbuscaexped" onclick="buscarExpediente()">
+                                &nbsp;
+                            </button>
+                            <button type="button" id="btnquitarexped" name="btnquitarexped" onclick="clearExpedientePrecedente()">
+                                &nbsp;
+                            </button>
+                        </td>
+                    </tr>
+                    <tr <?php
+                    if ($userdata->cidarea != '0000000200')
+                        echo 'style="display: none;"';
+                    ?>>
+                        <td style="text-align:left;" colspan="3">
+                            Nº Documento Externo<br/>
+                            <input class="editable ui-text"
+                                   type="text"
+                                   id="txtvnrodocini"
+                                   name="txtvnrodocini"
+                                   style="width:400px;"
+                                   maxlength="200"
+                                   value="<?php echo $this->vnrodocini; ?>"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;" colspan="3">
+                            Asunto<br/>
+                            <input type="hidden" id="hddasunto" name="hddasunto" value="<?php echo $this->dasunto; ?>" />
+                            <input class="editable ui-text" type="text" id="txtdasunto" name="txtdasunto" style="width:400px;" value="<?php echo $this->dasunto_tipasunto; ?>"  readonly="readonly"/>
+                            <button type="button" id="btnbuscardasunto" name="btnbuscardasunto" onclick="buscardasunto()">
+                                &nbsp;
+                            </button>
+                        </td>
+                    </tr>
+                    <tr <?php
+                    if ($userdata->cidarea != '0000000200')
+                        echo 'style="display: none;"';
+                       // echo  $this->ccosini;
+                    ?>
+                        >
+                        <td style="text-align:left;" colspan="3">
+                            Area destino<br/>
+                            <select id="cboccosini" name="cboccosini" style="width:405px;">
+                                <?php echo $this->util()->getComboContenedorOtro('0000000001', $this->ccosini, 'coactivo.obtener_areas_coactivo'); ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;" colspan="3">
+                            Relevancia<br/>
+                            <select id="cboctiprele" name="cboctiprele" style="width:405px;">
+                                <?php echo $this->util()->getComboContenedorCoactivo('0000000006', $this->ctiprele);
+                               /// echo $this->ctiprele.'dsfg';
+                                ?>
+
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <div id="tabs">
+                    <ul>
+                        <li><a href="#tabs-1">Asunto detallado</a></li>
+                        <li><a href="#tabs-2">Observacion</a></li>
+                    </ul>
+                    <div id="tabs-1">
+                        <textarea style="width:300px;height:100px;text-transform: uppercase;" id="txtvasunto" name="txtvasunto" placeholder="Asunto detallado" placeholder="Asunto..."><?php echo $this->vasunto; ?></textarea>
+                    </div>
+                    <div id="tabs-2">
+                        <textarea style="width:300px;height:50px;text-transform: uppercase;" id="txtvobserv" name="txtvobserv"><?php echo $this->vobserv; ?></textarea>
+                    </div>
+
+                    <div id="div_mensaje" name="div_mensaje"></div>
+
+
+
+                </div>
+        </td>
+        <td valign="top">
+            <div id="panelRegistro2" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 500px;margin: 3px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                    <label>Contribuyente</label>
+                </div>
+                <!-- FROM HERE -->
+                <div class="ui-widget ui-widget-content ui-corner-all" style="width: 95%;margin: 3px;">
+                    <div id="panelSesionPersona">
+                    </div>
+                </div>
+            </div>
+
+            <div id="panelRegistro3" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 500px;margin: 3px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                    <label>Carpeta Documentaria</label>
+                </div>
+                <!-- Panel Expediente desde aqui -->
+                <div class="ui-widget ui-widget-content ui-corner-all" style="width: 95%;margin: 3px;">
+                    <div id="panelExpedienteInfo">
+
+                    </div>
+                </div>
+                <!-- Panel Expediente hasta aqui -->
+            </div>
+        </td>
+    </tr>
+</table>
+<script>
+
+
+    themeComboBox("#cboctiprtram");
+    themeComboBox("#cboccosini");
+    themeComboBox("#cboctiprele");
+    expedparams = {
+        "idsigma": $("#hdidsigma").val(),
+        "buttons": "yes",
+        "tiptram": "<?php echo $this->ctiprtram; ?>"
+    };
+    _postadm = $.post(path + "tramite/paneladministrado", expedparams);
+    _postadm.success(function(request) {
+        $("#panelSesionPersona").html(request);
+        _post = $.post(path + "tramite/panelexpediente", expedparams);
+        _post.success(function(request) {
+            $("#panelExpedienteInfo").html(request);
+            if ($("#hdidsigma").val() != "" && $("#hdidsigma").val() != "0000000000") {
+                var isreadOnly = false;
+                if (
+                       $("#hd_nvcarea").val() !== $("#hdcareapexped").val() ||
+                       ($("#cusuario_registro").val() !== "" && $("#cusuario_registro").val() !== $("#cusuario_actual").val())
+                        ) {
+                    $("#btnguardarexp").hide();
+                    $("#txtnfolios").attr("disabled", "disabled");
+                    $("#txtdasunto").attr("disabled", "disabled");
+                    $("#txtvnrodocini").attr("disabled", "disabled");
+                    $("#btnbuscardasunto").hide();
+                    $("#btnbuscaexped").hide();
+                    $("#btnquitarexped").hide();
+                    $("#cboccosini").combobox("disable");
+                    $("#cboctiprele").combobox("disable");
+                   $("#btnbuscaradministrado").hide();
+                    $("#btnbuscarrepresentante").hide();
+                    $("#btnbuscarrepresentante").hide();
+                   $("#btnbuscarentrega").hide();
+                   $("#btncancelarexp").html("Solo Lectura - Volver al listado");
+                   $(".clsentrega3").hide();
+                    isreadOnly = true;
+                }
+
+            }
+            var config = {
+                skin: 'v2'
+                , toolbar: [
+                    ['Bold', 'Italic', 'Underline', '-', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Undo', 'Redo', '-', 'HorizontalRule', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'TextColor', 'BGColor'],
+                    ['UIColor']
+                ]
+                , readOnly: isreadOnly
+            };
+            var hEd = CKEDITOR.instances['txtvobserv'];
+            var iEd = CKEDITOR.instances['txtvasunto'];
+            if (hEd) {
+                CKEDITOR.remove(hEd);
+            }
+            if (iEd) {
+                CKEDITOR.remove(iEd);
+            }
+            CKEDITOR.replace('txtvobserv', config);
+            CKEDITOR.replace('txtvasunto', config);
+        });
+    });
+    if ($("#hdidsigma").val() != "" && $("#hdidsigma").val() !== "0000000000") {
+        $("#cboctiprtram").combobox("disable");
+    }
+
+    $("#tabs").tabs();
+//$(".mbuttons").button();
+    $("#btnguardarexp").button({
+        icons: {primary: 'ui-icon-disk'}
+    });
+    $("#btncancelarexp").button({
+        icons: {primary: 'ui-icon-cancel'}
+    });
+    $("#btnquitarexped").button({
+        icons: {primary: 'ui-icon-trash'},
+        text: false
+    })
+    $("#btnbuscaexped").button({
+        icons: {
+            primary: 'ui-icon-search'
+        },
+        text: false
+    });
+    $("#btnbuscardasunto").button({
+        icons: {
+            primary: 'ui-icon-search'
+        },
+        text: false
+    });
+    function buscardasunto() {
+
+        var ctra = ($("#cboctiprtram").val() == '0000000620' ? '0000000287' : $("#cboctiprtram").val());
+        openDialogData1("tramite/listardasunto", {ctiptra: ctra}, "1000", "500", "Seleccion de asunto...");
+    }
+
+    function clearExpedientePrecedente() {
+        $("#hdmdocumento").val("");
+        $("#txtmdocumento").val("");
+    }
+    function buscarExpediente() {
+        var param = {
+            "cidarea": "",
+            "vestado": "%"
+        };
+        openDialogData2("tramite/listarexpediente", param, "1030", "530", "Seleccion de Carpeta Documentaria...");
+    }
+       function retornar(){
+         
+         if ("<?php echo $this->ctiprtram ;?>" == '0000000620') {
+            window.open(path + 'documentos/bandejadocs', '_self');
+        } else {
+            window.open(path + 'tramite/listarexpediente', '_self');
+        }
+        
+    }
+    function guardarExpediente() {
+        var aEditor = CKEDITOR.instances['txtvasunto'];
+        var vasunto = aEditor.getData();
+        var bEditor = CKEDITOR.instances['txtvobserv'];
+        var vobserv = bEditor.getData();
+        var ctipper = $('#hdctipper').val();
+        // Parametros para guardar
+        var idsigma = $('#hdidsigma').val();
+        var dasunto = $('#hddasunto').val();
+        var mperson = $('#hdmperson').val();
+        var dfecdocu = $('#txtdfecdocu').val();
+        var nfolios = $('#txtnfolios').val();
+        var ctiprtram = $('#cboctiprtram').val();
+        // var
+
+        var ccosini = '';
+        var ccossender = '';
+        var nrodocini = $('#txtvnrodocini').val();
+        if ($("#hd_nvcarea").val() == '0000000200') {
+            ccossender = '0000000200'; // XXX
+            ccosini = $('#cboccosini').val();
+        } else {
+            ccossender = '0000000287'; //TRAMITE INTERNO DE COACTIVO.MCONTEN
+            //ccosini = $("#hd_nvcarea").val();
+        }
+        ccosini = $('#cboccosini').val();
+        var ctiprele = $('#cboctiprele').val();
+        var vnrodocu = $('#txtvnrodocu').val();
+        var crepres = $.trim($('#hdcrepres').val());
+        var centrega = $.trim($('#hdcentrega').val());
+        var mdocumento = $.trim($('#hdmdocumento').val());
+        var dentrega = $.trim($("#txtdentrega").val());
+        var flagdentrega = $("#hdflagentrega").val();
+        var dsadministrado = $.trim($("#showvperson").html());
+        var ndias = 0;
+        var listErrors = "";
+        if (ctiprtram == "9999999999") {
+            listErrors += "- Seleccionar tipo de tramite<br/>";
+            openDialogError("Seleccionar tipo de tramite<br/>", "250", "150", function() {
+                $("#linkctiprtram").focus();
+            });
+            return;
+        }
+        if (nfolios == "") {
+            openDialogError("Ingrese el numero de folios", "250", "150", function() {
+                $("#txtnfolios").focus();
+            });
+            return;
+        }
+        if (mperson == "") {
+            openDialogError("Seleccione el Contribuyente", "250", "150", function() {
+                $("#btnbuscaradministrado").focus();
+            });
+            return;
+        }
+        if (dasunto == "") {
+            openDialogError("Seleccionar asunto", "250", "150", function() {
+                $("#btnbuscardasunto").focus();
+            });
+            return;
+        }
+        if (ccosini == "9999999999") {
+            openDialogError("Seleccionar área destino", "250", "150", function() {
+                $("#linkccosini").focus();
+            });
+            return;
+        }
+        if (ctiprele == "9999999999") {
+            openDialogError("Seleccionar relevancia del documento", "250", "150", function() {
+                $("#linkctiprele").focus();
+            });
+            return;
+        }
+        if (ctipper == "0000000112" && crepres == "") {
+            openDialogError("Seleccione Representante Legal", "250", "150", function() {
+                $("#btnbuscarrepresentante").focus();
+            });
+            return;
+        }
+        if (flagdentrega == "1") {
+            if (dentrega == "") {
+                openDialogError("Ingrese la persona que entrega el documento", "250", "150", function() {
+                    $("#txtdentrega").focus();
+                });
+                return;
+            }
+        }
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: path + "tramite/guardarexpediente/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            data:
+                    {
+                        idsigma: idsigma,
+                        dasunto: dasunto,
+                        mperson: mperson,
+                        dfecdocu: dfecdocu,
+                        nfolios: nfolios,
+                        ctiprtram: ctiprtram,
+                        vasunto: vasunto,
+                        ccosini: ccosini,
+                        ctiprele: ctiprele,
+                        vobserv: vobserv,
+                        vnrodocu: vnrodocu,
+                        crepres: crepres,
+                        centrega: centrega,
+                        mdocumento: mdocumento,
+                        dentrega: dentrega,
+                        flagdentrega: flagdentrega,
+                        dsadministrado: dsadministrado,
+                        ndias: ndias,
+                        ccossender: ccossender,
+                        vnrodocini: nrodocini
+                    },
+            success: function(requestData) { 	//Llamada exitosa)
+                 if ("<?php echo $this->ctiprtram ;?>" == '0000000620') {
+                        window.open(path + 'documentos/bandejadocs', '_self');
+                    } else {
+                     window.open(path + 'tramite/listarexpediente', '_self');
+                    }
+            },
+            error: function(requestData, errNumber, errMessage) {
+                if (errNumber == '') {
+                    openDialogError("No se puede determinar el error.");
+                } else {
+                    openDialogError(errNumber + ': ' + errMessage);
+                }
+            }
+        });
+    }
+</script>

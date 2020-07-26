@@ -1,0 +1,245 @@
+<table style="width: 100%;" border="0" >
+  <tr>
+    <td style="vertical-align:top" width="370px">
+        <div id="panelHRuta">
+            <table id="tblHRuta">
+            </table>
+        </div>
+        <button id="btnimpruta">Imprimir ruta</button>
+    </td>   
+    <td align="center" style="vertical-align:top">
+      
+              <table border="0" width="100%">
+                <tr>
+                        <td>
+                            
+                            <div id="panelrecurrente" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 350px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                  <label>Administrado</label>
+                </div>
+                <div id="divpanelrecurrente" ></div>
+              </div>
+                        </td>
+                    </tr>
+                <tr>
+                        <td>
+                          <div id="panelexp" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 350px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                  <label>Expediente</label>
+                </div>
+                <div id="divpanelexp" style="height: 160px;"></div>
+              </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="panelobs" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 350px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                  <label>Observacion de Envio</label>
+                </div>
+                <div id="divpanelobs" style="height: 130px"></div>
+              </div>
+                        </td>
+                    </tr>
+              </table>
+            </div>
+    </td>
+  </tr>
+</table>
+
+
+
+
+
+<script type="text/javascript">
+
+ $(function() {
+  /*var hEd = CKEDITOR.instances['txtobsruta'];
+  if (hEd) {
+      CKEDITOR.remove(hEd);
+  }
+  CKEDITOR.replace('txtobsruta', config);
+
+*/
+
+              gridConfigHRuta = {
+                  colNames: ["id",""
+                  //, "level"
+                  , "mdocumento"
+                  //, "vnrodocu","ccocsini"
+                  ,"Origen"
+                  ,"Ruta"
+                  //,"ccocsdes" ,"vcocsdes" 
+                  ,"Fecha Envio" 
+                  ,"cruta"
+
+                  ,"cdruta"
+                  ,"cidsigma"
+                  ,"ctipjerar"
+                  ,"Dias"
+                  ,"isEditable"
+                  ,"Docs."
+                  ,"HR"
+                  ],
+                  colModel: [
+        { name: 'id', index: 'id', hidden: true  , key: true},
+        { name: 'idtbl', index: 'idtbl', hidden: true },
+        /*{ name: 'level', index: 'level', width: 180 , hidden: true},*/
+        { name: 'mdocumento', index: 'mdocumento', width: 180 , hidden: true},
+        /*{ name: 'vnrodocu', index: 'vnrodocu', width: 180 , hidden: true},
+        { name: 'ccocsini', index: 'ccocsini', width: 180 , hidden: true},*/
+              { name: 'vccosini', index: 'vccosini', width: 210 },
+        { name: 'vdescrip', index: 'vdescrip', width: 310 },
+        /*{ name: 'ccocsdes', index: 'ccocsdes', width: 180 , hidden: true},
+        { name: 'vcocsdes', index: 'vcocsdes', width: 180 , hidden: true},*/
+        { name: 'dfecenv', index: 'dfecenv', width: 100 },
+        { name: 'cruta', index: 'cruta', width: 180 , hidden: true},
+        
+        { name: 'cdruta', index: 'cdruta', width: 180 , hidden: true},
+        { name: 'cidsigma', index: 'cidsigma', width: 180 , hidden: true},
+        { name: 'ctipjerar', index: 'ctipjerar', width: 180 , hidden: true},
+        { name: 'diasdoc', index: 'diasdoc', width: 30, align:'center' },
+        { name: 'isEditable', index: 'isEditable', width: 30, align:'center' , hidden: true },
+        { name: 'btndocumt', index: 'btndocumt', width: 40, align: 'center' ,formatter : H_btndocumt},
+        { name: 'btnhojaruta', index: 'btnhojaruta', width: 40, align: 'center' ,formatter : H_btnhojaruta}
+          ],
+                  height: 'auto',
+                  pager: null,
+                  onSelectRow: function(id, status) {
+                    
+                    var rowHRuta = $(this).jqGrid('getRowData', id);
+
+                    $("#divpanelrecurrente").load(path + "tramite/paneladministrado",{idsigma:rowHRuta.mdocumento});  
+                  $("#divpanelexp").load(path + "tramite/panelexpediente",{idsigma:rowHRuta.mdocumento});
+                  
+                    if(rowHRuta.level=='1' || rowHRuta.level=='0'){
+                      //console.log(rowHRuta);
+                      $("#divpanelobs").html('');
+                    }
+                    if(rowHRuta.level=='2'){
+                      $("#divpanelobs").load(path + "documentos/panelobsenvio",{pidsigma :rowHRuta.cidsigma , pctipjerar : rowHRuta.ctipjerar });   
+                    }
+                    if(rowHRuta.level=='3'){
+                      $("#divpanelobs").load(path + "documentos/panelobsenvio",{pidsigma :rowHRuta.cidsigma , pctipjerar : rowHRuta.ctipjerar });                       
+                    }
+                    }
+              };
+
+        
+        var paramtrsHRuta = '{'+
+                        '"pmruta":"<?php echo $this->mruta; ?>"'
+                        +'}';
+
+              parametersHRuta = {
+                  "name": "tblHRuta",
+                  "procedure": "coactivo.sp_ArblHojaRuta_get",
+                  "print" :"true",
+                  "parameters": paramtrsHRuta
+              };
+
+
+              //inicializarGrid("registrar", gridConfigHRuta)
+              procesarConsultaSubProceso('registrar', parametersHRuta, procesoHRuta, 'json');
+
+              $("#btnimpruta").button().click(function(){
+                  $("#panelHRuta").jqprint();
+              });
+
+
+          });
+
+
+        function procesoHRuta(request) {
+            
+            gridConfigHRuta2 = $.extend(gridConfigHRuta, {
+                datatype: "jsonstring",
+                datastr: request,
+                gridview: true,
+                sortname: 'id',
+                treeGrid: true,
+                treeGridModel: 'adjacency',
+                treedatatype: "local",
+                ExpandColumn: 'vdescrip',
+                caption: " Hoja de Ruta",
+                jsonReader: {
+                    repeatitems: false,
+                    root: function(obj) { return obj; },
+                    page: function(obj) { return 1; },
+                    total: function(obj) { return 1; },
+                    records: function(obj) { return obj.length; }
+                },
+                gridComplete: function(){
+                    
+                    
+                  setTimeout(function(){     
+                     rootNode = $( "#tblHRuta" ).jqGrid('getRowData')[0];
+                     rootNode._id_ = rootNode.id;
+                     //$( "#tblHRuta" ).jqGrid('expandRow'   ,rootNode);
+                     //$( "#tblHRuta" ).jqGrid('expandNode'  ,rootNode);  
+                     $( "#tblHRuta" ).jqGrid('setSelection',rootNode.id);       
+                  }, 1);
+                    
+                }
+            });
+
+
+            $("#panelHRuta").html('<table id="tblHRuta"></table>');
+            inicializarGrid("tblHRuta", gridConfigHRuta2);
+
+        }
+
+        // -----> H_btndocumt Boton que llama a los documentos del documento
+        function H_btndocumt(cellvalue, options, rowObject){
+      //console.log(rowObject);
+            if (rowObject.level =='1' || rowObject.level =='2' || rowObject.level =='3'){
+              return '<div align="center" class="ui-pg-button " title="Documento" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="H_accionbtndocumt(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+            }else{
+        return'';
+                }
+                
+            
+        }
+
+        function H_accionbtndocumt(rowId){
+            var rowdat = jQuery("#tblHRuta").jqGrid('getRowData',rowId);
+            //console.log(rowdat);
+            var paramtrs ={ 
+              cidsigma :rowdat.cidsigma 
+              ,ctipjerar: rowdat.ctipjerar
+              ,mdocumento:rowdat.mdocumento
+              ,editable:rowdat.isEditable
+            };
+            /*if (rowdat.level =='1'){
+              var paramtrs ={ cidsigma :rowdat.mdocumento ,ctipjerar: '0000000130',mdocumento:rowdat.mdocumento};
+                }
+            if (rowdat.level =='2'){
+              var paramtrs ={ cidsigma :rowdat.cruta ,ctipjerar: '0000000131',mdocumento:rowdat.mdocumento};
+                }
+            if (rowdat.level =='3'){
+              var paramtrs ={ cidsigma :rowdat.cruta ,ctipjerar: '0000000132',mdocumento:rowdat.mdocumento};
+                }*/
+            
+
+            openDialogDataFunction2("documentos/ddocumento", paramtrs, "1000", "520", "Documentos " , null, {});
+        }
+
+     // <------- H_btndocumt
+     //-------------> H_btnhojaruta
+      function H_btnhojaruta(cellvalue, options, rowObject){
+      //console.log(rowObject);
+            if (rowObject.level =='1'){
+              return '<div align="center" class="ui-pg-button " title="Hoja de Ruta" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="H_accionbtnhojaruta(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+            }else{
+        return'';
+                }
+        }
+      
+      function H_accionbtnhojaruta(rowId){
+          var rowdat = jQuery("#tblHRuta").jqGrid('getRowData',rowId);
+          var paramtrs ={ cidsigma :rowdat.cidsigma ,ctipjerar: rowdat.ctipjerar,mdocumento:rowdat.mdocumento};
+      window.open(pathRpt+"tipo=pdf&nombrereporte=hoja_ruta&param=P_USUARIO^"+VAR_USERLOGIN+"|P_CMDOCUMENTO^"+rowdat.mdocumento);
+      }
+      
+      //<---------
+
+</script>

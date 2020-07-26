@@ -1,0 +1,191 @@
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "
+     style="width: 99.8%;margin-top:2px;margin-left : 0px;margin-right :0px;margin-bottom:2px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <table border="0" width="100%" >
+            <tr >
+                <td width="3%">
+                    <A href="index">
+                        <img width="25" height="25" src="<?php echo $this->util()->getImage("home-icon.png");?>">
+                    </A></td>
+                <td align="center" width="97%">
+                    <label style="font-size:12px !important;">COSTAS PROCESALES</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+	<input type="hidden" value="<?php echo $this->cidusuario?>"  id="hdcidusuario"/>
+    <table border="0" width="80%" >
+        <tr>
+            <td>
+                <div align="center" style="display: none">
+                    <button  id="btnbuscarCostasProcesales">Buscar</button>
+                    <button  id="btnImprimir">Imprimir</button>
+                </div>
+            </td>
+        </tr>
+
+        <!-- <tr><td colspan="5">&nbsp;</td></tr> -->
+    </table>
+
+   
+</div>
+<div id="panelCostasProcesaless" >
+    <table id="tblCostasProcesales"></table><div id="ptblCostasProcesales"></div>
+</div>
+    <script type="text/javascript">
+        ProcesoBuscarCostasProcesales = function() {
+            parameters = {
+                "name": "tblCostasProcesales",
+                "procedure": "coactivo.lst_costasprocesales",
+                "print": "true",
+                "parameters": '{' +
+                '"p_idsigma":"",' +
+                '"p_nrodocumento":""' +
+                '}'
+            };
+ procesarProcedimientoJSON('panelCostasProcesaless','tblCostasProcesales',gridConfigDocsUser,parameters,null,navPanelCentroP);
+    //PARA SELECCIONAR LA PRIMERA FILA
+    /*        procesar = function(requestData){
+                options = $.extend(gridConfigDocsUser, {
+                    data: requestData,
+                    //     datatype: "local",
+                    gridComplete: function(){
+                        isGridComplete = true;
+                        $("#tblCostasProcesales").jqGrid('setSelection', 1, true);
+                      //  $('#btnBuscarCaj').button({ icons: {primary:'ui-icon-search'} }).click(function(){   buscarcajerocaja(); });
+
+                    }
+                });
+                procesarProcedimientoJSON('panelCostasProcesaless','tblCostasProcesales',gridConfigDocsUser,parameters,bindkeysmcajero,navPanelCentroP);
+            };
+          procesarConsultaSubProceso("registrar", parameters, procesar, 'json');
+*/
+        };
+
+
+$("#btnbuscarCostasProcesales").button({ icons: { primary: "ui-icon-search"} }).click(function() { ProcesoBuscarCostasProcesales(); });
+$("#btnImprimir").button({ icons: { primary: "ui-icon-print"} }).click(function() {  });
+
+gridConfigDocsUser = {
+        height: 230,
+        width: 875,
+        colNames: ["Codigo", "Tipo Documento","Nro Documento","Fecha Documento", "Fecha Inicial","Fecha Final","dEstado","Observacion","Estado"],
+        colModel: [
+            { name: 'idsigma', index: 'idsigma', width: 10, align: 'center', hidden:true},
+            { name: 'tipodocumento', index: 'tipodocumento',  width: 140, align: 'left' },
+            { name: 'nrodocumento', index: 'nrodocumento', width: 140, align: 'left'},
+            { name: 'fechadocumento', index: 'fechadocumento', width: 70, align: 'left' },
+            { name: 'fechainicio', index: 'fechainicio', width: 70, align: 'left' },
+            { name: 'fechafin', index: 'fechafin', width: 70, align: 'left' },
+            { name: 'estado', index: 'estado', width: 120, align: 'left',hidden:true },
+            { name: 'vobserv', index: 'vobserv', width: 220, align: 'left'},
+            { name: 'destado', index: 'destado', width: 40, align: 'center' }
+            ],
+        caption: "Listado de Costas Procesales",
+        rowNum: 10,
+        rownumbers: true,
+
+        viewrecords: true,
+        recordpos: 'right',
+        loadComplete: function (data) {
+            if (data.rows.length > 0) {
+            }
+        },
+        onSelectRow: function(id){
+        },
+    afterInsertRow: function(rowid, aData){
+        switch (aData.estado) {
+            case '1':
+               /* jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'idsigma','',{color:'blue'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'tipodocumento','',{color:'green'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'nrodocumento','',{color:'black'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'fechadocumento','',{color:'blue'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'fechainicio','',{color:'orange'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'fechafin','',{color:'purple'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'destado','',{color:'yellow'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'vobserv','',{color:'white',backgroundColor:'red'});*/
+                break;
+            case '0':
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'idsigma','',{color:'red',backgroundColor:'orange'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'tipodocumento','',{color:'red',backgroundColor:'orange'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'nrodocumento','',{color:'red',backgroundColor:'orange'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'fechadocumento','',{color:'red',backgroundColor:'orange'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'fechainicio','',{color:'red',backgroundColor:'orange'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'fechafin','',{color:'red',backgroundColor:'orange'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'destado','',{color:'red',backgroundColor:'orange'});
+                jQuery("#tblCostasProcesales").jqGrid('setCell',rowid,'vobserv','',{color:'red',backgroundColor:'orange'});
+                break;
+        }
+    }
+    };
+
+
+
+//BOTONES
+btnAgregaCostaP = {
+    caption: '&nbsp; Agregar &nbsp;',
+    title: 'Agregar Costas Procesales',
+    id:'btnnuevo',
+    buttonicon: 'ui-icon-plusthick',
+    onClickButton: function () {
+        newCostProcesal();
+    }
+};
+
+//BOTON EDITAR COSTAS PROCESALES
+btnEditarCostaP = {
+    caption: '&nbsp; Editar &nbsp;',
+    title: 'Editar Costas Procesales',
+    buttonicon: 'ui-icon-pencil',
+    onClickButton: function () {
+        editCostaProcesal();
+    }
+};
+//BOTON EDITAR COSTAS PROCESALES
+btnPrintCostasP = {
+    caption: '&nbsp; Imprimir &nbsp;',
+    title: 'Imprimir Costas Procesales',
+    buttonicon: 'ui-icon-print',
+    onClickButton: function () {
+        PrintCostProcesal();
+    }
+};
+
+//AGREGAR COSTAS PROCESALES
+newCostProcesal=function(){
+    openDialogDataFunction1("coactivo/mantecostasprocesales",{idsigma: '' },"650", "500", "Agregar Costas Procesales");
+};
+
+//EDITAR COSTAS PROCESALES
+editCostaProcesal=function(_parameters){
+    rowid= jQuery("#tblCostasProcesales").jqGrid('getGridParam','selrow');
+    if (rowid == undefined){
+        openDialogInfo("Seleccione una fila",300);
+        return false;
+    }
+    row = $("#tblCostasProcesales").jqGrid('getRowData', rowid);
+    openDialogDataFunction1("coactivo/mantecostasprocesales",{idsigma:row.idsigma,tipodocumento:row.tipodocumento
+        ,nrodocumento:row.nrodocumento,fechadocumento:row.fechadocumento,
+        fechainicio:row.fechainicio,fechafin:row.fechafin,estado:row.estado,vobserv:row.vobserv},"650", "500", "Mantener Auxiliar Coactivo");
+};
+//IMPRIMIR COSTAS PROCESALES
+PrintCostProcesal=function(){
+    openDialogDataFunction1("coactivo/mantecostasprocesales",{idsigma: '' },"650", "500", "Agregar Costas Procesales");
+};
+    var navPanelCentroP = function() {
+        $("#tblCostasProcesales").jqGrid('navGrid', '#ptblCostasProcesales', {edit: false, add: false, del: false, search: false, refresh: false});
+        $("#tblCostasProcesales").jqGrid('navButtonAdd', '#ptblCostasProcesales', btnAgregaCostaP);
+        $("#tblCostasProcesales").jqGrid('navSeparatorAdd', '#ptblCostasProcesales');
+        $("#tblCostasProcesales").jqGrid('navButtonAdd', '#ptblCostasProcesales', btnEditarCostaP);
+        $("#tblCostasProcesales").jqGrid('navSeparatorAdd', '#ptblCostasProcesales');
+        $("#tblCostasProcesales").jqGrid('navButtonAdd', '#ptblCostasProcesales', btnPrintCostasP);
+        $("#tblCostasProcesales").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
+    };
+
+    $(function(){
+
+        //inicializarGrid("tblCostasProcesales", gridConfigDocsUser);
+        ProcesoBuscarCostasProcesales();
+    });
+
+</script>

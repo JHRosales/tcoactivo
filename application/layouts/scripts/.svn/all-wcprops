@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/335/trunk/titania/application/layouts/scripts
+END
+layout.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/335/trunk/titania/application/layouts/scripts/layout.phtml
+END
+southView.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/6/trunk/titania/application/layouts/scripts/southView.phtml
+END
+menuView.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/6/trunk/titania/application/layouts/scripts/menuView.phtml
+END
+layoutscript.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/332/trunk/titania/application/layouts/scripts/layoutscript.phtml
+END
+northView.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/258/trunk/titania/application/layouts/scripts/northView.phtml
+END
+jqConfirm.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/33/trunk/titania/application/layouts/scripts/jqConfirm.phtml
+END
+layoutwithpanel.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/26/trunk/titania/application/layouts/scripts/layoutwithpanel.phtml
+END
+jqCargando.phtml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/6/trunk/titania/application/layouts/scripts/jqCargando.phtml
+END

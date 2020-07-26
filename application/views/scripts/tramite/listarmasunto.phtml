@@ -1,0 +1,161 @@
+<style>
+
+</style>
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 1000px;margin: 3px;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Mantenimiento de asuntos</label>
+    </div>
+</div>
+<div id="panelListaAsunto" align="center" style="width: 99%;margin: 3px;">
+    <table id="tblListaAsunto"></table>
+    <div id="ptblListaAsunto"></div>
+</div>
+<div id="container" style="display: none; min-width: 400px; height: 150px; margin: 0 auto"></div>
+<script type="text/javascript">
+
+    function chkEstadoGrupoAsunto(cellvalue, options, rowObject) {
+        return '<input  type="checkbox" id="chkestado_'+options.rowId+'" ' + (cellvalue=='1' ? ' checked="checked"' : '') +
+            'onclick="changeEstadoAsunto(' + options.rowId + ')"  ' + (cellvalue=='1' ? ' disabled ' : '') + ' />';
+    }
+
+    function changeEstadoAsunto(rowId) {
+        var row = jQuery("#tblListaAsunto").jqGrid('getRowData', rowId);
+        openDialogConfirm1("\u00BFEst\u00E1 Activar este grupo de asuntos?", 350, {
+            "Si": function(){
+                $.ajax({
+                    dataType: "html",
+                    type: "POST",
+                    url: path + "tramite/guardarasunto/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+                    data: {
+                        "idsigma":row.idsigma,
+                        "vdescri":row.vdescri,
+                        "dfecini":row.dfecini,
+                        "dfecfin":row.dfecfin,
+                        "varticulo":row.varticulo,
+                        "nestado":1
+                    },
+                    success: function(requestData){ 	//Llamada exitosa)
+                        closeDialog("jqDialogConfirmacion1");
+                        buscarAsunto();
+                    },
+                    error: function(requestData, errNumber, errMessage){
+                        if(errNumber == '') {
+                            openDialogError("No se puede determinar el error.");
+                        } else {
+                            openDialogError(errNumber +': ' + errMessage);
+                        }
+                    }
+                });
+            },
+            "No": function() {
+                closeDialog("jqDialogConfirmacion1");
+            }
+        });
+    }
+
+    optionAsunto = {
+        width: 1000,
+        height: 300,
+        colNames: ['Codigo',
+            'Descripci\u00F3n',
+            'Estado',
+            'Fec. Inicio',
+            'Fec. Fin',
+            'Articulo',
+            'Estacion',
+            'Usuario',
+            'Fec. Registro',
+        ],
+        colModel: [{name: 'idsigma', index:'idsigma', width: 70, align:'center'},
+            {name: 'vdescri', index:'vdescri', width: 350},
+            {name: 'nestado', index:'nestado', width: 45, formatter:chkEstadoGrupoAsunto},
+            {name: 'dfecini', index:'dfecini', width: 75, formatter:'date', formatoptions: {srcformat:"d/m/Y", newformat:"d/m/Y"}, align: 'center'},
+            {name: 'dfecfin', index:'dfecfin', width: 75, formatter:'date', formatoptions: {srcformat:"d/m/Y", newformat:"d/m/Y"}, align: 'center'},
+            {name: 'varticulo', index:'varticulo', width: 300},
+            {name: 'estacion', index:'estacion', width: 1, hidden: true},
+            {name: 'usuario_registro', index:'usuario_registro', width: 1, hidden: true},
+            {name: 'fecha_registro', index:'fecha_registro', width: 1, formatter:'date', formatoptions: {srcformat:"Y-m-d", newformat:"d/m/Y"}, align: 'center', hidden: true}
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Asuntos registrados",
+        ondblClickRow: function(){
+            verMasunto();
+        },
+        onSelectRow: function(id) {
+            row = $(this).getRowData(id);
+        },
+        gridComplete: function() {
+            var _rows = $("#tblListaAsunto").find(".jqgrow");
+            for (var i = 0; i < _rows.length; i++) {
+                if(parseInt(_rows[i].childNodes[0].textContent) == 0) {
+                    _rows[i].attributes["class"].value += " nivel5";
+                }
+            }
+        }
+    };
+
+    function nuevoMasunto(){
+        datamasunto = {
+            "idsigma": '##########'
+        };
+
+        openDialogData1("tramite/asunto",datamasunto,1010,580, "Nuevo grupo de asuntos");
+    }
+    function verMasunto(){
+        var selr = $('#tblListaAsunto').jqGrid('getGridParam','selrow');
+        var row = $("#tblListaAsunto").jqGrid('getRowData', selr);
+        datamasunto = {
+            "idsigma": row.idsigma
+        };
+
+        openDialogData1("tramite/asunto",datamasunto,1010,580,"Editar grupo de asuntos");
+    }
+    function buttonsGridAsunto(){
+        $("#tblListaAsunto")
+            .navGrid('#ptblListaAsunto', {edit:false,add:false,del:false,search:false,refresh:false},{},{},{},{multipleSearch:true})
+            .navButtonAdd('#ptblListaAsunto',{
+                caption:"Agregar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-plus",
+                onClickButton: function(){
+                    nuevoMasunto();
+                },
+                position:"last"
+            })
+            .navSeparatorAdd()
+            .navButtonAdd('#ptblListaAsunto',{
+                caption:"Editar&nbsp;&nbsp;",
+                buttonicon:"ui-icon-pencil",
+                onClickButton: function(){
+                    verMasunto();
+                },
+                position:"last"
+            })
+
+        ;
+    }
+
+    buscarAsunto = function() {
+        var params = '['+
+            '["@p_idsigma",""]' +
+            '["@p_nestado",""]' +
+            +']';
+        parameters = {
+            "name": "tblListaAsunto",
+            "procedure": "tramite.listar_masunto",
+            "print": "true",
+            "parameters": params
+        };
+
+        //procesarProcedimientoJSON(idPanel, idx, _options, parameters, bindkeys, navGrid)
+        procesarProcedimientoJSON(
+            "panelListaAsunto"
+            , "tblListaAsunto"
+            , optionAsunto
+            , parameters
+            , null
+            , buttonsGridAsunto);
+    };
+    $(document).ready(function() {
+        buscarAsunto();
+    });
+
+</script>

@@ -1,0 +1,297 @@
+<script src="./../../../public/js/app/highcharts/highcharts.js"></script>
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 99%;margin: 5px ; ">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label style="font-size:12px !important;"></label>
+        <table border="0" width="100%" >
+            <tr >
+                <td width="3%">
+                    <a href="../coactivo/index">
+                        <img width="25" height="25" src="<?php echo $this->util()->getImage("home-icon.png");?>">
+                    </a></td>
+                <td align="center" width="97%">
+                    <label style="font-size:12px !important;">RESPORTES</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+	<input type="hidden" value="<?php echo $this->cidusuario?>"  id="hdcidusuario"/>
+    <table border="0" width="50%" >
+        <tr>
+            <td align="center"><button type="submit" id="btnbar">
+                    <img width="50" height="50"  src="<?php echo $this->util()->getImage("icons/Bar-chart-disabled1.png");?>"
+                         onmouseover="this.src='<?php echo $this->util()->getImage("icons/Bar-chart.png"); ?>'"
+                         onmouseout="this.src='<?php echo $this->util()->getImage("icons/Bar-chart-disabled1.png"); ?>'">
+                </button>
+
+            </td>
+            <td align="center"><button type="submit" id="btndisper">
+                    <img width="50" height="50" src="<?php echo $this->util()->getImage("icons/Line-chart-disabled1.png");?>"
+                     onmouseover="this.src='<?php echo $this->util()->getImage("icons/Line-chart.png"); ?>'"
+                    onmouseout="this.src='<?php echo $this->util()->getImage("icons/Line-chart-disabled1.png"); ?>'">
+                </button>
+            </td>
+            <td align="center"><button type="submit" id="btnpie">
+                    <img width="50" height="50" src="<?php echo $this->util()->getImage("icons/pie-chart-disabled.png");?>"
+                         onmouseover="this.src='<?php echo $this->util()->getImage("icons/pie-chart.png"); ?>'"
+                         onmouseout="this.src='<?php echo $this->util()->getImage("icons/pie-chart-disabled.png"); ?>'">
+                </button>
+            </td>
+        </tr>
+    </table>
+    <table border="0" width="80%">
+        <tr >
+            <td width="150px"> &nbsp;</td>
+            <td  width=120><b>Desde  </b></td>
+            <td  width=70> &nbsp;</td>
+            <td><b>Hasta </b></td>
+            <td rowspan="2"> <button id="btnimprimir">Imprimir</button> <button id="btnbuscardocsUser">Buscar</button> </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="text" id="fecdesde" class="ui-text" style="text-align: left;width: 100px;"/>
+            </td>
+            <td> &nbsp;</td>
+            <td>
+                <input type="text" id="fechasta" class="ui-text" style="text-align: left;width: 100px;"/>
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div id="scriptgraf" align="center"></div>
+<div id="containeruno"></div>
+
+<div id="chartdivbarras" align="center"></div>
+<br /><hr /><br />
+<div id="chartdivpie" align="center"></div>
+<div id="scriptgraf" align="center"></div>
+<br/>
+<br>
+<br>
+
+    <script>
+    $(document).ready(function() {
+
+        $("#btnbuscardocsUser").button({ icons: { primary: "ui-icon-search"} }).click(function() {  buscarapertcajxfecha($('#fecdesde').val(),$('#fechasta').val()); });
+        $("#btnimprimir").button({ icons: { primary: "ui-icon-search"} }).click(function() { exportEstockexcel(); });
+        $("#btnbar").button({ icons: { primary: "ui-icon-search"} }).click(function() { buscarapertcajx($('#fecdesde').val(),$('#fechasta').val()); });
+        $("#btndisper").button({ icons: { primary: "ui-icon-search"} }).click(function() {buscardisper(); });
+        $("#btnpie").button({ icons: { primary: "ui-icon-search"} }).click(function() { buscarpie(); });
+
+        $("#fecdesde").datepicker({ showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy" });
+        $("#fechasta").datepicker({ showOn: "button", buttonImage: pathImage + "calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy" });
+        buscarapertcajx($('#fecdesde').val(),$('#fechasta').val());
+        });
+
+
+    buscarapertcajxfecha = function(_fecha,_fecha1) {
+        /*Graficos*/
+        _post2 = $.post(path + "documentos/graficocajeros/", "fecha1=" + _fecha + "&fecha2=" + _fecha1);
+        _post2.success(function (requestData) {
+            $('#scriptgraf').html(requestData);
+        });
+
+    };
+    exportEstockexcel = function(){
+        var stockmin='90';
+
+        var renipres= "0000000100";
+        var desde=$('#fecdesde').val();
+        var hasta=$('#fecdesde').val();
+        var tiporepex='report_exl.php';
+        var tiporepex1='report_exl2.php';
+
+        window.open("<?php echo $this->util()->getPath(); ?>"+"report/"+tiporepex+
+        "?p_ren="+renipres+"&p_des="+desde+"&p_ast="+hasta);
+
+        window.open("<?php echo $this->util()->getPath(); ?>"+"report/"+tiporepex1+
+        "?p_ren="+renipres+"&p_des="+desde+"&p_ast="+hasta);
+    };
+
+
+    buscarapertcajx = function(var1,var2) {
+        /*Graficos*/
+        _post2 = $.post(path + "reportes/graficoconsumo/","fini="+var1+"&ffin="+var2);
+        _post2.success(function (requestData) {
+            var arrdata=JSON.parse(requestData);
+            console.log(arrdata);
+            var hosp="";
+            var tit=[];
+            var no=[];
+            var si=[];
+            for(i=0;i<arrdata.length;i++){
+                hosp="";
+                tit.push("Envio");
+                no.push(parseInt(arrdata[i][0]));
+                si.push(parseInt(arrdata[i][1]));
+            }
+            var chart = Highcharts.chart('containeruno', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Eficacia de la Cobranza Coactiva'
+                },
+                subtitle: {
+                    text: ''
+                },
+                legend: {
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    layout: 'vertical'
+                },
+                xAxis: {
+                    categories:tit,
+                    labels: {
+                        x: -10
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    title: {
+                        text: 'Cantidad'
+                    }
+                },
+                series: [{
+                    name: 'Emitido',
+                    data:  no,
+                    color:'#00CC33',
+                    dataLabels: {
+                        enabled: true,
+                        rotation: 0,
+                        color: 'black',
+                        align: 'center',
+                        y: 0
+                    }
+                }, {
+                    name: 'Cancelado',
+                    data: si,
+                    color:'#F1C7D2',
+                    dataLabels: {
+                        enabled: true,
+                        rotation: 0,
+                        color: 'black',
+                        align: 'center',
+                        y: 0
+                    }
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 900
+                        },
+                        chartOptions: {
+                            legend: {
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                layout: 'horizontal'
+                            },
+                            yAxis: {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -5
+                                },
+                                title: {
+                                    text: 'Cantidad'
+                                }
+                            },
+                            subtitle: {
+                                text: null
+                            },
+                            credits: {
+                                enabled: false
+                            }
+                        }
+                    }]
+                }
+            });
+
+        });
+
+    };
+
+    buscarpie= function() {
+
+        Highcharts.chart('containeruno', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Porcentaje de Recaudación en el ultimo Mes'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Brands',
+                colorByPoint: true,
+                data: [{
+                    name: 'Recaudado',
+                    y: 8000,
+                    sliced: true,
+                    selected: true
+                }, {
+                    name: 'Deuda',
+                    y: 2040
+                }]
+            }]
+        });
+    };
+
+    buscardisper= function() {
+
+        Highcharts.chart('containeruno', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Monto por meses'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [ 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                title: {
+                    text: 'Cantidad'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: 'Total',
+                data: [7.0, 6.9, 9.5, 14.5, 18.4]
+            }, {
+                name: 'Coactivo',
+                data: [3.9, 4.2, 5.7, 8.5, 11.9]
+            }]
+        });
+    };
+
+</script>

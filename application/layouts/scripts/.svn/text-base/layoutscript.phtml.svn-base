@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?php
+        echo $this->headMeta() . "\n";
+        echo $this->headTitle() . "\n";
+        ?>
+        <style type="text/css">
+            .printable {
+                border: 1px dotted #CCCCCC ;
+                padding: 10px 10px 10px 10px ;
+            }
+        </style>
+
+        <link href="<?php echo $this->util()->getPath(); ?>theme/<?php echo $this->util()->getTheme(); ?>/jquery-ui.css" rel="stylesheet" type="text/css" id="jquery_theme_link" />
+        <?php echo $this->util()->getStyle(); ?>
+        <link href="<?php echo $this->util()->getImage("refbar.ico"); ?>" rel="shortcut icon" type="image/x-icon" />
+        <link href="<?php echo $this->util()->getImage("refbar.ico"); ?>" rel="icon" type="image/x-icon" />
+
+        <?php
+        echo $this->util()->getScript("js/app/ui");
+        echo $this->util()->getScript("js/app/common");
+        echo $this->util()->getScript("js/app/jqGrid");
+
+        $controller = $this->util()->getScriptJSController();
+        $controllerAction = $this->util()->getScriptJSControllerAction();
+        $leave = $this->util()->getScriptLeave();
+
+        if (strlen($controller) > 0) {
+            echo $controller;
+        }
+
+        if (strlen($controllerAction) > 0) {
+            echo $controllerAction;
+        }
+
+        if (strlen($leave) > 0) {
+            echo $leave;
+        }
+        ?>
+
+        <?php echo $this->util()->isMap(); ?>        
+        <script type="text/javascript">
+            var path = "<?php echo $this->util()->getPath(); ?>index.php/",
+                    pathImage = "<?php echo $this->util()->getPath(); ?>img/",
+                    pathReport = "<?php echo $this->util()->getPathReport(); ?>",
+                    imageInit = "<?php echo $this->util()->getImage("alumnos0.jpg"); ?>",
+                    ajaxDialog = true,
+                    layoutParentContainer = null;
+
+            $.jgrid.no_legacy_api = true;
+            $.jgrid.useJSON = true;
+
+            jQuery(document).ready(function() {
+                layoutParentContainer = $(window.parent.document);
+                jQuery.scriptPath = "<?php echo $this->util()->getPath(); ?>";
+                jQuery.ajaxSettings.traditional = true;
+                jQuery.ajaxSetup({
+                    cache: false,
+                    error: function(request, status, error) {
+                        if (request.status == 408)
+                            window.open(obtenerContexto("view/common/log-out.jsp"), '_self');
+                        else
+                            openDialogError("<b>Error de comunicaci\u00F3n.</b> <br/>Estado: " + status + "<br/> Detalle: " + error + "");
+                    },
+                    beforeSend: function(xhr, settings) {
+                        switch (settings.type) {
+                            case "GET":
+                                settings.url += "&_ajaxcall_=1";
+                                break;
+                            case "POST":
+                                settings.data += "&_ajaxcall_=1";
+                                break;
+                        }
+                    }
+                });
+            });
+
+            $(document).ready(function() {
+                $(document).ajaxStart(function() {
+                    debugger;
+                    console.log(layoutParentContainer.find('#jqDialogCargando'));
+                    if (ajaxDialog) {
+                        layoutParentContainer.find('#jqDialogCargando').dialog('open');
+                    } else {
+                        layoutParentContainer.find('#jqCargando').css({"display": "inline"});
+                    }
+                });
+
+                $(document).ajaxStop(function() {
+                    if (ajaxDialog) {
+                        layoutParentContainer.find('#jqDialogCargando').dialog('close');
+                    } else {
+                        layoutParentContainer.find('#jqCargando').css({"display": "none"});
+                    }
+                    ajaxDialog = true;
+                });
+            });
+
+            $(function() {
+                $("input:submit, input:button, input:reset, button").button();
+            });
+        </script>
+    </head>    
+    <body>
+<?php echo $this->layout()->content; ?>
+<?php echo $this->render("jqCargando.phtml"); ?>
+<?php echo $this->render("jqConfirm.phtml"); ?>
+    </body>
+</html>

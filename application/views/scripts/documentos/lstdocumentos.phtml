@@ -1,0 +1,221 @@
+
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 960px;margin:5px ; ">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Lista de Documentos</label>
+    </div>
+
+<table style="width: 100%;" border="0" >
+	<tr>
+		<td style="vertical-align:top" width="200px">
+				<div id="panelHDocPrinc">
+				    <table id="tblHDocPrinc">
+				    </table>
+				</div>
+		</td>		
+		<td align="center" style="vertical-align:top">
+
+            <div id="panelddocumentos" >
+			        <table id="tblddocumentos">
+			        </table>
+			        <div id="ptblddocumentos">
+			        </div>
+			</div>
+		</td>
+	</tr>
+</table>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+ $(function() {
+
+	 gridtblddocumentos= {
+ 	        height: 300,
+ 	        width: 740,
+ 	        colNames: ["cmdocumento", "Expediente.","cddocumento", "ctipdocu","Generado en","Documento","Nro.Doc","Fec.Doc.","Usuario"," "],
+ 	        colModel: [
+ 		        { name: 'cmdocumento', index: 'cmdocumento', width: 100, align: 'center',hidden:true},
+ 		        { name: 'vnroexpe', index: 'vnroexpe', width: 120, align: 'left' },
+ 		        { name: 'cddocumento', index: 'cddocumento', width: 200, align: 'left',hidden:true },
+ 		        { name: 'ctipdocu', index: 'ctipdocu', width: 130, align: 'left',hidden:true },
+ 		        { name: 'ds_descrip', index: 'ds_descrip', width: 160, align: 'left' },
+ 		        { name: 'vdescri', index: 'vdescri', width: 130, align: 'left' },
+ 		        { name: 'vnrodocu', index: 'vnrodocu', width: 90, align: 'left' },
+ 		        { name: 'dfecdocu', index: 'dfecdocu', width: 75, align: 'left'},
+ 		        { name: 'ds_usuario', index: 'ds_usuario', width: 80, align: 'center'},
+ 		        { name: 'btndoc', index: 'btndoc', width: 20, align: 'center',formatter : btndoc }
+ 		        ],
+ 	        caption: " Documentos",
+ 	        rowNum: 20,
+ 	        rownumbers: true,
+            onSelectRow: function(id){
+                     var row = jQuery(this).jqGrid('getRowData', id);
+             }
+ 	    };
+
+		inicializarGrid("tblddocumentos", gridtblddocumentos);
+
+	 
+              gridConfigHDocPrinc = {
+				datatype: "jsonstring",
+                datastr: <?php echo $this->jsonArbol;?>,
+                gridview: true,
+                sortname: 'id',
+                treeGrid: true,
+                treeGridModel: 'adjacency',
+                treedatatype: "local",
+                ExpandColumn: 'vdescrip',
+                caption: " Expedientes",
+                jsonReader: {
+                     repeatitems: false,
+                     root: function(obj) { return obj; },
+                     page: function(obj) { return 1; },
+                     total: function(obj) { return 1; },
+                     records: function(obj) { return obj.length; }
+                },
+                gridComplete: function(){
+                          
+                   	setTimeout(function(){	   
+                    rootNode = $( "#tblHDocPrinc" ).jqGrid('getRowData')[0];
+                    rootNode._id_ = rootNode.id;
+                    $( "#tblHDocPrinc" ).jqGrid('setSelection',rootNode.id);       
+                	}, 1);
+                          
+                },
+                  colNames: ["id",""
+                  //, "level"
+                  , "mdocumento"
+                  //, "vnrodocu","ccocsini"
+                  ,"Ruta"
+                  //,"ccocsdes" ,"vcocsdes" 
+                  ,"Fecha Envio" 
+                  ,"cruta"
+
+                  ,"cdruta"
+                  ,"cidsigma"
+                  ,"ctipjerar"
+                  ,"Dias"
+                  ],
+                  colModel: [
+			      { name: 'id', index: 'id', hidden: true  , key: true},
+			      { name: 'idtbl', index: 'idtbl', hidden: true },
+			      /*{ name: 'level', index: 'level', width: 180 , hidden: true},*/
+			      { name: 'mdocumento', index: 'mdocumento', width: 180 , hidden: true},
+			      /*{ name: 'vnrodocu', index: 'vnrodocu', width: 180 , hidden: true},
+			      { name: 'ccocsini', index: 'ccocsini', width: 180 , hidden: true},*/
+			      { name: 'vdescrip', index: 'vdescrip', width: 200 },
+			      /*{ name: 'ccocsdes', index: 'ccocsdes', width: 180 , hidden: true},
+			      { name: 'vcocsdes', index: 'vcocsdes', width: 180 , hidden: true},*/
+			      { name: 'dfecenv', index: 'dfecenv', width: 100,hidden:true },
+			      { name: 'cruta', index: 'cruta', width: 180 , hidden: true},
+			      
+			      { name: 'cdruta', index: 'cdruta', width: 180 , hidden: true},
+			      { name: 'cidsigma', index: 'cidsigma', width: 180 , hidden: true},
+			      { name: 'ctipjerar', index: 'ctipjerar', width: 180 , hidden: true},
+			      { name: 'diasdoc', index: 'diasdoc', width: 30, align:'center' ,hidden:true}
+	       		],
+                  height: 'auto',
+                  pager: null,
+                  onSelectRow: function(id, status) {
+                	
+                    var rowHRuta = $(this).jqGrid('getRowData', id);
+                    ProcesoBuscarDdocumentos(rowHRuta.mdocumento);
+                  }
+              };
+
+  
+              inicializarGrid("tblHDocPrinc", gridConfigHDocPrinc);
+              /*procesarConsultaSubProceso('registrar', parametersHRuta, procesoHRuta, 'json');*/
+
+
+
+          });
+
+/*
+        function procesoHRuta(request) {
+            
+            gridConfigHDocPrinc2 = $.extend(gridConfigHDocPrinc, {
+                datatype: "jsonstring",
+                datastr: request,
+                gridview: true,
+                sortname: 'id',
+                treeGrid: true,
+                treeGridModel: 'adjacency',
+                treedatatype: "local",
+                ExpandColumn: 'vdescrip',
+                caption: " Expedientes",
+                jsonReader: {
+                    repeatitems: false,
+                    root: function(obj) { return obj; },
+                    page: function(obj) { return 1; },
+                    total: function(obj) { return 1; },
+                    records: function(obj) { return obj.length; }
+                },
+                gridComplete: function(){
+                    
+                	setTimeout(function(){	   
+             	       rootNode = $( "#tblHDocPrinc" ).jqGrid('getRowData')[0];
+             	       rootNode._id_ = rootNode.id;
+             	       $( "#tblHDocPrinc" ).jqGrid('setSelection',rootNode.id);       
+             	    }, 1);
+                    
+                }
+            });
+
+
+            $("#panelHDocPrinc").html('<table id="tblHDocPrinc"></table>');
+            inicializarGrid("tblHDocPrinc", gridConfigHDocPrinc2);
+
+        }*/
+
+        ProcesoBuscarDdocumentos = function(pddocumento) {
+            //var paramtrs = '[{"0":"dve"},{"1":"dve"}]';
+            var paramtrs = '{'+
+                            '"p_cmdocumento":"'+pddocumento+'"'
+                            +'}';
+
+            parameters = {
+            "name": "tblddocumentos",
+            "procedure": "coactivo.sp_ddocumentoxDocumento_get",
+            "print" :"true",
+            "parameters": paramtrs
+            };
+            
+            procesarConsultaSubProceso('registrar', parameters, procesoDdocumentos, 'json');
+        };
+
+
+        procesoDdocumentos = function(request){
+            var 
+            gridtblddocumentos2 = $.extend(gridtblddocumentos, {
+                data: request,
+                datatype: "local"
+            });
+
+  	
+            $("#panelddocumentos").html('<table id="tblddocumentos"></table><div id="ptblddocumentos"></div>');
+            inicializarGrid("tblddocumentos", gridtblddocumentos2);
+          
+            
+        };
+
+
+        // -----> btndoc Boton que llama a al documento vencido
+        function btndoc(cellvalue, options, rowObject){
+            
+            return '<div align="center" class="ui-pg-button " title="Ver Doc" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtndoc(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+        }
+
+        function accionbtndoc(rowId){
+            var rowdat = jQuery("#tblddocumentos").jqGrid('getRowData',rowId);
+            //console.log(rowdat);
+            //var paramtrs ={ cidsigma :rowdat.idsigma ,ctipjerar: '0000000114',mdocumento:rowdat.mdocumento};
+            openDialogDataFunction1("documentos/ddocumentomante", { type: "C",mdocumento: rowdat.cmdocumento, ddocument: rowdat.cddocumento,cidsigma :'',ctipjerar: '' }, "980", "630",  rowdat.vdescri, null, { 'Cancelar': function() { closeDialog("jqDialog1"); } });
+        }
+
+     // <------- btndocumt
+</script>

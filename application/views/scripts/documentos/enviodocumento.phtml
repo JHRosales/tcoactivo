@@ -1,0 +1,308 @@
+
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 100%;margin: 1px ; ">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Enviar Documento</label>
+    </div>
+
+    <table border="0" width="95%">
+        <tr>
+            <td colspan="2">  
+                <input type="hidden" id="hddselarrrow" name="hddselarrrow" value="" />
+                <span id="cadareas"></span>
+            </td>
+        </tr>
+        <!-- <tr>
+            <td><b>Area</b></td>
+            <td align ="left" colspan="2"> 
+                 <select id="cboareadestino" style="text-align: left;width: 205px;"></select>
+            </td>
+        </tr> -->
+        <tr>
+            <td>
+                <table><tr>
+                        <td><b>Accion</b> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td><select id="cboacciondestino" style="text-align: left;width: 205px;"></select></td>
+                        <td style="display: none;">
+                            <label for="chktodos">Todos</label>
+                            <input type="checkbox" id="chktodos" name="chktodos" checked="checked" />
+                        </td>
+                    </tr></table>
+            </td>
+            <td align ="left" > 
+                <span id="spanobs" ><b>Observacion</b></span>
+            </td>
+
+        </tr>
+        <tr >
+            <td style="vertical-align: bottom;" width="50%">
+                <div id="panelarea" >
+                    <table id="tblArea"></table><div id="ptblArea"></div>
+                </div>
+            </td>
+            <td><textarea id="txtobservacionenvio"></textarea></td>
+        </tr>
+        <tr><td colspan="2"><hr></td></tr>
+        <tr>
+            <td colspan="2">
+                <?php if ($this->qtDoc == 1) { ?>
+
+                    <table>
+                        <td>
+                            <b>Relevancia : </b>
+                        </td>
+                        <td>
+                            <input type="hidden" id="mdocumentorelevancia" value="<?php echo $this->mdocumento; ?>"/>
+                            <select id="cboctiprele" name="cboctiprele" style="width:105px;">
+                                <?php echo $this->util()->getComboContenedorCoactivo('0000000006', $this->ctiprele); ?>
+                            </select>
+                        </td>
+                        <td>
+                            <b>Folios : </b>
+                        </td>
+                        <td>
+                            <input type="text" id="txtpfolios" value="<?php echo $this->nfolios; ?>" class="ui-text" style="text-align: left;width: 50px;"/>
+                        </td>
+                        <!--
+                        <td>
+                            <button id="btnguardarrelevancia">Guardar Actualización</button>
+                        </td>
+                        -->
+                    </table>
+                <?php } ?>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+<script>
+    var lastsel;
+    $(document).ready(function() {
+        $("#cboctiprele").combobox();
+        /*$("#btnguardarrelevancia").button().click(function() {
+            var parameter = {};
+            parameter.pmdocumento = $("#mdocumentorelevancia").val();
+            parameter.pctiprele = $("#cboctiprele").val();
+            parameter.pfolios = $("#txtpfolios").val();
+
+            $.post(path + "documentos/updaterelevanciadoc", parameter, function(data) {
+                if (data[0].result === '1') {
+                    openDialogInfo(data[0].msj, "280", "150", null, function() {
+                        return ;
+                    });
+                }
+            }, 'json');
+        });*/
+
+        var hEd = CKEDITOR.instances['txtobservacionenvio'];
+        if (hEd) {
+            CKEDITOR.remove(hEd);
+            $("#cke_txtobservacionenvio").remove();
+        }
+        CKEDITOR.replace('txtobservacionenvio', config);
+        $("#chktodos").change(function() {
+            if ($("#chktodos").is(':checked')) {  //Esta activado
+                $("#spanobs").html("<b>Observacion <b>");
+                $("#tblArea").hideCol("jqcboaccion");
+                var hEd = CKEDITOR.instances['txtobservacionenvio'];
+                if (hEd) {
+                    CKEDITOR.remove(hEd);
+                    $("#cke_txtobservacionenvio").remove();
+                }
+                CKEDITOR.replace('txtobservacionenvio', config);
+
+                $("#cboacciondestino").combobox("enable");
+            } else { // No esta activado
+                $("#tblArea").showCol("jqcboaccion");
+                $("#cboacciondestino").combobox("disable");
+            }
+        });
+
+
+
+
+        gridConfigArea = {
+            data: <?php echo $this->arrareas; ?>,
+            datatype: "local",
+            editurl: "clientArray",
+            height: 230,
+            width: 465,
+            colNames: ["idsigma", "Area", "Accion", "vobserv"],
+            colModel: [
+                {name: 'idsigma', index: 'idsigma', width: 250, align: 'center', hidden: true},
+                {name: 'vdescri', index: 'vdescri', align: 'left', width: 280},
+                {name: 'jqcboaccion', index: 'jqcboaccion', align: 'left', width: 120, hidden: true
+                    , editable: true, formatter: 'select', edittype: "select"
+                    , editoptions: {value: JSON.parse('<?php echo $this->optionsjqcboaccion; ?>'), defaultValue: JSON.parse('{"9999999999" : "SELECCIONAR"}')}
+                },
+                {name: 'vobserv', index: 'vobserv', align: 'left', width: 100, hidden: true}
+            ],
+            caption: " Areas",
+            rowNum: 200,
+            rownumbers: true,
+            multiselect: true,
+            viewrecords: true,
+            recordpos: 'right',
+            /*gridComplete: function() {
+             var ids = jQuery(this).jqGrid('getDataIDs');
+             for(var i=0;i < ids.length;i++){
+             $(this).editRow(ids[i], false,null);
+             } 
+             $(this).jqGrid('setSelection',ids[0]);  
+             lastsel=ids[0];
+             },*/
+            loadComplete: function() {
+                isGridComplete = true;
+                var rowsids = jQuery("#tblArea").jqGrid('getDataIDs');
+
+                $.each(rowsids, function(i, rowid) {
+
+                    var rowData = jQuery("#tblArea").jqGrid('getRowData', rowid);
+
+                    $('#tblArea').jqGrid('editRow', rowid, false);
+
+                });
+
+
+                //  $(this).jqGrid('setSelection',rowsids[0]);  
+                lastsel = rowsids[0];
+
+
+            },
+            onSelectRow: function(id) {
+
+                if (id && id !== lastsel) {
+
+                    if (!$("#chktodos").is(':checked')) {
+                        var oEditor = CKEDITOR.instances['txtobservacionenvio'];
+                        var obs = "";
+                        if (oEditor) {
+                            obs = oEditor.getData();
+                        }
+
+                        jQuery("#tblArea").jqGrid('setRowData', lastsel, {vobserv: obs});
+
+
+
+                        var hEd = CKEDITOR.instances['txtobservacionenvio'];
+                        if (hEd) {
+                            CKEDITOR.remove(hEd);
+                            $("#cke_txtobservacionenvio").remove();
+                        }
+                        var row = jQuery("#tblArea").jqGrid('getRowData', id);
+                        $("#spanobs").html("<b>Observacion : " + row.vdescri + "<b>");
+                        $("#txtobservacionenvio").html(row.vobserv);
+
+                        CKEDITOR.replace('txtobservacionenvio', config);
+                    }
+                    lastsel = id;
+                }
+            },
+            sortname: "vdescri",
+            sortorder: "asc"   
+            /*,
+                    //toolbar: [true, "bottom"],
+                    jsonReader: {
+                        repeatitems: false
+                    },
+            scroll: false,
+            shrinkToFit: false*/
+        };
+
+        inicializarGrid("tblArea", gridConfigArea);
+        //$("#tblArea").hideCol("jqcboaccion");
+
+    });
+    function EnviardocumentoSave() {
+        //MODIFICADO 0106 - INICIO VALIDAR FOLIOS
+        var vtxtfolios= $("#txtpfolios").val();//MODIFICADO 0106
+        if (vtxtfolios <='0'){
+            openDialogError("La cantidad e Folios debe ser mayor 0", "250", "150", function() {
+                    $("#txtvfolios").focus();
+                });
+                return;
+        }
+        if (vtxtfolios ===''){
+            openDialogError("Ingresar numero de folios", "250", "150", function() {
+                    $("#txtvfolios").focus();
+                });
+                return;
+        }
+        //MODIFICADO 0106 - FIN VALIDAR FOLIOS
+        if ($("#chktodos").is(':checked') && $("#cboacciondestino").val() === '9999999999') {
+            openDialogWarning("Seleccione Accion.", 380, 150);
+            return false;
+        }
+
+        if (!$("#chktodos").is(':checked')) {
+            var oEditor = CKEDITOR.instances['txtobservacionenvio'];
+            var obs = "";
+            if (oEditor) {
+                obs = oEditor.getData();
+            }
+            jQuery("#tblArea").jqGrid('setRowData', lastsel, {vobserv: obs});
+        }
+        var oEditor = CKEDITOR.instances['txtobservacionenvio'];
+        var obs = oEditor.getData();
+
+        gsrr = jQuery("#tblArea").jqGrid('getGridParam', 'selarrrow');
+        
+        if (gsrr.length > 0) {
+            var areaenvio = [];
+            for (var i = 0; i < gsrr.length; i++) {
+
+                //$('#tblArea').jqGrid('saveRow',gsrr[i],false,'clientArray');
+                $('#tblArea').jqGrid('saveRow', gsrr[i]);
+                var row = jQuery("#tblArea").jqGrid('getRowData', gsrr[i]);
+                areaenvio[i] = {parea: row.idsigma, jqcboaccion: row.jqcboaccion, vobserv: row.vobserv};
+                $("#tblArea").editRow(gsrr[i], false, null);
+                if (!$("#chktodos").is(':checked') && row.jqcboaccion == '9999999999') {
+                    console.log(row);
+                    openDialogInfo("Seleccionar Accion", "250", "150", null, function() {
+                        $("#" + gsrr[i] + "_jqcboaccion").focus();
+                    });
+                    return false;
+                }
+            }
+            //modificado 0106 inicio 
+            var parameter = {};
+            parameter.pmdocumento = $("#mdocumentorelevancia").val();
+            parameter.pctiprele = $("#cboctiprele").val();
+            parameter.pfolios = $("#txtpfolios").val();
+
+            $.post(path + "documentos/updaterelevanciadoc", parameter, function(data) {
+                if (data[0].result === '1') {
+                    //openDialogInfo(data[0].msj, "280", "150", null, function() {
+                    //    return ;
+                    //});
+                }
+            }, 'json');
+            //
+            //console.log(areaenvio);
+
+            var parmter = {};
+            //parmter.pmdocumento = $("#mdocumentorelevancia").val();//MODIFICADO 0106 
+            //parmter.pctiprele = $("#cboctiprele").val();//MODIFICADO 0106 
+            //parmter.pfolios = $("#txtpfolios").val();//MODIFICADO 0106 
+            parmter.pccocsdes = $('#cboareadestino').val();
+            parmter.pctipacc = $('#cboacciondestino').val();
+            parmter.pmdocumentos = $("#hddselarrrow").val();
+            parmter.pvobserv = obs;
+            parmter.pareadestino = JSON.stringify(areaenvio);
+            parmter.ptodos = $("#chktodos").is(':checked');
+                        
+            $.post(path + "documentos/enviodocumentosave", parmter, updateresultenvio, 'json');
+
+        } else {
+            openDialogWarning("Seleccione Area destino.", 380, 150);
+        }
+    }
+
+    function updateresultenvio(data) {
+        openDialogInfo(data[0].msj, "250", "150", null, function() {
+            closeDialog("jqDialog1");
+            ProcesoBuscarRuta('');
+        });
+    }
+
+</script>

@@ -1,0 +1,107 @@
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 875px;margin: 15px ; ">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Documentos Vencidos</label>
+    </div>
+    <div id="panelDocVenc" >
+        <table id="tblDocVenc"></table><div id="ptblDocVenc"></div>
+		</div>
+
+       
+</div>
+
+
+    <script>
+    $(document).ready(function() {
+
+           gridConfigDocVenc = {
+                height: 230,
+                width: 875,
+                colNames: ["cdocumento","Documento", "Recurrente","Fec. Docu","cddocumento","ctipdocu","Tipo Documento","Nro.Doc","Fec. Documento","Fec. Venc"," "],
+                colModel: [
+                    { name: 'cdocumento', index: 'cdocumento', width: 100, align: 'center',hidden:true },
+                    { name: 'vnrodocu', index: 'vnrodocu', width: 100, align: 'center'},
+                    { name: 'vrecurrente', index: 'vrecurrente', width: 180,  align: 'left'},
+                    { name: 'vdfecdocu', index: 'vdfecdocu', width: 100, align: 'center'},
+                    { name: 'cddocumento', index: 'cddocumento', width: 100, align: 'center',hidden:true},
+                    { name: 'ctipdocu', index: 'ctipdocu', width: 100 ,hidden:true},
+                    { name: 'vdescri', index: 'vdescri', width: 100 },
+                    { name: 'vdnrodocu', index: 'vdnrodocu', width: 100, align: 'center' },
+                    { name: 'dfecdocu', index: 'dfecdocu', width: 100, align: 'center' },
+                    { name: 'vfecvenc', index: 'vfecvenc', width: 100, align: 'center' },
+                    { name: 'btndocvenc', index: 'btndocvenc', width: 20, align: 'center',formatter : btndocvenc }
+                    ],
+                caption: " Documentos ",
+                rowNum: 10,
+                rownumbers: true,
+                viewrecords: true,
+                recordpos: 'right',
+                loadComplete: function (data) {
+                    if (data.rows.length > 0) {
+
+                    }
+                },
+                onSelectRow: function(id){
+                        /*console.log(id);*/
+                        //var row = jQuery("#tblDocVenc").jqGrid('getRowData', id);
+                        //console.log(row);
+                        //if (row.bnd=='S')
+                        //    jQuery("#tblDocVenc").jqGrid('setSelection',id);
+                        
+                }
+            };
+
+            inicializarGrid("tblDocVenc", gridConfigDocVenc);
+            ProcesoBuscarDocVenc();
+
+        });
+
+
+    ProcesoBuscarDocVenc = function() {
+        //var paramtrs = '[{"0":"dve"},{"1":"dve"}]';
+        /*var paramtrs = '['+
+                        '["@pccosto","'+$('#cboarea').val()+'"],'
+                        +'["@pfdesde","'+$('#fecdesde').val()+'"],'
+                        +'["@pfhasta","'+$('#fechasta').val()+'"]'
+                        +']';*/
+		var paramtrs = '[["@pcidarea","<?php echo $this->cidarea ?>"]]';
+        parameters = {
+        "name": "tblDocVenc",
+        "procedure": "tramite.sp_documentosvencidos_get",
+        "print" :"true",
+        "parameters": paramtrs
+        };
+        
+        procesarConsultaSubProceso('registrar', parameters, procesoDocVenc, 'json');
+    };
+    procesoDocVenc = function(request){
+        var records = (request == null ? 0 : request.length),
+        gridConfigDocVenc2 = $.extend(gridConfigDocVenc, {
+            data: request,
+            datatype: "local",
+            gridComplete: function(){
+                isGridComplete = true;
+            }
+        });
+
+        $("#panelDocVenc").html('<table id="tblDocVenc"></table><div id="ptblDocVenc"></div>');
+        inicializarGrid("tblDocVenc", gridConfigDocVenc2, {});
+        
+    };
+
+    // -----> btndocvenc Boton que llama a al documento vencido
+    function btndocvenc(cellvalue, options, rowObject){
+        
+        return '<div align="center" class="ui-pg-button " title="Doc Vencido" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtndocvenc(\''+options.rowId+'\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
+    }
+
+    function accionbtndocvenc(rowId){
+        var rowdat = jQuery("#tblDocVenc").jqGrid('getRowData',rowId);
+        //console.log(rowdat);
+        //var paramtrs ={ cidsigma :rowdat.idsigma ,ctipjerar: '0000000114',mdocumento:rowdat.mdocumento};
+        openDialogDataFunction1("documentos/ddocumentomante", { type: "C",mdocumento: rowdat.cdocumento, ddocument: rowdat.cddocumento,cidsigma :'',ctipjerar: '' }, "980", "630", "Documento Vencido " + rowdat.vdescri, null, { 'Cancelar': function() { closeDialog("jqDialog1"); } });
+    }
+
+ // <------- btndocumt
+
+    
+</script>

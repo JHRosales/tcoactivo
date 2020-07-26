@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="agrup_tipoconcep" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="P_NROCAJA" class="java.lang.String"/>
+	<parameter name="P_FECHADESDE" class="java.lang.String"/>
+	<parameter name="P_FECHAHASTA" class="java.lang.String"/>
+	<parameter name="P_USERIMPR" class="java.lang.String"/>
+	<parameter name="P_TIPOPAGO" class="java.lang.String"/>
+	<parameter name="P_HORASERVER" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select CTIPING,VTIPING,ctiprec,vdescri,sum(nmontot)as TOTAL, to_char(dfecpag::date,'dd/MM/yyyy') dfecpag,NESTADO,DESCRIPCION from tesoreria.vw_recibos
+where  (dfecpag::date between now()::date and now()::date)
+AND NESTADO='1'
+group by CTIPING,VTIPING,ctiprec,vdescri,to_char(dfecpag::date,'dd/MM/yyyy'),NESTADO,DESCRIPCION
+order by to_char(dfecpag::date,'dd/MM/yyyy'),CTIPING]]>
+	</queryString>
+	<field name="ctiping" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vtiping" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ctiprec" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vdescri" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dfecpag" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nestado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="total_1" class="java.math.BigDecimal" resetType="Group" resetGroup="CTIPING" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<variable name="total_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	</variable>
+	<group name="CTIPING">
+		<groupExpression><![CDATA[$F{ctiping}]]></groupExpression>
+		<groupHeader>
+			<band height="45">
+				<textField>
+					<reportElement x="18" y="0" width="149" height="20"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{vtiping}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="437" y="21" width="100" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Importe]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="167" y="21" width="270" height="20"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Descripcion del Concepto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="67" y="21" width="100" height="20"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cod.]]></text>
+				</staticText>
+				<line>
+					<reportElement x="18" y="21" width="525" height="1"/>
+				</line>
+				<line>
+					<reportElement x="18" y="43" width="525" height="1"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="29">
+				<line>
+					<reportElement x="465" y="6" width="78" height="1"/>
+				</line>
+				<textField>
+					<reportElement x="459" y="6" width="78" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{total_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="71" y="8" width="242" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Municipalidad Distrital de Puente Piedra
+]]></text>
+			</staticText>
+			<image>
+				<reportElement x="18" y="8" width="53" height="50"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Archivos de programa\\Zend\\Apache2\\htdocs\\titania\\public\\img\\marca\\escudo.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="18" y="58" width="525" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["REPORTE DE MOVIMIENTOS RESUMIDO POR CONCEPTOS DEL "  +$P{P_FECHADESDE} +" AL "+$P{P_FECHAHASTA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte por Tipo de Ingreso]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="67" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ctiprec}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="437" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="0" width="270" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vdescri}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="19">
+			<line>
+				<reportElement x="18" y="2" width="525" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="19" y="4" width="395" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Impreso por " + $P{P_USERIMPR} +" "+$P{P_HORASERVER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="50">
+			<rectangle>
+				<reportElement x="348" y="7" width="195" height="30"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="357" y="12" width="92" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Acumulado S/.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="449" y="12" width="85" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{total_2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,65 @@
+<div id="formRequisito" title="Documento" style="text-align: center;">
+    <table class="ui-table-panelLayout" border="0" style="margin: 4px;width:400px;" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <td>Tipo Documento</td>
+            <td>
+                <select id="cboctipdoc"
+                        name="cboctipdoc"
+                        style="width:250px;"
+                    ><?php echo $this->tipodocs; ?></select>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" id="txtidsigma_req" value=""/>
+    <input type="hidden" id="reqaccion" value=""/>
+    <button id="btnaceptarReq" onclick="aceptarRequisito()">Aceptar</button>
+    <button id="btncancelarReq" onclick="cancelarRequisito()">Cancelar</button>
+</div>
+<script>
+    $('#btnaceptarReq').button({
+        icons : {primary:'ui-icon-check'}
+    });
+    $('#btncancelarReq').button({
+        icons : {primary:'ui-icon-cancel'}
+    });
+    themeComboBox();
+    function aceptarRequisito(){
+        var r_idsigma = $("#txtidsigma_req").val();
+        var r_dasunto = $("#txtidsigma_dasunto").val();
+        var r_vtipasunto = '';
+        var r_ctipdoc = $("#cboctipdoc").val();
+        var r_vtipdoc = $("#cboctipdoc option:selected").html();
+        var r_nestado = '1';
+        var r_vobserv = '';
+        var r_vhostnm = '';
+        var r_vusernm = '';
+        var r_ddatetm = '';
+
+        var reqrowdata = {
+            idsigma:r_idsigma,
+            dasunto:r_dasunto,
+            vtipasunto:r_vtipasunto,
+            ctipdoc:r_ctipdoc,
+            vtipdoc:r_vtipdoc,
+            nestado:r_nestado,
+            vestado:'Activo',
+            vobserv:r_vobserv,
+            vhostnm:r_vhostnm,
+            vusernm:r_vusernm,
+            ddatetm:r_ddatetm
+        };
+        if($("#reqaccion").val() == "I"){
+            var nrowid = $("#tblListaReq").jqGrid('getGridParam', 'records') + 1;
+            $("#tblListaReq").addRowData(nrowid, reqrowdata);
+        }else{
+            var nrowid = $('#tblListaReq').jqGrid('getGridParam','selrow');
+            $("#tblListaReq").setRowData(nrowid, reqrowdata);
+        }
+        closeDialog('jqDialog3');
+        //$("#formRequisito").dialog("close");
+    }
+    function cancelarRequisito(){
+        closeDialog('jqDialog3');
+        //$("#formRequisito").dialog("close");
+    }
+</script>

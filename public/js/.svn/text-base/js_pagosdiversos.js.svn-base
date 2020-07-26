@@ -1,0 +1,331 @@
+function FiltrarConceptosxAreas(datos){
+	v_area = $("#cbareas").val();
+	BusqXCriterioConceptoPagosDiversos(3,datos,v_area);
+}
+
+function MostrarBuscarConceptosPagosDiversos(conceptos) {
+
+	var v = $("#hidden_buscarconcepto").val();
+	if (v == 0) {
+		$("#hidden_buscarconcepto").val('1');
+		
+		var parameters = {datoscpd: conceptos};
+		var _post = $.post(path + "pagosdiversos/busqconceptopagodiverso/", parameters);
+		_post.success(function(requestData){
+			$("#div_buscarconcepto").html(requestData);
+		});
+	} else {
+		$("#hidden_buscarconcepto").val('0');
+		$("#div_buscarconcepto").html('');
+	}
+}
+
+function MostrarDetalleConceptoPagosDiversos() {
+	var datos = $("#cbconceptos").val();
+	
+	if(datos == null || datos == undefined) {
+		datos = " | | |0.00";
+	}
+	
+	var arraydatos = datos.split('|');
+	var cod = arraydatos[0];
+	var des = arraydatos[1];
+	var cid = arraydatos[2];
+	var monto = arraydatos[3];
+	$("#codconcepto").html(cod);
+	$("#descripconceptomin").html('<font size="1">' + des + '</font>');
+	$("#descripconcepto").val(des);
+	$("#cidconcepto").val(cid);
+	$("#montoconcepto").val(monto);
+	$("#cantidadconcepto").val('1');
+	$("#glosaconcepto").val('');
+}
+
+function BusqXCriterioConceptoPagosDiversos(crit, datos,varea) {
+	if(varea == undefined) varea='';
+ 
+	datos = replaceAll(datos, "&", "^");
+	// var cadrequest = '';
+	var criterio = crit;
+	var val='';
+	if (criterio == 1) { // Por codigo
+		val = $("#busqxcodconcepto").val();
+		$("#busqxnomconcepto").val('');
+	}
+	if (criterio == 2) { // Por nombre de concepto
+		val = $("#busqxnomconcepto").val();
+		$("#busqxcodconcepto").val('');
+	}
+
+	var parameters = {datoscpd: datos, criterio: criterio, valor: val , area : varea};
+	
+	FsFiltroConceptos(parameters);
+}
+
+function FsFiltroConceptos(par){
+	$('#cbconceptos').html('');
+	var valor = par.valor;
+	var cont='';
+	var criterio=par.criterio ;
+	var cadbusq='';
+	if(par.criterio == '3'){
+		valor = (par.area=='9999999999'?'':par.area);
+	}
+	if(valor == '' || valor == null || valor.length == 0) {
+		for(var i=0;i<_conceptos.length;i++){
+			if(_conceptos[i][1].length>90){
+				descrip = _conceptos[i][1].substr(0,89)+'...';
+			}else{
+				descrip = _conceptos[i][1];
+			}
+			ncodcon = (_conceptos[i][0]+'****************').substr(0,10);
+			caddescrip = ncodcon+"   "+descrip;
+			cont =cont+'<option value="'+_conceptos[i][0]+'|'+_conceptos[i][1]+'|'+_conceptos[i][2]+'|'+_conceptos[i][3]+'">'+caddescrip+'</option>';
+		}
+	}else{
+		b = 0;
+		group='';
+		for(var i=0;i<_conceptos.length;i++){
+			valorbusq = '';
+			if(criterio == '1'){
+				cadbusq = _conceptos[i][0];
+			}if(criterio == '2'){
+				cadbusq = _conceptos[i][1].toUpperCase();
+				valor=valor.toUpperCase();
+			}if(criterio == '3'){
+				cadbusq = _conceptos[i][4];
+			}
+
+			if (cadbusq.indexOf(valor) != -1){
+				b++;
+				if(_conceptos[i][1].length>90){
+					descrip = _conceptos[i][1].substr(0,89)+'...';
+				}else{
+					descrip = _conceptos[i][1];
+				}
+				
+				ncodcon = (_conceptos[i][0]+'****************').substr(0,10);
+				caddescrip = ncodcon+" "+descrip;
+				
+				if (group==_conceptos[i][6]){
+					if(b == 1){
+						cont +='<option value="'+_conceptos[i][0]+'|'+_conceptos[i][1]+'|'+_conceptos[i][2]+'|'+_conceptos[i][3]+'" selected="selected"> '+caddescrip+'</option>';
+					}else{
+						cont +='<option value="'+_conceptos[i][0]+'|'+_conceptos[i][1]+'|'+_conceptos[i][2]+'|'+_conceptos[i][3]+'"> '+caddescrip+'</option>';
+					}
+				}else{
+					
+					group=_conceptos[i][6];
+					if(b != 1)cont +='</optgroup>';
+					cont +='<optgroup label="'+_conceptos[i][7]+'">';
+					cont +='<option value="'+_conceptos[i][0]+'|'+_conceptos[i][1]+'|'+_conceptos[i][2]+'|'+_conceptos[i][3]+'"> '+caddescrip+'</option>';
+				}
+			}
+		}
+	}
+	
+	$('#cbconceptos').html(cont);
+}
+
+function AgregarDetalleConceptoPagosDiversos() {
+	var o = {
+		cod: rtrim(ltrim($("#codconcepto").html())),
+		des: $("#descripconcepto").val(),
+		cid: rtrim(ltrim($("#cidconcepto").val())),
+		monto: $("#montoconcepto").val(),
+		cantidad: $("#cantidadconcepto").val(),
+		glosa: $("#glosaconcepto").val(),
+	};
+
+
+	$("#div_resultpagosdiversos").html('');
+	
+	if (o.cod == '' || o.cod == null) {
+		openDialogWarning('Seleccionar el concepto a cobrar.');
+	} else if (o.monto == '0.00' || o.monto == '' || o.monto == '0') {
+		openDialogWarning('Ingresar monto a cobrar a dicho concepto.');
+	} else if (o.cantidad == '' || o.cantidad == '0') {
+		openDialogWarning('Ingresar cantidad de conceptos a cobrar.');
+	} else {
+		var _post = $.post(path + "pagosdiversos/agregarconceptopagodiverso/", o);
+		
+		_post.success(function(requestData){
+			$("#divdetallepagodiverso").html(requestData);
+		});
+	}
+}
+
+function BorrarDetalleConceptoPagosDiversos(vcod, vmonto) {
+	$("#div_erroragregarconcepto").html("");
+	var o = {
+		cod: vcod,
+		cantidad: '1',
+		monto: vmonto
+	};
+	
+	var _post = $.post(path + "pagosdiversos/borrarconceptopagodiverso/", o);
+	
+	_post.success(function(requestData){
+		$("#divdetallepagodiverso").html(requestData);
+	});
+}
+//---------------->
+
+function DetallePagoConceptoPagosDiversos() {
+	vrowtotal=$('#rowTotal').html();
+	
+	if (!(vrowtotal==undefined || vrowtotal==0 || vrowtotal==0.00 ))
+		openDialog1("pagosarbitriospredios/ventanacobrarpagosarbitriospredios/?tipopago=1", 290, 220, "Generando Recibos");
+	else
+		openDialogWarning("Ingresar pago diverso con un monto mayor a 0.00");
+}
+function ventanadetallepago() {
+	var totpag = $('#txttotalpagar').val();
+	if (totpag==undefined || totpag== null)
+		totpag=$('#rowTotal').html();
+	
+	if (!(totpag==undefined || totpag==0 || totpag==0.00 ))
+	openDialog2("pagosarbitriospredios/ventanadetallepago/?totpag="+totpag+"&tproc=1", 700, 240, "Generando Recibos");
+	else
+		openDialogWarning("Ingresar pago diverso con un monto mayor a 0.00");
+}
+
+
+
+
+function borrardetallepago(codtipppago,nrodoc) {	
+	var montototal = $('#montototal').val();
+	$.ajax( 
+	{
+		dataType: "html",
+		type: "POST",
+		url: jQuery.scriptPath + "index.php/pagosarbitriospredios/borrardetallepago/", 
+		data: 	"montototal="+montototal+"&codtipppago="+codtipppago+"&nrodoc="+nrodoc,
+		beforeSend: function(data){ 
+		$("#div_detallepago").html('cargando...');
+		},
+		success: function(requestData){ 	
+		$("#div_detallepago").html(requestData);		
+		},		
+		error: function(requestData, strError, strTipoError){											
+		$("#div_detallepago").html("Error " + strTipoError +": " + strError);
+		},
+		complete: function(requestData, exito){ 
+		
+		}
+	});	
+}
+
+function aniadirdetallepago() {	
+	
+	var totalrestante = $('#hdsubtotal').val();
+	
+	Mcbotipopago=$('#cbotipopago').val();
+	var montototal = $('#montototal').val();
+	var codtipppago = $('#cbodetallepago').val();
+	var desctipppago = $('#cbodetallepago option:selected').html();
+	var monto = $('#txtmontopago').val();
+	var nrodoc = $('#txtnrodoc').val();
+	var nroope = $('#txtnroope').val();
+	
+	var error = '';
+	
+	if(Mcbotipopago == '9999999999'){
+		error += 'Seleccionar Tipo de Pago.<br>';		
+	}
+	//console.log(monto+" > "+totalrestante);
+	
+	/*if(monto > totalrestante){
+		error += 'El Monto ingresado supera al total restante.<br>';
+	}*/
+		if(Mcbotipopago == '1000001863'){
+			//efectivo
+			nrodoc = '';
+			nroope = '';		
+		}if(Mcbotipopago == '1000001859'){
+			//cheque
+			if(trim(nrodoc) == ''){
+				error += 'Ingresar Nro de Cheque.<br>';	
+			}		
+		}if(Mcbotipopago == '1000001855' || Mcbotipopago == '1000001851'){
+			//tarjeta
+			if(trim(nrodoc) == ''){
+				error += 'Ingresar Nro de Tarjeta.<br>';	
+			}if(trim(nroope) == ''){
+				error += 'Ingresar Nro de Operaci&oacute;n.<br>';	
+			}		
+		}
+	
+	if(monto == 0.00){
+		error += 'Ingresar Monto a Pagar.<br>';				
+	}
+	
+	if(error.length > 0)
+	{
+		openDialogWarning(error,300,150);
+	}else{	
+		$("#div_mensajex").html('');
+		$.ajax( 
+		{
+		dataType: "html",
+		type: "POST",
+		url: jQuery.scriptPath + "index.php/pagosarbitriospredios/aniadirdetallepago/", 
+		data: 	"montototal="+montototal+"&codtipppago="+codtipppago+"&desctipppago="+desctipppago+"&monto="+monto+"&nrodoc="+nrodoc+"&nroope="+nroope,
+		beforeSend: function(data){ 
+		$("#div_detallepago").html('cargando...');
+		},
+		success: function(requestData){ 	
+		$("#div_detallepago").html(requestData);
+			//jQuery('#cbtipopago').attr('value', '9999999999'); 
+			//$('#txtmontopago').val('0.00');
+			$('#txtnrodoc').val('');
+			$('#txtnroope').val('');			
+		},		
+		error: function(requestData, strError, strTipoError){											
+		$("#div_detallepago").html("Error " + strTipoError +": " + strError);
+		},
+		complete: function(requestData, exito){ 
+		}
+		});
+	}
+}
+
+function restarmontospagosarbitriospredios() {	
+	var m1 = $("#txttotalpagar").val();
+	var m2 = $("#txtefectivo").val();
+		if(m2 == '' || m2 == null){
+			m2 = 0.00;
+		}
+	var rest = m2-m1;
+	$("#txtvuelto").val(rest.toFixed(2));
+}
+
+function CobrarConceptoPagosDiversos() {
+	
+	var _post = $.post(path + "pagosdiversos/cobrarconceptopagodiverso/");
+	_post.success(function(requestData){
+		$("#div_resultpagosdiversos").html(requestData);
+		closeDialog('jqDialog1');
+	});
+}
+
+Filtrodetallepago = function(selectui,jsondetalletp){
+	$("#cbotipopag option[selected=selected]").attr("selected", "");
+	$("#cbotipopago option[value="+$(selectui.item.option).val()+"]").attr("selected", "selected");
+	
+	htmlCombo = _FsFiltrarCombo(jsondetalletp,$(selectui.item.option).val(),3,0,1,'1000001884');
+	$("#cbodetallepago").combobox("destroy");
+	$("#cbodetallepago").html(htmlCombo);
+	$("#cbodetallepago").combobox();
+};
+
+
+
+verrecxoperacion = function(_numope){
+	openDialogData1("cajaduplicadosrecibos/veroperacionpago", {cnumope: _numope}, "940", "330", "Detalle de la Operacion Nro. "+_numope);
+};
+
+imprimirreciboxoperacion= function(_numrec){
+	window.open(path+'/pagosdiversos/imprimirreciboconceptopagodiverso/?nrorecibo=' +_numrec +"&copiacaja=1","_blank","width=570, height=500, scrollbars=no, menubar=no, location=no, resizable=no,status =no,directories=no");
+	window.open(path+'/pagosdiversos/imprimirreciboconceptopagodiverso/?nrorecibo=' +_numrec ,"_blank","width=570, height=500, scrollbars=no, menubar=no, location=no, resizable=no,status =no,directories=no");
+};

@@ -1,0 +1,3527 @@
+<<<<<<< .mine
+<?php
+
+require_once 'Zend/Controller/Action.php';
+
+class RegistroController extends Zend_Controller_Action {
+
+    public function init() {
+   		$this->_helper->layout()->setLayout('layoutwithpanel');
+        $map = new Zend_Session_Namespace("map");
+        $map->data = true;
+    }
+
+    public function indexAction() {
+        $this->view->util()->registerScriptJSControllerAction($this->getRequest());
+
+        $procedure = 'registro.mubigeodistr';
+        $params[0] = '15';
+        $params[1] = '01';
+        $params[2] = '00';
+        
+        $dataAdapter = new Model_DataAdapter();
+        $this->view->rowUbigeo = $dataAdapter->executeAssocQuery($procedure, $params);
+        
+        // TODO: Implementar la validacion de vias por año
+        $parameters[] = date("Y");
+        $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+        $this->view->mviascp = $rows;
+    }
+
+    public function listarpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $name = $this->_request->getParam('name');
+
+            $procedure = 'registro.mubigeodistr';
+            $params[0] = '15';
+            $params[1] = '01';
+            $params[2] = '00';
+            
+            $dataAdapter = new Model_DataAdapter();
+            $this->view->rowUbigeo = $dataAdapter->executeAssocQuery($procedure, $params);
+            
+            if (isset($name)) {
+                $dataSet = new Zend_Session_Namespace($name);
+                $rows = $dataSet->data;
+
+                $this->view->cidpers = $rows[0][0];
+                $this->view->vnombre = $rows[0][1];
+                $this->view->vdirecc = $rows[0][2];
+
+                $this->_request->setParam('cidpers', $rows[0][0]);
+            } else {
+                $this->view->cidpers = $this->_request->getParam('cidpers');
+                $this->view->vnombre = $this->_request->getParam('crazsoc');
+                $this->view->vdirecc = $this->_request->getParam('direccf');
+
+                $mhresum = $this->_request->getParam('mhresum');
+                if (isset($mhresum)) {
+                    $this->view->mhresum = $this->_request->getParam('mhresum');
+                    $this->view->vnrodoc = $this->_request->getParam('vnrodoc');
+                } else {
+                    $parameters[] = $this->view->cidpers;
+                    $rows = $dataAdapter->executeAssocQuery("pl_function.panel_persona", $parameters);
+                    if (count($rows) == 1) {
+                        $this->view->mhresum = $rows[0]['mhresum'];
+                        $this->view->vnrodoc = $rows[0]['vnrodoc'];
+                    }
+                }
+            }
+            
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $consult = $ddatosuserlog->consult;
+            // echo '-->' . $consult . '<--';
+            if ($consult == '*') {
+                echo "<script>$('#btnRegistrarPredio').hide();</script>";
+            }
+        }
+    }
+
+    public function verpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $this->view->mperson = $this->_request->getParam('mperson');
+            $this->view->vnombre = $this->_request->getParam('vnombre');
+            $this->view->vdirecf = $this->_request->getParam('vdirecf');
+            $this->view->p_mhresum = $this->_request->getParam('mhresum');
+            $this->view->p_mpredio = $this->_request->getParam('mpredio');
+            $this->view->p_cperiod = $this->_request->getParam('cperiod');
+
+            $parameters[] = $this->_request->getParam('mpredio');
+            $parameters[] = $this->_request->getParam('mhresum');
+            $parameters[] = $this->_request->getParam('cperiod');
+
+            $parameters2[] = $this->_request->getParam('mpredio');
+            $parameters2[] = $this->_request->getParam('mhresum');
+
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.ver_predio", $parameters);
+
+            if (is_array($rows) && count($rows) > 0) {
+                $this->view->mpredio = $rows[0];
+                $this->view->nrecalc = ($rows[0]['destado'] == '0') ? '1' : $rows[0]['nrecalc'];
+
+                $parameters = array($rows[0]["dpredio"], $rows[0]["cperiod"]);
+
+                $dataAdapter->saveQuery("tblPiso", "pl_function.listar_construccion", $parameters);
+                $dataAdapter->saveQuery("tblInstalacion", "pl_function.listar_instalacion", $parameters);
+                $dataAdapter->saveQuery("tblLindero", "pl_function.listar_lindero", $parameters);
+                $dataAdapter->saveQuery("tblRustico", "pl_function.listar_caracteristica_rustico", $parameters);
+                $dataAdapter->saveQuery("tblInafecto", "pl_function.listar_inafecto", $parameters2);
+
+
+                $pintar = new Libreria_Pintar();
+                $val[] = array('ccodpre', $rows [0]['ccodpre'], 'val');
+                $pintar->PintarValor($val);
+            }
+        }
+    }
+
+    public function direccionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function declaracionAction() {
+        $this->view->util()->registerScriptJSControllerAction($this->getRequest());
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->view->mperson = $this->_request->getParam('mperson');
+            $this->view->vnombre = $this->_request->getParam('dperson');
+            $this->view->mhresum = $this->_request->getParam('mhresum');
+            $this->view->ddatetm = date('d/m/Y');
+            $this->view->cperiod = date("Y");
+
+            $parameters[] = date("Y");
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+            $this->view->mviascp = $rows;
+            $this->view->hoy = date("d") . '/' . date("m") . '/'  . (date("Y") - 40);      
+        }
+    }
+
+    public function condominioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function listardeclaracionAction() {
+        $this->view->cidpers = $this->_request->getParam('cidpers');
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function listarprediovalorAction() {
+        $this->view->mpredio = $this->_request->getParam('mpredio');
+        $this->view->mhresum = $this->_request->getParam('mhresum');
+        $this->view->cidpers = $this->_request->getParam('cidpers');
+    }
+
+    public function prediovalorAction() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $dataAdapter = new Model_DataAdapter();
+
+        $parameters[] = $this->_request->getParam('mpredio');
+        $parameters[] = $this->_request->getParam('mhresum');
+        $parameters[] = '-1';
+        $data['valorpredio'] = $dataAdapter->executeAssocQuery("pl_function.ver_predio", $parameters);
+
+        $parameters = array($this->_request->getParam('cidpers'));
+        $data['resumensaldo'] = $dataAdapter->executeAssocQuery("pl_function.resumen_saldo_personal", $parameters);
+
+        echo $this->_helper->json($data);
+    }
+
+    public function verpisoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function verpisocaracteristicasAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $dataAdapter = new Model_DataAdapter();
+            $data['material'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000161'));
+            $data['estado'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000149'));
+            $data['banio'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000283'));
+            $data['muro'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000228'));
+            $data['piso'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000250'));
+            $data['puerta'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000261'));
+            $data['revestimiento'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000272'));
+            $data['techo'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000239'));
+            $data['instalacion'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000294'));
+
+            echo $this->_helper->json($data);
+        }
+    }
+
+    public function verinstalacionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function impresionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function verlinderoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function verrusticoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function linderoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function guardarlinderoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['cptocar'] . ','
+                    . $_POST['ctiplin'] . ','
+                    . $_POST['ccodpre'] . ','
+                    . $_POST['vdirecc'] . ','
+                    . $_POST['mperson'] . ','
+                    . $_POST['dpredio'] . ','
+                    . $coduser . ','
+                    . $vhostnm . ',';
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mlindero", $parameters);
+
+            if ($rows[0][0] == 1) {
+                $parameters = array($_POST['dpredio'], $_POST["cperiod"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_lindero", $parameters);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function guardarpisoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['dpredio'] . ','
+                    . $_POST['cnitems'] . ','
+                    . $_POST['cnumpis'] . ','
+                    . $_POST['cmescon'] . ','
+                    . $_POST['canocon'] . ','
+                    . $_POST['cmateri'] . ','
+                    . $_POST['cconser'] . ','
+                    . $_POST['cmurcol'] . ','
+                    . $_POST['ctechos'] . ','
+                    . $_POST['cmpisos'] . ','
+                    . $_POST['cpueven'] . ','
+                    . $_POST['crevest'] . ','
+                    . $_POST['cbanios'] . ','
+                    . $_POST['celectr'] . ','
+                    . '0,' // $_POST['narecom']
+                    . '0,' // $_POST['nporcom']
+                    . $_POST['nestado'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['narecon'];
+
+            $parameters[] = $row;
+            $parameters[] = $_POST["cclasif"];
+            $parameters[] = $_POST["caracte"];
+            $parameters[] = $_POST['cnumpis'];
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mconstr", $parameters);
+
+            if ($rows[0][0] == 1) {
+                $parameters = array($_POST['dpredio'], $_POST["cperiod"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_construccion", $parameters);
+
+                $params[] = $_POST["p_mhresum"];
+                $params[] = $_POST["p_cperiod"];
+                $params[] = $_POST["p_dpredio"];
+                $rows = $dataAdapter->executeAssocQuery("pl_function.ver_valor_predio", $params);
+
+                $data['valorPredio'] = $rows;
+                $data['error'] = "";
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function guardarinstalacionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['dpredio'] . ','
+                    . $_POST['cnumpis'] . ','
+                    . $_POST['canocon'] . ','
+                    . '0000000001' . ',' //INSTALACION-
+                    . $_POST['nvalanc'] . ','
+                    . $_POST['nvalalt'] . ','
+                    . $_POST['nvallar'] . ','
+                    . $_POST['ctipint'] . ','
+                    . $_POST['vdesint'] . ','
+                    . '0' . ',' //cmateri
+                    . '0' . ',' //cconser
+                    . '0' . ',' //cmurcol
+                    . '0' . ',' //ctechos
+                    . '0' . ',' //cmpisos
+                    . '0' . ',' //cpueven
+                    . '0' . ',' //crevest
+                    . '0' . ',' //cbanios
+                    . '0' . ',' //celectr
+                    . '0' . ',' //narecom
+                    . '0' . ',' //nporcom
+                    . $_POST['nestado'] . ',' //nestado
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['nvalins']; //fecha
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_minstal", $parameters);
+
+            if ($rows[0][0] == 1) {
+                $parameters2 = array($_POST['dpredio'], $_POST["cperiod"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_instalacion", $parameters2);
+
+
+                $params[] = $_POST["p_mhresum"];
+                $params[] = $_POST["p_cperiod"];
+                $params[] = $_POST["p_dpredio"];
+                $rows = $dataAdapter->executeAssocQuery("pl_function.ver_valor_predio", $params);
+
+                $data['valorPredio'] = $rows;
+                $data['error'] = "";
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function guardardeclaracionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row =
+                    $_POST["idsigma"] . ',' .
+                    $_POST["ctipdat"] . ',' .
+                    $_POST["vnrodoc"] . ',' .
+                    $_POST["dfecdoc"] . ',' .
+                    $_POST['cmotivo'] . ',' .
+                    $_POST["ctipdoc"] . ',' .
+                    $_POST["vnrodjj"] . ',' .
+                    $_POST["vobserv"] . ',' .
+                    $_POST["nestado"] . ',' .
+                    $vhostnm . ',' .
+                    $coduser . ',' .
+                    date("y-m-d") . ',' .
+                    $_POST["cperini"] . ',' .
+                    $_POST["cperfin"] . ',' .
+                    $_POST["mperson"];
+
+            $parameters[] = $row;
+            $parameters[] = $_POST["dpredio"];
+            $parameters[] = $_POST["ctipacc"];
+            $parameters[] = $_POST["mpropie"];
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mhresum", $parameters);
+
+            if ($rows > 0) {
+                $data['nroDeclaracion'] = $rows[0][0];
+                $data['mensaje'] = "";
+                $data['tipoResultado'] = "EXITO";
+            } else {
+                $data['mensaje'] = "Ocurrio un error durante el proceso extracción de datos.";
+                $data['tipoResultado'] = "ERROR";
+            }
+            $this->_helper->json($data);
+        }
+    }
+
+    public function guardardetalleAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST["idsigma"] . ',' .
+                    $_POST["mpredio"] . ',' .
+                    $_POST["ctippre"] . ',' .
+                    $_POST["cclasif"] . ',' .
+                    $_POST["ccondic"] . ',' .
+                    $_POST["cestado"] . ',' .
+                    $_POST["cusogen"] . ',' .
+                    $_POST["cusoesp"] . ',' .
+                    $_POST["nporcen"] . ',' .
+                    $_POST["ntertot"] . ',' .
+                    $_POST["nporter"] . ',' .
+                    $_POST["nterren"] . ',' .
+                    $_POST["ncomtot"] . ',' .
+                    $_POST["nporcom"] . ',' .
+                    $_POST["narecom"] . ',' .
+                    $_POST["nporafe"] . ',' .
+                    $_POST["dfecadq"] . ',' . //$_POST["dfecdes"].','.
+                    date("d-m-y", strtotime($_POST["dfecdes"])) . ',' .
+                    $_POST["dfecadq"] . ',' .
+                    $_POST["nfrente"] . ',' .
+                    $_POST["ncanper"] . ',' .
+                    $_POST["ctippar"] . ',' .
+                    $_POST["vobserv"] . ',' .
+                    $_POST["nestado"] . ',' .
+                    $vhostnm . ',' .
+                    $coduser . ',' .
+                    date("y-m-d") . ',' .
+                    date("d-m-y", strtotime($_POST["dfectra"])) . ',' .
+                    $_POST["cnotari"] . ',' .
+                    $_POST["ctiptra"] . ',' .
+                    $_POST["cpartid"] . ',' .
+                    $_POST["csubtip"] . ',' .
+                    $_POST["cmotadq"] . ',' .
+                    $_POST["mhresum"];
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_dpredio", $parameters);
+
+            if ($rows[0][0] != '-1') {
+                $params[] = $_POST["mhresum"];
+                $params[] = $_POST["cperiod"];
+                $params[] = $rows[0][0];
+                $rows = $dataAdapter->executeAssocQuery("pl_function.ver_valor_predio", $params);
+
+                $data['valorPredio'] = $rows;
+                $data['error'] = "";
+            } else {
+                $data['error'] = "Error al actualizar";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function prediomantenAction() {
+        $parameters[] = date("Y");
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+        $this->view->mviascp = $rows;
+        
+        
+    }
+
+    public function verprediomanttAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $parameters[] = date("Y") - 1;
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+            $this->view->mviascp = $rows;
+        }
+    }
+
+    public function guardarmpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST["idsigma"] . ',' .
+                    $_POST["mviadis"] . ',' .
+                    $_POST["dnumero"] . ',' .
+                    $_POST["dinteri"] . ',' .
+                    $_POST["dletras"] . ',' .
+                    $_POST["ddepart"] . ',' .
+                    $_POST["destaci"] . ',' .
+                    $_POST["ddeposi"] . ',' .
+                    $_POST["drefere"] . ',' .
+                    $_POST["dmanzan"] . ',' .
+                    $_POST["dnlotes"] . ',' .
+                    $_POST["ccatast"] . ',' .
+                    $_POST["cplanos"] . ',' .
+                    $_POST["ctipmer"] . ',' .
+                    $_POST["dnummer"] . ',' .
+                    $_POST["cdiscat"] . ',' .
+                    $_POST["czoncat"] . ',' .
+                    $_POST["cmzacat"] . ',' .
+                    $_POST["cseccat"] . ',' .
+                    $_POST["cltecat"] . ',' .
+                    $_POST["cundcat"] . ',' .
+                    $_POST["dbloque"] . ',' .
+                    $_POST["dseccio"] . ',' .
+                    $_POST["dunidad"] . ',' .
+                    $_POST["mpoblad"] . ',' .
+                    $_POST["vdirpre"] . ',' .
+                    $_POST["nestado"] . ',' .
+                    $_POST["ccodpre"] . ',' .
+                    $_POST["ctippre"] . ',' .
+                    $_POST["idanexo"] . ',' .
+                    $_POST["ccodcuc"] . ',' .
+                    $vhostnm . ',' .
+                    $coduser . ',' .
+                    date("y-m-d") . ',' .
+                    $_POST["nlatitu"] . ',' .
+                    $_POST["nlongit"] . ',' .
+                    $_POST["nzoom"] . ',' .
+                    $_POST["mpredio"];
+
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mpredio", $parameters);
+
+            if (count($rows) > 0) {
+                $parameters = array($rows[0][0],'','','','');
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.buscar_predio", $parameters);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function busqpredioAction() {
+        $pintar = new Libreria_Pintar();
+
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $mperson = $this->_request->getPost('mperson');
+        }
+
+        $parameters[] = date("Y");
+
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+        $this->view->mviascp = $rows;
+
+        $val[] = array('txtMperson', $mperson, 'val');
+
+        $pintar->PintarValor($val);
+    }
+
+    public function busqprediocontrAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function recargarpredioAction() {
+
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        $pintar = New Libreria_Pintar();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+
+            $parameters[] = $this->_request->getPost('mpredio');
+            $parameters[] = $this->_request->getPost('mhresum');
+            $parameters[] = $this->_request->getPost('cperiod');
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.ver_predio", $parameters);
+
+            // print_r($rows );
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboTipoPredio").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboTipoPredio option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboTipoPredio option[value=' . $rows[0]['ctippre'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboTipoPredio").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboTipoPredioUrbano").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboTipoPredioUrbano option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboTipoPredioUrbano option[value=' . $rows[0]['csubtip'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboTipoPredioUrbano").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboUso").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboUso option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboUso option[value=' . $rows[0]['cusogen'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboUso").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboUsoEspecifico").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboUsoEspecifico option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboUsoEspecifico option[value=' . $rows[0]['cusoesp'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboUsoEspecifico").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboEstado").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboEstado option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboEstado option[value=' . $rows[0]['cestado'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboEstado").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboCondicion").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboCondicion option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboCondicion option[value=' . $rows[0]['ccondic'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboCondicion").combobox();');
+
+            $val[] = array('nporcen', $rows[0]['nporcen'], 'val');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboClasificacion").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboClasificacion option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboClasificacion option[data-idsigma=' . $rows[0]['cclasif'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboClasificacion").combobox();');
+
+
+            $val[] = array('nnrohab', $rows[0]['ncanper'], 'val');
+
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboMotivo").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboMotivo option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboMotivo option[value=' . $rows[0]['cmotadq'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboMotivo").combobox();');
+
+            $val[] = array('dtpFechaAdquisicion', date("d/m/Y", strtotime($rows[0]['dfecadq'])), 'val');
+
+            $val[] = array('dtpFechaTransferencia',date("d/m/Y", strtotime($rows[0]['dfecdes'])) , 'val');
+
+            $val[] = array('txtNotaria', $rows[0]['cnotari'], 'val');
+
+            $val[] = array('txtTipoTransferencia', $rows[0]['ctiptra'], 'val');
+
+            $val[] = array('txtPartida', $rows[0]['cpartid'], 'val');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboCondicion").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboCondicion option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboCondicion option[value=' . $rows[0]['ccondic'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboCondicion").combobox();');
+
+            $val[] = array('nareter', $rows[0]['ntertot'], 'val');
+            $val[] = array('narecom', $rows[0]['ncomtot'], 'val');
+            $val[] = array('nporter', $rows[0]['nporter'], 'val');
+            $val[] = array('nporcom', $rows[0]['nporcom'], 'val');
+            $val[] = array('ntotter', $rows[0]['nterren'], 'val');
+            $val[] = array('ntotcom', $rows[0]['narecom'], 'val');
+            $val[] = array('nfronti', $rows[0]['nfrente'], 'val');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboParque").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboParque option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboParque option[value=' . $rows[0]['ctippar'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboParque").combobox();
+						
+						
+						
+					$(" .ui-combobox-input").attr("disabled", true);
+					$(" .ui-combobox-input").toggleClass("ui-text-disable");
+					$(" ui-combobox-input a").button("option", "disabled", true);
+
+					//$("#txtMotivo").attr("disabled", true);
+					//$("#txtMotivo").toggleClass("ui-text-disable");
+					 
+					$("#linkMotivo").button("option", "disabled", true);
+					 
+					$("#linkTipoPredio").button("option", "disabled", true);
+					$("#linkTipoPredioUrbano").button("option", "disabled", true);
+							$("#linkUso").button("option", "disabled", true);
+							$("#linkUsoEspecifico").button("option", "disabled", true);
+							$("#linkEstado").button("option", "disabled", true);
+							$("#linkCondicion").button("option", "disabled", true);
+							$("#linkClasificacion").button("option", "disabled", true);
+							$("#linkParque").button("option", "disabled", true);
+							 
+							 
+							//$("#cboPeriodo").combobox("destroy");
+							//$("#cboPeriodo").combobox();
+
+							//alert("despues");
+								
+							');
+        }
+        $pintar->PintarValor($val);
+        $pintar->EjecutarFuncion($fun);
+    }
+
+    public function editarpredioAction() {
+        $this->_helper->layout->disableLayout();
+
+        $codpre = $this->_request->getParam('mhresum', '');
+        $mpredio = $this->_request->getParam('mpredio', '');
+        $pintar = new Libreria_Pintar();
+        $parameters[] = date("Y") - 1;
+
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+        $this->view->mviascp = $rows;
+
+        $parameters2[] = $mpredio;
+        $parameters2[] = '';
+        $parameters2[] = '';
+        $parameters2[] = '';
+        $parameters2[] = '';
+
+        $dataAdapter2 = new Model_DataAdapter();
+        $rows2 = $dataAdapter2->executeAssocQuery("pl_function.buscar_mpredio", $parameters2);
+
+        if (count($rows2) > 0) {
+
+            $val[] = array('txtcodpre', $rows2[0]['ccodpre'], 'val');
+            $val[] = array('txt_idsigma', $rows2[0]['idsigma'], 'val');
+            $val[] = array('txt_mviadis', $rows2[0]['mviadis'], 'val');
+            $val[] = array('txt_mpoblad', $rows2[0]['mpoblad'], 'val');
+
+            $val[] = array('txtviacentrpob', $rows2[0]['tnomvia'] . ' - ' . $rows2[0]['tnompob'], 'val');
+            $val[] = array('txtnumero', $rows2[0]['dnumero'], 'val');
+            $val[] = array('txtdepart', $rows2[0]['ddepart'], 'val');
+            $val[] = array('txtinterior', $rows2[0]['dinteri'], 'val');
+            $val[] = array('txtletra', $rows2[0]['dletras'], 'val');
+            $val[] = array('txtestacio', $rows2[0]['destaci'], 'val');
+            $val[] = array('txtdeposito', $rows2[0]['ddeposi'], 'val');
+            $val[] = array('txtbloque', $rows2[0]['dbloque'], 'val');
+            $val[] = array('txtseccion', $rows2[0]['dseccio'], 'val');
+            $val[] = array('txtunidinmob', $rows2[0]['dunidad'], 'val');
+            $val[] = array('txtmanzana', $rows2[0]['dmanzan'], 'val');
+            $val[] = array('txtlote', $rows2[0]['dnlotes'], 'val');
+            $val[] = array('txt_ctippre', $rows2[0]['ctippre'], 'val');
+            $val[] = array('txtreferencia', $rows2[0]['drefere'], 'val');
+
+            $val[] = array('txtczoncat', $rows2[0]['czoncat'], 'val');
+            $val[] = array('txtcmzacat', $rows2[0]['cmzacat'], 'val');
+            $val[] = array('txtcseccat', $rows2[0]['cseccat'], 'val');
+            $val[] = array('txtcltecat', $rows2[0]['cltecat'], 'val');
+            $val[] = array('txtcundcat', $rows2[0]['cundcat'], 'val');
+
+            $val[] = array('txt_nlatitu', $rows2[0]['nlatitu'], 'val');
+            $val[] = array('txt_nlongit', $rows2[0]['nlongit'], 'val');
+            $val[] = array('txt_nzoom', $rows2[0]['nzoom'], 'val');
+
+            $pintar->PintarValor($val);
+        }
+    }
+
+    public function pintarpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        $pintar = New Libreria_Pintar();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $codpre = $this->_request->getPost('idsigma', '');
+            $vdirpre = $this->_request->getPost('vdirepre', '');
+
+            $val[] = array('txtMpredio', $codpre, 'val');
+            $val[] = array('txtDirecpred', $vdirpre, 'val');
+        }
+
+        $pintar->EjecutarFuncion($val);
+    }
+
+    public function recargarvalorpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $pintar = New Libreria_Pintar();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $p_mhresum = $this->_request->getPost('p_mhresum', '');
+            $p_cperiod = $this->_request->getPost('p_cperiod', '');
+            $p_dpredio = $this->_request->getPost('p_dpredio', '');
+
+
+            $parameters2[] = $p_mhresum;
+            $parameters2[] = $p_cperiod;
+            $parameters2[] = $p_dpredio;
+
+            $dataAdapter2 = new Model_DataAdapter();
+            $rows2 = $dataAdapter2->executeAssocQuery("pl_function.ver_valor_predio", $parameters2);
+        }
+
+        if (count($rows2) > 0) {
+            $val[] = array('lblArancel', $rows2[0]['narance'], 'html');
+            $val[] = array('lblValorTerreno', $rows2[0]['nvalter'], 'html');
+            $val[] = array('lblValorConstruccion', $rows2[0]['nvalpis'], 'html');
+            $val[] = array('lblValorInstalacion', $rows2[0]['nvalins'], 'html');
+            $val[] = array('lblAutovaluo', $rows2[0]['nvalpre'], 'html');
+            $val[] = array('lblMontoBarrido', $rows2[0]['nbarrid'], 'html');
+
+            $val[] = array('lblMontoParque', $rows2[0]['nparque'], 'html');
+            $val[] = array('lblMontoRecoleccion', $rows2[0]['nrecole'], 'html');
+            $val[] = array('lblMontoSerenazgo', $rows2[0]['nserena'], 'html');
+
+            $val[] = array('lblUsuario', $rows2[0]['vusernm'], 'html');
+            $val[] = array('lblFechaModificacion', $rows2[0]['ddatetm'], 'html');
+            $val[] = array('lblFechaProceso', $rows2[0]['dfectra'], 'html');
+
+            $pintar->PintarValor($val);
+        }
+    }
+
+    public function galeriafotosAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $this->_helper->layout->disableLayout();
+
+        $dpredio = $this->_request->getParam('dpredio', '');
+
+        $parameters2[] = $dpredio;
+
+
+        $dataAdapter2 = new Model_DataAdapter();
+        $rows2 = $dataAdapter2->executeAssocQuery("pl_function.listar_galeria", $parameters2);
+
+        $cant = count($rows2);
+
+        $pintar = new Libreria_Pintar();
+
+        $path = explode("/index.php", $_SERVER["PHP_SELF"]);
+        //echo  $path[0] . "/" . PATH;
+
+        $a = "";
+        if ($cant > 0) {
+
+            for ($i = 0; $i < count($rows2); $i++) {
+                $foto = trim($rows2[$i]['vfotonm']);
+                $a.= "<img src=\"" . $path[0] . "/" . PATH . "uploads/_sized/" . $foto . "\" />";
+            }
+
+            $val[] = array("slider", $a, 'html');
+            $pintar->PintarValor($val);
+        } else {
+
+            echo "No hay Fotos";
+        }
+
+        $fun[] = array('$("#slider").nivoSlider();');
+
+        $pintar->EjecutarFuncion($fun);
+    }
+
+    public function presubirfotoAction() {
+
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $this->_helper->layout->disableLayout();
+
+        $dpredio = $this->_request->getParam('dpredio', '');
+
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $ddatosuserlog->dpredio = $dpredio;
+    }
+
+    public function subirfotoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        $pintar = New Libreria_Pintar();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $p_dpredio = $this->_request->getPost('p_dpredio', '');
+            $p_foto = $this->_request->getPost('p_foto', '');
+        }
+
+        echo $p_dpredio;
+        echo "</br>" . $p_foto;
+    }
+
+    public function uploadAction() {
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            // else do regular POST upload (i.e. for old non-HTML5 browsers)
+            $name = $_FILES['qqfile']['name'];
+            $size = $_FILES['qqfile']['size'];
+            //echo $name; 
+
+            if ($size == 0) {
+                return array('error' => 'File is empty.');
+            }
+
+            $uploadname = $name;
+            $carpeta = "uploads/";
+            opendir($carpeta);
+            $destino = $carpeta . $_FILES['qqfile']['name'];
+            copy($_FILES['qqfile']['tmp_name'], $destino);
+        }
+
+        $imgSizer = new imgSizer();
+        $imgSizer->type = "width";
+        $imgSizer->max = 400;
+        $imgSizer->quality = 8;
+        $imgSizer->square = true;
+        $imgSizer->prefix = "";
+        $imgSizer->folder = "_sized/";
+        $imgSizer->image = "/titania/public/uploads/" . $name;
+        $imgSizer->resize();
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $coduser = $ddatosuserlog->cidpers;
+        $vhostnm = $ddatosuserlog->vhostnm;
+        $dpredio = $ddatosuserlog->dpredio;
+
+
+        $row = "-1" . ','
+                . $name . ','
+                . "" . ','
+                . '1' . ','
+                . $coduser . ','
+                . $vhostnm . ','
+                . date('y-m-d');
+
+        $parameters[] = $row;
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeSelect("pl_function.guardar_mfotpre", $parameters);
+
+        //print_r($rows); 
+
+        $row2 = "-1" . ','
+                . $dpredio . ','
+                . $rows[0][0] . ','
+                . '1' . ','
+                . $coduser . ','
+                . $vhostnm . ','
+                . date('y-m-d');
+
+        $parameters2[] = $row2;
+        $dataAdapter = new Model_DataAdapter();
+        $rows2 = $dataAdapter->executeSelect("pl_function.guardar_mgaleria", $parameters2);
+
+
+        $results = array('success' => true);
+        // returns JSON
+        echo $this->_helper->json($results);
+    }
+
+    public function guardarinafectaAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['mperson'] . ','
+                    . $_POST['mpredio'] . ','
+                    . $_POST['ctipina'] . ','
+                    . $_POST['vbasleg'] . ','
+                    . $_POST['vnumexp'] . ','
+                    . $_POST['vnumres'] . ','
+                    . $_POST['dfecres'] . ','
+                    . $_POST['ctiping'] . ','
+                    . $_POST['nporafe'] . ','
+                    . $_POST['dfecini'] . ','
+                    . $_POST['dfecfin'] . ','
+                    . $_POST['nestado'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['mhresum'] . ','
+                    . $_POST['vobserv'];
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_minafec", $parameters);
+            if ($rows[0][0] == 1) {
+                $parameters = array($_POST['mpredio'], $_POST["mhresum"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_inafecto", $parameters);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+        }
+        $this->_helper->json($data);
+    }
+
+    public function guardarrusticoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['dpredio'] . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . $_POST['nestado'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d");
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mrustic", $parameters);
+
+            $row2 = $_POST['idsigma'] . ','
+                    . $rows[0][0] . ','
+                    . $_POST['cclasif'] . ','
+                    . $_POST['ccatego'] . ','
+                    . $_POST['narance'] . ','
+                    . $_POST['nhectar'] . ','
+                    . $_POST['nvalrus'] . ','
+                    . $_POST['nestado'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['cperiod'];
+
+            $parameters2[] = $row2;
+            $dataAdapter2 = new Model_DataAdapter();
+            $rows2 = $dataAdapter->executeSelect("pl_function.guardar_drustic", $parameters2);
+
+            if ($rows > 0) {
+                $parameters3 = array($_POST['dpredio'], $_POST["cperiod"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_rustico", $parameters3);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function finalizardeclaracionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $params[] = $this->_request->getPost('p_mhresum', '');
+            $params[] = $this->_request->getPost('p_mperson', '');
+            $params[] = $vhostnm;
+            $params[] = $coduser;
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.generar_cuenta", $params);
+
+            if ($rows > 0) {
+                $data['mensaje'] = "Se finalizo la declaración jurada con exito.";
+                $data['tipoResultado'] = "EXITO";
+            } else {
+                $data['mensaje'] = "Ocurrio un error durante el proceso de finalización.";
+                $data['tipoResultado'] = "ERROR";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function vercondominanteAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function guardarcondominanteAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['mperson'] . ','
+                    . $_POST['mpredio'] . ','
+                    . $_POST['nporcen'] . ','
+                    . $_POST['nestado'] . ','
+                    . $_POST['ctippro'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['mhresum'] . ','
+                    . $_POST['nvalida'];
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mpropie", $parameters);
+
+            if ($rows[0][0] == 1) {
+                $parameters = array($_POST['mhresum'], $_POST["mpredio"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.buscar_mpropie", $parameters);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function listaractorprediosAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $params[] = $this->_request->getPost('p_operad1', '');
+            $params[] = $this->_request->getPost('p_ctipact', '');
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocSelect("pl_select.listar_actores", $params);
+
+            if ($rows > 0) {
+                $data['listaActorPredios'] = $rows;
+                $data['mensaje'] = "";
+                $data['tipoResultado'] = "EXITO";
+            } else {
+                $data['mensaje'] = "Ocurrio un error durante el proceso extracción de datos.";
+                $data['tipoResultado'] = "ERROR";
+            }
+            $this->_helper->json($data);
+        }
+    }
+
+    public function buscarcontribuyenteAction() {
+        $this->view->util()->registerScriptJSControllerAction($this->getRequest());
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        $ccontri = $this->_request->getParam('ccontri', '');
+
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+
+        $pintar = new Libreria_Pintar();
+
+        $val[] = array('txtcodcontriant', $ccontri, 'val');
+
+        $pintar->PintarValor($val);
+    }
+
+    public function verinafectoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+ public function reporteopcestactacteAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        
+         /*
+          0000000278	0000000279	ARBITRIO DE LIMPIEZA PUBLICA.
+          0000000278	0000000283	ARBITRIO DE PARQUES Y JARDINES.
+          0000000278	0000007267	RECOLECCION DE RESIDUOS SOLIDOS
+          0000000278	0000008509	SEGURIDAD CIUDADANA
+          0000000273	0000000273	IMPUESTO PREDIAL
+         */
+        
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $this->view->usuario = $ddatosuserlog->nompers;
+
+        $ccontri = $this->_request->getParam('ccontri', '');
+        $predios = $this->_request->getParam('predios', '');
+
+        
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $parameters[] = $ccontri; 
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.panel_persona", $parameters);
+            if (count($rows) == 1) {
+            	$this->view->cidpers=$ccontri; 
+            	$this->view->vnombre = $rows[0]['crazsoc'];
+            	$this->view->vdirecc = $rows[0]['direccf']; 
+
+            						                  						        
+            }
+        
+        $pintar = new Libreria_Pintar();
+
+        $params[] = $ccontri;
+        $params[] = "1"; 
+
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeAssocQuery("pl_function.panel_personaestadoctac", $params);
+          
+          
+        //print_r( explode('*',(String) $rows[0]['tribdeudatodos']));
+
+        for ($j=1;$j<count($rows);++$j  ){
+        	 if ($rows[$j]['estado_general']=="0"){
+        	    $tipodeuda[]=array($rows[$j]['ctiprec'] ,$rows[$j]['deuda'] ); 	    
+        	}else{
+  				$tipopagado[]=array($rows[$j]['ctiprec'] ,$rows[$j]['deuda'] ); 	          	        	    
+        	}    	
+        }
+        
+        //if (count($tipodeuda)>0){
+         //print_r($tipodeuda);	
+        //}
+               
+	    /*if (count($tipopagado)>0){
+		 //print_r($tipopagado); 
+
+			
+			$tmp = array ();
+			
+			foreach ($tipopagado as $row) 
+			    if (!in_array($row,$tmp)) array_push($tmp,$row);
+			
+			//print_r ($tmp);  
+			
+			   
+        $data['tipodeuda'] = $tmp;
+        //$data['error'] = "";
+        
+
+    
+		}*/  
+         
+                
+
+        $val[] = array('mperson', $ccontri, 'val');
+        
+
+        for ($i = 1994; $i <= date("Y"); ++$i) {
+            //echo $i;  
+            $anios[] = array($i, $i);
+        }
+
+        $val[] = array('cbodesde', $pintar->ContenidoCombo($anios, $rows[0]['min']), 'html');
+
+
+        $fun[] = array('
+					// Destroy the combobox
+					$("#cbodesde").combobox("destroy");
+											
+					// Unselect the currently selected option
+					$("#cbodesde option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cbodesde option[value=' . $rows[0]['min'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cbodesde").combobox();');
+
+
+        $val[] = array('cbodesde', $pintar->ContenidoCombo($anios, $rows[0]['min']), 'html');
+
+        $fun[] = array('
+					// Destroy the combobox
+					$("#cbohasta").combobox("destroy");
+											
+					// Unselect the currently selected option
+					$("#cbohasta option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cbohasta option[value=' . $rows[0]['max'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cbohasta").combobox();');
+
+        $val[] = array('cbohasta', $pintar->ContenidoCombo($anios, $rows[0]['max']), 'html');
+
+        $fun[] = array('$("#txtdesde").numeric();
+					  $("#txthasta").numeric();');
+					 
+       $val[] = array('txtfechproy',date('d/m/Y'),'val');
+        } 
+       $pintar->PintarValor($val);
+       $pintar->EjecutarFuncion($fun);
+       
+       
+
+    
+    }
+
+    public function cargardeudasAction(){
+    	    $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            
+    	$ccontri = $this->_request->getPost('ccontri', '');
+
+     
+        $params[] = $ccontri;
+
+        $dataAdapter = new Model_DataAdapter();
+        $data['data'] = $dataAdapter->executeAssocQuery("pl_function.panel_personaestadoctac", $params);
+          
+          
+        //print_r( explode('*',(String) $rows[0]['tribdeudatodos']));
+
+        /*for ($j=1;$j<count($rows);++$j  ){
+        	 if ($rows[$j]['estado_general']=="0"){
+        	    $tipodeuda[]=array($rows[$j]['ctiprec'] ,$rows[$j]['deuda'] ); 	    
+        	}else{
+  				$tipopagado[]=array($rows[$j]['ctiprec'] ,$rows[$j]['deuda'] ); 	          	        	    
+        	}    	
+        }
+        
+        if (count($tipodeuda)>0){
+         //print_r($tipodeuda);	
+        }
+               
+		if (count($tipopagado)>0){
+		 //print_r($tipopagado); 
+
+			
+			$tmp = array ();
+			
+			foreach ($tipopagado as $row) 
+			    if (!in_array($row,$tmp)) array_push($tmp,$row);
+			
+			//print_r ($tmp);  
+			
+			   */
+       
+        // $data['tipodeuda'] = $rows;
+		       
+        $this->_helper->json($data);
+    }
+		
+}
+    public function borrarcuentaAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $parameters[] = (String) $_POST['mperson'];
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocSelect("pl_function.borrarcuenta", $parameters);
+        }
+    }
+    
+    public function verauditoriaAction(){
+    	
+          $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $parameters[] = (String) $this->_request->getParam('p_nametable','');
+            $parameters[] = (String) $this->_request->getParam('p_idsigma','');
+            
+            
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.listar_tableaudit", $parameters);
+            
+            $pintar=new Libreria_Pintar(); 
+            
+            if(count($rows)>0){
+            	
+            	$val[]=array('lblfechamodaudit',$rows[0]['ddatetm'],'html');
+            	$val[]=array('lblusuarioaudit',$rows[0]['vusernm'],'html');
+            	$val[]=array('lblhostaudit',$rows[0]['vhostnm'],'html');
+            	$val[]=array('txtobservacionaudit',$rows[0]['vobserv'],'html');
+            	$pintar->PintarValor($val);
+            	
+            }
+            
+            //echo count($rows ); 
+        }
+    
+    }
+    
+  public function graficodeudasAction(){
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    	$this->_helper->getHelper('ajaxContext')->initContext();
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$url = $this->view->util()->getPath();
+    		// Graficas
+    		$vccontri = $this->_request->getPost('ccontri');
+    		 
+    		$store = 'pl_function.panel_personaestadoctac';
+    		$pgraf[] = $vccontri;
+    		$pgraf[] = '5';
+    		 
+    		$cn = new Model_DataAdapter ();
+    		$datosgraf = $cn->ejec_store_procedura_sql($store, $pgraf);
+    		
+    		$store2 = 'pl_function.panel_personaestadoctac';
+    		$pgraf2[] = $vccontri;
+    		$pgraf2[] = '6';
+    		 
+    		$cn2 = new Model_DataAdapter ();
+    		$datosgraf2 = $cn->ejec_store_procedura_sql($store2, $pgraf2);
+    		
+    		$cadgrafcategorias = '';
+    		$cadgrafcancelado = '';
+    		$cadgrafdatospie = '';
+    		$montorecaudado=0.00;
+    		for ($i = 0; $i < count($datosgraf); $i++) {
+    			$cadgrafcategorias .="<category label='" . $datosgraf[$i][2] . "'/>";
+    			$cadgrafcancelado .="<set value='" . $datosgraf[$i][3] . "' />";
+    			$montorecaudado+= $datosgraf[$i][3];
+    		}
+    		
+    		for ($i = 0; $i < count($datosgraf2); $i++) {
+    		$cadgrafdatospie .="<set label='" . $datosgraf2[$i][2] . "' value='" . $datosgraf2[$i][3] . "'/>";
+    		}
+    		
+    		$montorecaudado	=	number_format($montorecaudado, 2, '.', ',');
+    		$htmltotales ="<b>IMPORTE TOTAL DE DEUDA INSOLUTO: $montorecaudado.* &nbsp;<br/>*No Incluyen moras,ni descuento por Amnistias.<b>";
+    		if (count($datosgraf) > 0) {
+    			$cadgrafbarras = "<script >
+				var chart = new FusionCharts('" . $url . "graf/MSColumn3D.swf', 'ChartbarrasId', '500', '400', '0', '0');
+				chart.setDataXML(\"<chart palette='1' caption='ANALISIS POR TIPO DE TRIBUTO' xAxisName='Tipo Deuda' yAxisName='Monto' numberPrefix='S/.' decimals='2'   formatNumberScale='0'    showValues='0'  rotateNames='1'  slantLabels='1' rotateValues='0' placeValuesInside='1' forceYAxisValueDecimals='1'  yAxisValueDecimals='2'>";
+    			$cadgrafbarras .= "<categories>" . $cadgrafcategorias . "</categories>";
+    			$cadgrafbarras .= "<dataset seriesname='Deuda' color='00CC33' showValues='1'>" . $cadgrafcancelado . " </dataset>";
+    			$cadgrafbarras .= "</chart>\");
+				chart.render(\"chartdivbarras\");
+				</script> ";
+    
+    			$cadgrafpie = "<script>
+				var chartpie = new FusionCharts('" . $url . "graf/Pie3D.swf', 'ChartpieId', '500', '200', '0', '0');
+				chartpie.setDataXML(\"<chart palette='1' caption='ANALISIS POR ESTADO DE DEUDA' numberPrefix='S/.' decimals='2' formatNumberScale='0'  enableSmartLabels='1' enableRotation='1' bgColor='99CCFF,FFFFFF' bgAlpha='40,100' bgRatio='0,100' bgAngle='360' showBorder='1' startingAngle='70'>" . $cadgrafdatospie . "</chart>\");
+				chartpie.render(\"chartdivpie\");
+    
+				$('#totalrecaudado').html('".$htmltotales."');
+				</script>";
+    
+    			echo $cadgrafbarras . $cadgrafpie;
+    		}
+    	}
+    }
+
+}
+
+class imgSizer {
+
+    // SET VARIABLES ##############################################################################	
+
+    public $image = ""; // Full orig. img path (ex: $_SERVER['DOCUMENT_ROOT'] . "/path/to/image.jpg")
+    public $type = "width"; // Resize type ('width' or 'height')
+    public $max = 300; // Max width or height (applied to $type)
+    public $quality = 5; // Image quality (1-10)
+    public $square = false; // Crop the image in a square (based on center)
+    public $prefix = ""; // Prefix added to resized images	
+    public $folder = "_sized/"; // Folder for resized images (inside source folder, trailing slash req.)	
+
+    // RESIZE FUNCTION ############################################################################
+
+    public function resize() {
+
+        // Split image parts (path and file)
+        $imgSplit = explode("/", $this->image);
+        $srcName = end($imgSplit);
+        $srcUrl = str_ireplace($srcName, "", $this->image);
+        $srcPath = $_SERVER['DOCUMENT_ROOT'] . str_ireplace($srcName, "", $this->image);
+
+        //echo $srcPath;
+        // Get extension
+        $split = explode(".", $srcName);
+        $ext = strtolower($split[1]);
+
+        // Misc variables
+        $rszUrl = $srcUrl . $this->folder;
+        $rszName = $this->prefix . $srcName;
+        $rszPath = $srcPath . $this->folder;
+        $rszQuality = $this->quality;
+
+        //echo "<br/>1".$rszUrl;
+        //echo "<br/>2".$rszPath;
+        // If save path doesn't exist, create it
+
+        if (!file_exists($rszPath)) {
+            mkdir($rszPath, 0777);
+        }
+
+        // If the resized img doesn't exist, create it
+
+        if (!file_exists("$rszPath/$rszName")) {
+
+            switch ($ext) {
+                case('jpg'): $srcImage = imagecreatefromjpeg("$srcPath$srcName");
+                    break;
+                case('jpeg'): $srcImage = imagecreatefromjpeg("$srcPath$srcName");
+                    break;
+                case('png'): $srcImage = imagecreatefrompng("$srcPath$srcName");
+                    if ($rszQuality == 10) {
+                        $rszQuality = 9;
+                    } break;
+                case('gif'): $srcImage = imagecreatefromgif("$srcPath$srcName");
+                    break;
+            }
+
+            $srcWidth = imagesx($srcImage);
+            $srcHeight = imagesy($srcImage);
+
+            // Determine specs based on type
+
+            if (strtolower($this->type) == "width") {
+                $rszWidth = $this->max;
+                $rszHeight = $srcHeight / ($srcWidth / $rszWidth);
+            } else {
+                $rszHeight = $this->max;
+                $rszWidth = $srcWidth / ($srcHeight / $rszHeight);
+            }
+
+            // Determine specs if crop applied
+
+            $srcX = 0;
+            $srcY = 0;
+            $srcNewWidth = $srcWidth;
+            $srcNewHeight = $srcHeight;
+            $dest = $srcImage;
+
+            // Square crop
+
+            if ($this->square == true) {
+                $rszWidth = $this->max;
+                $rszHeight = $this->max;
+
+                if ($srcHeight > $srcWidth) {
+                    $srcX = 0;
+                    $srcY = floor(($srcHeight - $srcWidth) / 2);
+                    $srcNewHeight = $srcWidth;
+                    $srcNewWidth = $srcWidth;
+                }
+
+                if ($srcWidth > $srcHeight) {
+                    $srcX = floor(($srcWidth - $srcHeight) / 2);
+                    $srcY = 0;
+                    $srcNewHeight = $srcHeight;
+                    $srcNewWidth = $srcHeight;
+                }
+                // Create new image with a new width and height.
+                $dest = imagecreatetruecolor($srcNewWidth, $srcNewHeight);
+
+                // Copy new image to memory after cropping.
+                imagecopy($dest, $srcImage, 0, 0, $srcX, $srcY, $srcNewWidth, $srcNewHeight);
+            }
+
+            $targetImage = imagecreatetruecolor($rszWidth, $rszHeight);
+            imagecopyresampled($targetImage, $dest, 0, 0, 0, 0, $rszWidth, $rszHeight, $srcNewWidth, $srcNewHeight);
+
+            switch ($ext) {
+                case('jpg'): imagejpeg($targetImage, "$rszPath/$rszName", $rszQuality * 10);
+                    break;
+                case('jpeg'): imagejpeg($targetImage, "$rszPath/$rszName", $rszQuality * 10);
+                    break;
+                case('png'): imagepng($targetImage, "$rszPath/$rszName", $rszQuality);
+                    break;
+                case('gif'): imagegif($targetImage, "$rszPath/$rszName");
+                    break;
+            }
+        }
+
+        // Return the resized image
+
+        return($rszUrl . $rszName);
+
+        // Clear temps
+        imagedestroy($dest);
+        imagedestroy($targetImage);
+    }
+
+}
+
+=======
+<?php
+
+require_once 'Zend/Controller/Action.php';
+
+class RegistroController extends Zend_Controller_Action {
+
+    public function init() {
+   		$this->_helper->layout()->setLayout('layoutwithpanel');
+        $map = new Zend_Session_Namespace("map");
+        $map->data = true;
+    }
+
+    public function indexAction() {
+        $this->view->util()->registerScriptJSControllerAction($this->getRequest());
+
+        $procedure = 'registro.mubigeodistr';
+        $params[0] = '15';
+        $params[1] = '01';
+        $params[2] = '00';
+        
+        $dataAdapter = new Model_DataAdapter();
+        $this->view->rowUbigeo = $dataAdapter->executeAssocQuery($procedure, $params);
+        
+        // TODO: Implementar la validacion de vias por año
+        $parameters[] = date("Y");
+        $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+        $this->view->mviascp = $rows;
+    }
+
+    public function listarpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $name = $this->_request->getParam('name');
+
+            $procedure = 'registro.mubigeodistr';
+            $params[0] = '15';
+            $params[1] = '01';
+            $params[2] = '00';
+            
+            $dataAdapter = new Model_DataAdapter();
+            $this->view->rowUbigeo = $dataAdapter->executeAssocQuery($procedure, $params);
+            
+            if (isset($name)) {
+                $dataSet = new Zend_Session_Namespace($name);
+                $rows = $dataSet->data;
+
+                $this->view->cidpers = $rows[0][0];
+                $this->view->vnombre = $rows[0][1];
+                $this->view->vdirecc = $rows[0][2];
+
+                $this->_request->setParam('cidpers', $rows[0][0]);
+            } else {
+                $this->view->cidpers = $this->_request->getParam('cidpers');
+                $this->view->vnombre = $this->_request->getParam('crazsoc');
+                $this->view->vdirecc = $this->_request->getParam('direccf');
+
+                $mhresum = $this->_request->getParam('mhresum');
+                if (isset($mhresum)) {
+                    $this->view->mhresum = $this->_request->getParam('mhresum');
+                    $this->view->vnrodoc = $this->_request->getParam('vnrodoc');
+                } else {
+                    $parameters[] = $this->view->cidpers;
+                    $rows = $dataAdapter->executeAssocQuery("pl_function.panel_persona", $parameters);
+                    if (count($rows) == 1) {
+                        $this->view->mhresum = $rows[0]['mhresum'];
+                        $this->view->vnrodoc = $rows[0]['vnrodoc'];
+                    }
+                }
+            }
+            
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $consult = $ddatosuserlog->consult;
+            // echo '-->' . $consult . '<--';
+            if ($consult == '*') {
+                echo "<script>$('#btnRegistrarPredio').hide();</script>";
+            }
+        }
+    }
+
+    public function verpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $this->view->mperson = $this->_request->getParam('mperson');
+            $this->view->vnombre = $this->_request->getParam('vnombre');
+            $this->view->vdirecf = $this->_request->getParam('vdirecf');
+            $this->view->p_mhresum = $this->_request->getParam('mhresum');
+            $this->view->p_mpredio = $this->_request->getParam('mpredio');
+            $this->view->p_cperiod = $this->_request->getParam('cperiod');
+
+            $parameters[] = $this->_request->getParam('mpredio');
+            $parameters[] = $this->_request->getParam('mhresum');
+            $parameters[] = $this->_request->getParam('cperiod');
+
+            $parameters2[] = $this->_request->getParam('mpredio');
+            $parameters2[] = $this->_request->getParam('mhresum');
+
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.ver_predio", $parameters);
+
+            if (is_array($rows) && count($rows) > 0) {
+                $this->view->mpredio = $rows[0];
+                $this->view->nrecalc = ($rows[0]['destado'] == '0') ? '1' : $rows[0]['nrecalc'];
+
+                $parameters = array($rows[0]["dpredio"], $rows[0]["cperiod"]);
+
+                $dataAdapter->saveQuery("tblPiso", "pl_function.listar_construccion", $parameters);
+                $dataAdapter->saveQuery("tblInstalacion", "pl_function.listar_instalacion", $parameters);
+                $dataAdapter->saveQuery("tblLindero", "pl_function.listar_lindero", $parameters);
+                $dataAdapter->saveQuery("tblRustico", "pl_function.listar_caracteristica_rustico", $parameters);
+                $dataAdapter->saveQuery("tblInafecto", "pl_function.listar_inafecto", $parameters2);
+
+
+                $pintar = new Libreria_Pintar();
+                $val[] = array('ccodpre', $rows [0]['ccodpre'], 'val');
+                $pintar->PintarValor($val);
+            }
+        }
+    }
+
+    public function direccionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function declaracionAction() {
+        $this->view->util()->registerScriptJSControllerAction($this->getRequest());
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->view->mperson = $this->_request->getParam('mperson');
+            $this->view->vnombre = $this->_request->getParam('dperson');
+            $this->view->mhresum = $this->_request->getParam('mhresum');
+            $this->view->ddatetm = date('d/m/Y');
+            $this->view->cperiod = date("Y");
+
+            $parameters[] = date("Y");
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+            $this->view->mviascp = $rows;
+            $this->view->hoy = date("d") . '/' . date("m") . '/'  . (date("Y") - 40);      
+        }
+    }
+
+    public function condominioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function listardeclaracionAction() {
+        $this->view->cidpers = $this->_request->getParam('cidpers');
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function listarprediovalorAction() {
+        $this->view->mpredio = $this->_request->getParam('mpredio');
+        $this->view->mhresum = $this->_request->getParam('mhresum');
+        $this->view->cidpers = $this->_request->getParam('cidpers');
+    }
+
+    public function prediovalorAction() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+
+        $dataAdapter = new Model_DataAdapter();
+
+        $parameters[] = $this->_request->getParam('mpredio');
+        $parameters[] = $this->_request->getParam('mhresum');
+        $parameters[] = '-1';
+        $data['valorpredio'] = $dataAdapter->executeAssocQuery("pl_function.ver_predio", $parameters);
+
+        $parameters = array($this->_request->getParam('cidpers'));
+        $data['resumensaldo'] = $dataAdapter->executeAssocQuery("pl_function.resumen_saldo_personal", $parameters);
+
+        echo $this->_helper->json($data);
+    }
+
+    public function verpisoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function verpisocaracteristicasAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $dataAdapter = new Model_DataAdapter();
+            $data['material'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000161'));
+            $data['estado'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000149'));
+            $data['banio'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000283'));
+            $data['muro'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000228'));
+            $data['piso'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000250'));
+            $data['puerta'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000261'));
+            $data['revestimiento'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000272'));
+            $data['techo'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000239'));
+            $data['instalacion'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_piso", array('1000000294'));
+
+            echo $this->_helper->json($data);
+        }
+    }
+
+    public function verinstalacionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function impresionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function verlinderoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function verrusticoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function linderoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function guardarlinderoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['cptocar'] . ','
+                    . $_POST['ctiplin'] . ','
+                    . $_POST['ccodpre'] . ','
+                    . $_POST['vdirecc'] . ','
+                    . $_POST['mperson'] . ','
+                    . $_POST['dpredio'] . ','
+                    . $coduser . ','
+                    . $vhostnm . ',';
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mlindero", $parameters);
+
+            if ($rows[0][0] == 1) {
+                $parameters = array($_POST['dpredio'], $_POST["cperiod"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_lindero", $parameters);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function guardarpisoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['dpredio'] . ','
+                    . $_POST['cnitems'] . ','
+                    . $_POST['cnumpis'] . ','
+                    . $_POST['cmescon'] . ','
+                    . $_POST['canocon'] . ','
+                    . $_POST['cmateri'] . ','
+                    . $_POST['cconser'] . ','
+                    . $_POST['cmurcol'] . ','
+                    . $_POST['ctechos'] . ','
+                    . $_POST['cmpisos'] . ','
+                    . $_POST['cpueven'] . ','
+                    . $_POST['crevest'] . ','
+                    . $_POST['cbanios'] . ','
+                    . $_POST['celectr'] . ','
+                    . '0,' // $_POST['narecom']
+                    . '0,' // $_POST['nporcom']
+                    . $_POST['nestado'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['narecon'];
+
+            $parameters[] = $row;
+            $parameters[] = $_POST["cclasif"];
+            $parameters[] = $_POST["caracte"];
+            $parameters[] = $_POST['cnumpis'];
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mconstr", $parameters);
+
+            if ($rows[0][0] == 1) {
+                $parameters = array($_POST['dpredio'], $_POST["cperiod"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_construccion", $parameters);
+
+                $params[] = $_POST["p_mhresum"];
+                $params[] = $_POST["p_cperiod"];
+                $params[] = $_POST["p_dpredio"];
+                $rows = $dataAdapter->executeAssocQuery("pl_function.ver_valor_predio", $params);
+
+                $data['valorPredio'] = $rows;
+                $data['error'] = "";
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function guardarinstalacionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['dpredio'] . ','
+                    . $_POST['cnumpis'] . ','
+                    . $_POST['canocon'] . ','
+                    . '0000000001' . ',' //INSTALACION-
+                    . $_POST['nvalanc'] . ','
+                    . $_POST['nvalalt'] . ','
+                    . $_POST['nvallar'] . ','
+                    . $_POST['ctipint'] . ','
+                    . $_POST['vdesint'] . ','
+                    . '0' . ',' //cmateri
+                    . '0' . ',' //cconser
+                    . '0' . ',' //cmurcol
+                    . '0' . ',' //ctechos
+                    . '0' . ',' //cmpisos
+                    . '0' . ',' //cpueven
+                    . '0' . ',' //crevest
+                    . '0' . ',' //cbanios
+                    . '0' . ',' //celectr
+                    . '0' . ',' //narecom
+                    . '0' . ',' //nporcom
+                    . $_POST['nestado'] . ',' //nestado
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['nvalins']; //fecha
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_minstal", $parameters);
+
+            if ($rows[0][0] == 1) {
+                $parameters2 = array($_POST['dpredio'], $_POST["cperiod"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_instalacion", $parameters2);
+
+
+                $params[] = $_POST["p_mhresum"];
+                $params[] = $_POST["p_cperiod"];
+                $params[] = $_POST["p_dpredio"];
+                $rows = $dataAdapter->executeAssocQuery("pl_function.ver_valor_predio", $params);
+
+                $data['valorPredio'] = $rows;
+                $data['error'] = "";
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function guardardeclaracionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row =
+                    $_POST["idsigma"] . ',' .
+                    $_POST["ctipdat"] . ',' .
+                    $_POST["vnrodoc"] . ',' .
+                    $_POST["dfecdoc"] . ',' .
+                    $_POST['cmotivo'] . ',' .
+                    $_POST["ctipdoc"] . ',' .
+                    $_POST["vnrodjj"] . ',' .
+                    $_POST["vobserv"] . ',' .
+                    $_POST["nestado"] . ',' .
+                    $vhostnm . ',' .
+                    $coduser . ',' .
+                    date("y-m-d") . ',' .
+                    $_POST["cperini"] . ',' .
+                    $_POST["cperfin"] . ',' .
+                    $_POST["mperson"];
+
+            $parameters[] = $row;
+            $parameters[] = $_POST["dpredio"];
+            $parameters[] = $_POST["ctipacc"];
+            $parameters[] = $_POST["mpropie"];
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mhresum", $parameters);
+
+            if ($rows > 0) {
+                $data['nroDeclaracion'] = $rows[0][0];
+                $data['mensaje'] = "";
+                $data['tipoResultado'] = "EXITO";
+            } else {
+                $data['mensaje'] = "Ocurrio un error durante el proceso extracción de datos.";
+                $data['tipoResultado'] = "ERROR";
+            }
+            $this->_helper->json($data);
+        }
+    }
+
+    public function guardardetalleAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST["idsigma"] . ',' .
+                    $_POST["mpredio"] . ',' .
+                    $_POST["ctippre"] . ',' .
+                    $_POST["cclasif"] . ',' .
+                    $_POST["ccondic"] . ',' .
+                    $_POST["cestado"] . ',' .
+                    $_POST["cusogen"] . ',' .
+                    $_POST["cusoesp"] . ',' .
+                    $_POST["nporcen"] . ',' .
+                    $_POST["ntertot"] . ',' .
+                    $_POST["nporter"] . ',' .
+                    $_POST["nterren"] . ',' .
+                    $_POST["ncomtot"] . ',' .
+                    $_POST["nporcom"] . ',' .
+                    $_POST["narecom"] . ',' .
+                    $_POST["nporafe"] . ',' .
+                    $_POST["dfecadq"] . ',' . //$_POST["dfecdes"].','.
+                    date("d-m-y", strtotime($_POST["dfecdes"])) . ',' .
+                    $_POST["dfecadq"] . ',' .
+                    $_POST["nfrente"] . ',' .
+                    $_POST["ncanper"] . ',' .
+                    $_POST["ctippar"] . ',' .
+                    $_POST["vobserv"] . ',' .
+                    $_POST["nestado"] . ',' .
+                    $vhostnm . ',' .
+                    $coduser . ',' .
+                    date("y-m-d") . ',' .
+                    date("d-m-y", strtotime($_POST["dfectra"])) . ',' .
+                    $_POST["cnotari"] . ',' .
+                    $_POST["ctiptra"] . ',' .
+                    $_POST["cpartid"] . ',' .
+                    $_POST["csubtip"] . ',' .
+                    $_POST["cmotadq"] . ',' .
+                    $_POST["mhresum"];
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_dpredio", $parameters);
+
+            if ($rows[0][0] != '-1') {
+                $params[] = $_POST["mhresum"];
+                $params[] = $_POST["cperiod"];
+                $params[] = $rows[0][0];
+                $rows = $dataAdapter->executeAssocQuery("pl_function.ver_valor_predio", $params);
+
+                $data['valorPredio'] = $rows;
+                $data['error'] = "";
+            } else {
+                $data['error'] = "Error al actualizar";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function prediomantenAction() {
+        $parameters[] = date("Y");
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+        $this->view->mviascp = $rows;
+        
+        
+    }
+
+    public function verprediomanttAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $parameters[] = date("Y") - 1;
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+            $this->view->mviascp = $rows;
+        }
+    }
+
+    public function guardarmpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST["idsigma"] . ',' .
+                    $_POST["mviadis"] . ',' .
+                    $_POST["dnumero"] . ',' .
+                    $_POST["dinteri"] . ',' .
+                    $_POST["dletras"] . ',' .
+                    $_POST["ddepart"] . ',' .
+                    $_POST["destaci"] . ',' .
+                    $_POST["ddeposi"] . ',' .
+                    $_POST["drefere"] . ',' .
+                    $_POST["dmanzan"] . ',' .
+                    $_POST["dnlotes"] . ',' .
+                    $_POST["ccatast"] . ',' .
+                    $_POST["cplanos"] . ',' .
+                    $_POST["ctipmer"] . ',' .
+                    $_POST["dnummer"] . ',' .
+                    $_POST["cdiscat"] . ',' .
+                    $_POST["czoncat"] . ',' .
+                    $_POST["cmzacat"] . ',' .
+                    $_POST["cseccat"] . ',' .
+                    $_POST["cltecat"] . ',' .
+                    $_POST["cundcat"] . ',' .
+                    $_POST["dbloque"] . ',' .
+                    $_POST["dseccio"] . ',' .
+                    $_POST["dunidad"] . ',' .
+                    $_POST["mpoblad"] . ',' .
+                    $_POST["vdirpre"] . ',' .
+                    $_POST["nestado"] . ',' .
+                    $_POST["ccodpre"] . ',' .
+                    $_POST["ctippre"] . ',' .
+                    $_POST["idanexo"] . ',' .
+                    $_POST["ccodcuc"] . ',' .
+                    $vhostnm . ',' .
+                    $coduser . ',' .
+                    date("y-m-d") . ',' .
+                    $_POST["nlatitu"] . ',' .
+                    $_POST["nlongit"] . ',' .
+                    $_POST["nzoom"] . ',' .
+                    $_POST["mpredio"];
+
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mpredio", $parameters);
+
+            if (count($rows) > 0) {
+                $parameters = array($rows[0][0],'','','','');
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.buscar_predio", $parameters);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function busqpredioAction() {
+        $pintar = new Libreria_Pintar();
+
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $mperson = $this->_request->getPost('mperson');
+        }
+
+        $parameters[] = date("Y");
+
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+        $this->view->mviascp = $rows;
+
+        $val[] = array('txtMperson', $mperson, 'val');
+
+        $pintar->PintarValor($val);
+    }
+
+    public function busqprediocontrAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function recargarpredioAction() {
+
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        $pintar = New Libreria_Pintar();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+
+            $parameters[] = $this->_request->getPost('mpredio');
+            $parameters[] = $this->_request->getPost('mhresum');
+            $parameters[] = $this->_request->getPost('cperiod');
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.ver_predio", $parameters);
+
+            // print_r($rows );
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboTipoPredio").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboTipoPredio option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboTipoPredio option[value=' . $rows[0]['ctippre'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboTipoPredio").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboTipoPredioUrbano").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboTipoPredioUrbano option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboTipoPredioUrbano option[value=' . $rows[0]['csubtip'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboTipoPredioUrbano").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboUso").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboUso option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboUso option[value=' . $rows[0]['cusogen'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboUso").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboUsoEspecifico").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboUsoEspecifico option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboUsoEspecifico option[value=' . $rows[0]['cusoesp'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboUsoEspecifico").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboEstado").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboEstado option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboEstado option[value=' . $rows[0]['cestado'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboEstado").combobox();');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboCondicion").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboCondicion option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboCondicion option[value=' . $rows[0]['ccondic'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboCondicion").combobox();');
+
+            $val[] = array('nporcen', $rows[0]['nporcen'], 'val');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboClasificacion").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboClasificacion option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboClasificacion option[data-idsigma=' . $rows[0]['cclasif'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboClasificacion").combobox();');
+
+
+            $val[] = array('nnrohab', $rows[0]['ncanper'], 'val');
+
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboMotivo").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboMotivo option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboMotivo option[value=' . $rows[0]['cmotadq'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboMotivo").combobox();');
+
+            $val[] = array('dtpFechaAdquisicion', date("d/m/Y", strtotime($rows[0]['dfecadq'])), 'val');
+
+            $val[] = array('dtpFechaTransferencia',date("d/m/Y", strtotime($rows[0]['dfecdes'])) , 'val');
+
+            $val[] = array('txtNotaria', $rows[0]['cnotari'], 'val');
+
+            $val[] = array('txtTipoTransferencia', $rows[0]['ctiptra'], 'val');
+
+            $val[] = array('txtPartida', $rows[0]['cpartid'], 'val');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboCondicion").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboCondicion option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboCondicion option[value=' . $rows[0]['ccondic'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboCondicion").combobox();');
+
+            $val[] = array('nareter', $rows[0]['ntertot'], 'val');
+            $val[] = array('narecom', $rows[0]['ncomtot'], 'val');
+            $val[] = array('nporter', $rows[0]['nporter'], 'val');
+            $val[] = array('nporcom', $rows[0]['nporcom'], 'val');
+            $val[] = array('ntotter', $rows[0]['nterren'], 'val');
+            $val[] = array('ntotcom', $rows[0]['narecom'], 'val');
+            $val[] = array('nfronti', $rows[0]['nfrente'], 'val');
+
+            $fun[] = array('
+					// Destroy the combobox
+					$("#cboParque").combobox("destroy");
+						
+					// Unselect the currently selected option
+					$("#cboParque option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cboParque option[value=' . $rows[0]['ctippar'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cboParque").combobox();
+						
+						
+						
+					$(" .ui-combobox-input").attr("disabled", true);
+					$(" .ui-combobox-input").toggleClass("ui-text-disable");
+					$(" ui-combobox-input a").button("option", "disabled", true);
+
+					//$("#txtMotivo").attr("disabled", true);
+					//$("#txtMotivo").toggleClass("ui-text-disable");
+					 
+					$("#linkMotivo").button("option", "disabled", true);
+					 
+					$("#linkTipoPredio").button("option", "disabled", true);
+					$("#linkTipoPredioUrbano").button("option", "disabled", true);
+							$("#linkUso").button("option", "disabled", true);
+							$("#linkUsoEspecifico").button("option", "disabled", true);
+							$("#linkEstado").button("option", "disabled", true);
+							$("#linkCondicion").button("option", "disabled", true);
+							$("#linkClasificacion").button("option", "disabled", true);
+							$("#linkParque").button("option", "disabled", true);
+							 
+							 
+							//$("#cboPeriodo").combobox("destroy");
+							//$("#cboPeriodo").combobox();
+
+							//alert("despues");
+								
+							');
+        }
+        $pintar->PintarValor($val);
+        $pintar->EjecutarFuncion($fun);
+    }
+
+    public function editarpredioAction() {
+        $this->_helper->layout->disableLayout();
+
+        $codpre = $this->_request->getParam('mhresum', '');
+        $mpredio = $this->_request->getParam('mpredio', '');
+        $pintar = new Libreria_Pintar();
+        $parameters[] = date("Y") - 1;
+
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeAssocQuery("pl_function.listar_vias", $parameters);
+        $this->view->mviascp = $rows;
+
+        $parameters2[] = $mpredio;
+        $parameters2[] = '';
+        $parameters2[] = '';
+        $parameters2[] = '';
+        $parameters2[] = '';
+
+        $dataAdapter2 = new Model_DataAdapter();
+        $rows2 = $dataAdapter2->executeAssocQuery("pl_function.buscar_mpredio", $parameters2);
+
+        if (count($rows2) > 0) {
+
+            $val[] = array('txtcodpre', $rows2[0]['ccodpre'], 'val');
+            $val[] = array('txt_idsigma', $rows2[0]['idsigma'], 'val');
+            $val[] = array('txt_mviadis', $rows2[0]['mviadis'], 'val');
+            $val[] = array('txt_mpoblad', $rows2[0]['mpoblad'], 'val');
+
+            $val[] = array('txtviacentrpob', $rows2[0]['tnomvia'] . ' - ' . $rows2[0]['tnompob'], 'val');
+            $val[] = array('txtnumero', $rows2[0]['dnumero'], 'val');
+            $val[] = array('txtdepart', $rows2[0]['ddepart'], 'val');
+            $val[] = array('txtinterior', $rows2[0]['dinteri'], 'val');
+            $val[] = array('txtletra', $rows2[0]['dletras'], 'val');
+            $val[] = array('txtestacio', $rows2[0]['destaci'], 'val');
+            $val[] = array('txtdeposito', $rows2[0]['ddeposi'], 'val');
+            $val[] = array('txtbloque', $rows2[0]['dbloque'], 'val');
+            $val[] = array('txtseccion', $rows2[0]['dseccio'], 'val');
+            $val[] = array('txtunidinmob', $rows2[0]['dunidad'], 'val');
+            $val[] = array('txtmanzana', $rows2[0]['dmanzan'], 'val');
+            $val[] = array('txtlote', $rows2[0]['dnlotes'], 'val');
+            $val[] = array('txt_ctippre', $rows2[0]['ctippre'], 'val');
+            $val[] = array('txtreferencia', $rows2[0]['drefere'], 'val');
+
+            $val[] = array('txtczoncat', $rows2[0]['czoncat'], 'val');
+            $val[] = array('txtcmzacat', $rows2[0]['cmzacat'], 'val');
+            $val[] = array('txtcseccat', $rows2[0]['cseccat'], 'val');
+            $val[] = array('txtcltecat', $rows2[0]['cltecat'], 'val');
+            $val[] = array('txtcundcat', $rows2[0]['cundcat'], 'val');
+
+            $val[] = array('txt_nlatitu', $rows2[0]['nlatitu'], 'val');
+            $val[] = array('txt_nlongit', $rows2[0]['nlongit'], 'val');
+            $val[] = array('txt_nzoom', $rows2[0]['nzoom'], 'val');
+
+            $pintar->PintarValor($val);
+        }
+    }
+
+    public function pintarpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        $pintar = New Libreria_Pintar();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $codpre = $this->_request->getPost('idsigma', '');
+            $vdirpre = $this->_request->getPost('vdirepre', '');
+
+            $val[] = array('txtMpredio', $codpre, 'val');
+            $val[] = array('txtDirecpred', $vdirpre, 'val');
+        }
+
+        $pintar->EjecutarFuncion($val);
+    }
+
+    public function recargarvalorpredioAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $pintar = New Libreria_Pintar();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $p_mhresum = $this->_request->getPost('p_mhresum', '');
+            $p_cperiod = $this->_request->getPost('p_cperiod', '');
+            $p_dpredio = $this->_request->getPost('p_dpredio', '');
+
+
+            $parameters2[] = $p_mhresum;
+            $parameters2[] = $p_cperiod;
+            $parameters2[] = $p_dpredio;
+
+            $dataAdapter2 = new Model_DataAdapter();
+            $rows2 = $dataAdapter2->executeAssocQuery("pl_function.ver_valor_predio", $parameters2);
+        }
+
+        if (count($rows2) > 0) {
+            $val[] = array('lblArancel', $rows2[0]['narance'], 'html');
+            $val[] = array('lblValorTerreno', $rows2[0]['nvalter'], 'html');
+            $val[] = array('lblValorConstruccion', $rows2[0]['nvalpis'], 'html');
+            $val[] = array('lblValorInstalacion', $rows2[0]['nvalins'], 'html');
+            $val[] = array('lblAutovaluo', $rows2[0]['nvalpre'], 'html');
+            $val[] = array('lblMontoBarrido', $rows2[0]['nbarrid'], 'html');
+
+            $val[] = array('lblMontoParque', $rows2[0]['nparque'], 'html');
+            $val[] = array('lblMontoRecoleccion', $rows2[0]['nrecole'], 'html');
+            $val[] = array('lblMontoSerenazgo', $rows2[0]['nserena'], 'html');
+
+            $val[] = array('lblUsuario', $rows2[0]['vusernm'], 'html');
+            $val[] = array('lblFechaModificacion', $rows2[0]['ddatetm'], 'html');
+            $val[] = array('lblFechaProceso', $rows2[0]['dfectra'], 'html');
+
+            $pintar->PintarValor($val);
+        }
+    }
+
+    public function galeriafotosAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $this->_helper->layout->disableLayout();
+
+        $dpredio = $this->_request->getParam('dpredio', '');
+
+        $parameters2[] = $dpredio;
+
+
+        $dataAdapter2 = new Model_DataAdapter();
+        $rows2 = $dataAdapter2->executeAssocQuery("pl_function.listar_galeria", $parameters2);
+
+        $cant = count($rows2);
+
+        $pintar = new Libreria_Pintar();
+
+        $path = explode("/index.php", $_SERVER["PHP_SELF"]);
+        //echo  $path[0] . "/" . PATH;
+
+        $a = "";
+        if ($cant > 0) {
+
+            for ($i = 0; $i < count($rows2); $i++) {
+                $foto = trim($rows2[$i]['vfotonm']);
+                $a.= "<img src=\"" . $path[0] . "/" . PATH . "uploads/_sized/" . $foto . "\" />";
+            }
+
+            $val[] = array("slider", $a, 'html');
+            $pintar->PintarValor($val);
+        } else {
+
+            echo "No hay Fotos";
+        }
+
+        $fun[] = array('$("#slider").nivoSlider();');
+
+        $pintar->EjecutarFuncion($fun);
+    }
+
+    public function presubirfotoAction() {
+
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $this->_helper->layout->disableLayout();
+
+        $dpredio = $this->_request->getParam('dpredio', '');
+
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $ddatosuserlog->dpredio = $dpredio;
+    }
+
+    public function subirfotoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        $pintar = New Libreria_Pintar();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $p_dpredio = $this->_request->getPost('p_dpredio', '');
+            $p_foto = $this->_request->getPost('p_foto', '');
+        }
+
+        echo $p_dpredio;
+        echo "</br>" . $p_foto;
+    }
+
+    public function uploadAction() {
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+
+            // else do regular POST upload (i.e. for old non-HTML5 browsers)
+            $name = $_FILES['qqfile']['name'];
+            $size = $_FILES['qqfile']['size'];
+            //echo $name; 
+
+            if ($size == 0) {
+                return array('error' => 'File is empty.');
+            }
+
+            $uploadname = $name;
+            $carpeta = "uploads/";
+            opendir($carpeta);
+            $destino = $carpeta . $_FILES['qqfile']['name'];
+            copy($_FILES['qqfile']['tmp_name'], $destino);
+        }
+
+        $imgSizer = new imgSizer();
+        $imgSizer->type = "width";
+        $imgSizer->max = 400;
+        $imgSizer->quality = 8;
+        $imgSizer->square = true;
+        $imgSizer->prefix = "";
+        $imgSizer->folder = "_sized/";
+        $imgSizer->image = "/titania/public/uploads/" . $name;
+        $imgSizer->resize();
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $coduser = $ddatosuserlog->cidpers;
+        $vhostnm = $ddatosuserlog->vhostnm;
+        $dpredio = $ddatosuserlog->dpredio;
+
+
+        $row = "-1" . ','
+                . $name . ','
+                . "" . ','
+                . '1' . ','
+                . $coduser . ','
+                . $vhostnm . ','
+                . date('y-m-d');
+
+        $parameters[] = $row;
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeSelect("pl_function.guardar_mfotpre", $parameters);
+
+        //print_r($rows); 
+
+        $row2 = "-1" . ','
+                . $dpredio . ','
+                . $rows[0][0] . ','
+                . '1' . ','
+                . $coduser . ','
+                . $vhostnm . ','
+                . date('y-m-d');
+
+        $parameters2[] = $row2;
+        $dataAdapter = new Model_DataAdapter();
+        $rows2 = $dataAdapter->executeSelect("pl_function.guardar_mgaleria", $parameters2);
+
+
+        $results = array('success' => true);
+        // returns JSON
+        echo $this->_helper->json($results);
+    }
+
+    public function guardarinafectaAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['mperson'] . ','
+                    . $_POST['mpredio'] . ','
+                    . $_POST['ctipina'] . ','
+                    . $_POST['vbasleg'] . ','
+                    . $_POST['vnumexp'] . ','
+                    . $_POST['vnumres'] . ','
+                    . $_POST['dfecres'] . ','
+                    . $_POST['ctiping'] . ','
+                    . $_POST['nporafe'] . ','
+                    . $_POST['dfecini'] . ','
+                    . $_POST['dfecfin'] . ','
+                    . $_POST['nestado'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['mhresum'] . ','
+                    . $_POST['vobserv'];
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_minafec", $parameters);
+            if ($rows[0][0] == 1) {
+                $parameters = array($_POST['mpredio'], $_POST["mhresum"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_inafecto", $parameters);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+        }
+        $this->_helper->json($data);
+    }
+
+    public function guardarrusticoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['dpredio'] . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . '' . ','
+                    . $_POST['nestado'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d");
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mrustic", $parameters);
+
+            $row2 = $_POST['idsigma'] . ','
+                    . $rows[0][0] . ','
+                    . $_POST['cclasif'] . ','
+                    . $_POST['ccatego'] . ','
+                    . $_POST['narance'] . ','
+                    . $_POST['nhectar'] . ','
+                    . $_POST['nvalrus'] . ','
+                    . $_POST['nestado'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['cperiod'];
+
+            $parameters2[] = $row2;
+            $dataAdapter2 = new Model_DataAdapter();
+            $rows2 = $dataAdapter->executeSelect("pl_function.guardar_drustic", $parameters2);
+
+            if ($rows > 0) {
+                $parameters3 = array($_POST['dpredio'], $_POST["cperiod"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.listar_caracteristica_rustico", $parameters3);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function finalizardeclaracionAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $params[] = $this->_request->getPost('p_mhresum', '');
+            $params[] = $this->_request->getPost('p_mperson', '');
+            $params[] = $vhostnm;
+            $params[] = $coduser;
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.generar_cuenta", $params);
+
+            if ($rows > 0) {
+                $data['mensaje'] = "Se finalizo la declaración jurada con exito.";
+                $data['tipoResultado'] = "EXITO";
+            } else {
+                $data['mensaje'] = "Ocurrio un error durante el proceso de finalización.";
+                $data['tipoResultado'] = "ERROR";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function vercondominanteAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+    public function guardarcondominanteAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $coduser = $ddatosuserlog->cidpers;
+            $vhostnm = $ddatosuserlog->vhostnm;
+
+            $row = $_POST['idsigma'] . ','
+                    . $_POST['mperson'] . ','
+                    . $_POST['mpredio'] . ','
+                    . $_POST['nporcen'] . ','
+                    . $_POST['nestado'] . ','
+                    . $_POST['ctippro'] . ','
+                    . $vhostnm . ','
+                    . $coduser . ','
+                    . date("y-m-d") . ','
+                    . $_POST['mhresum'] . ','
+                    . $_POST['nvalida'];
+
+            $parameters[] = $row;
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeSelect("pl_function.guardar_mpropie", $parameters);
+
+            if ($rows[0][0] == 1) {
+                $parameters = array($_POST['mhresum'], $_POST["mpredio"]);
+
+                $data['error'] = "";
+                $data['data'] = $dataAdapter->executeAssocQuery("pl_function.buscar_mpropie", $parameters);
+            } else {
+                $data['error'] = "Error al actualizar";
+                $data['data'] = "";
+            }
+
+            $this->_helper->json($data);
+        }
+    }
+
+    public function listaractorprediosAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $params[] = $this->_request->getPost('p_operad1', '');
+            $params[] = $this->_request->getPost('p_ctipact', '');
+
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocSelect("pl_select.listar_actores", $params);
+
+            if ($rows > 0) {
+                $data['listaActorPredios'] = $rows;
+                $data['mensaje'] = "";
+                $data['tipoResultado'] = "EXITO";
+            } else {
+                $data['mensaje'] = "Ocurrio un error durante el proceso extracción de datos.";
+                $data['tipoResultado'] = "ERROR";
+            }
+            $this->_helper->json($data);
+        }
+    }
+
+    public function buscarcontribuyenteAction() {
+        $this->view->util()->registerScriptJSControllerAction($this->getRequest());
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        $ccontri = $this->_request->getParam('ccontri', '');
+
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+
+        $pintar = new Libreria_Pintar();
+
+        $val[] = array('txtcodcontriant', $ccontri, 'val');
+
+        $pintar->PintarValor($val);
+    }
+
+    public function verinafectoAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+        }
+    }
+
+ public function reporteopcestactacteAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        
+         /*
+          0000000278	0000000279	ARBITRIO DE LIMPIEZA PUBLICA.
+          0000000278	0000000283	ARBITRIO DE PARQUES Y JARDINES.
+          0000000278	0000007267	RECOLECCION DE RESIDUOS SOLIDOS
+          0000000278	0000008509	SEGURIDAD CIUDADANA
+          0000000273	0000000273	IMPUESTO PREDIAL
+         */
+        
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $this->view->usuario = $ddatosuserlog->nompers;
+
+        $ccontri = $this->_request->getParam('ccontri', '');
+        $predios = $this->_request->getParam('predios', '');
+
+        
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $parameters[] = $ccontri; 
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.panel_persona", $parameters);
+            if (count($rows) == 1) {
+            	$this->view->cidpers=$ccontri; 
+            	$this->view->vnombre = $rows[0]['crazsoc'];
+            	$this->view->vdirecc = $rows[0]['direccf']; 
+
+            						                  						        
+            }
+        
+        $pintar = new Libreria_Pintar();
+
+        $params[] = $ccontri;
+        $params[] = "1"; 
+
+        $dataAdapter = new Model_DataAdapter();
+        $rows = $dataAdapter->executeAssocQuery("pl_function.panel_personaestadoctac", $params);
+          
+          
+        //print_r( explode('*',(String) $rows[0]['tribdeudatodos']));
+
+        for ($j=1;$j<count($rows);++$j  ){
+        	 if ($rows[$j]['estado_general']=="0"){
+        	    $tipodeuda[]=array($rows[$j]['ctiprec'] ,$rows[$j]['deuda'] ); 	    
+        	}else{
+  				$tipopagado[]=array($rows[$j]['ctiprec'] ,$rows[$j]['deuda'] ); 	          	        	    
+        	}    	
+        }
+        
+        //if (count($tipodeuda)>0){
+         //print_r($tipodeuda);	
+        //}
+               
+	    /*if (count($tipopagado)>0){
+		 //print_r($tipopagado); 
+
+			
+			$tmp = array ();
+			
+			foreach ($tipopagado as $row) 
+			    if (!in_array($row,$tmp)) array_push($tmp,$row);
+			
+			//print_r ($tmp);  
+			
+			   
+        $data['tipodeuda'] = $tmp;
+        //$data['error'] = "";
+        
+
+    
+		}*/  
+         
+                
+
+        $val[] = array('mperson', $ccontri, 'val');
+        
+
+        for ($i = 1994; $i <= date("Y"); ++$i) {
+            //echo $i;  
+            $anios[] = array($i, $i);
+        }
+
+        $val[] = array('cbodesde', $pintar->ContenidoCombo($anios, $rows[0]['min']), 'html');
+
+
+        $fun[] = array('
+					// Destroy the combobox
+					$("#cbodesde").combobox("destroy");
+											
+					// Unselect the currently selected option
+					$("#cbodesde option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cbodesde option[value=' . $rows[0]['min'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cbodesde").combobox();');
+
+
+        $val[] = array('cbodesde', $pintar->ContenidoCombo($anios, $rows[0]['min']), 'html');
+
+        $fun[] = array('
+					// Destroy the combobox
+					$("#cbohasta").combobox("destroy");
+											
+					// Unselect the currently selected option
+					$("#cbohasta option:selected").removeAttr("selected");
+						
+					// Select the option you want to select
+					$("#cbohasta option[value=' . $rows[0]['max'] . ']").attr("selected", "selected");
+						
+					// Create the combobox again
+					$("#cbohasta").combobox();');
+
+        $val[] = array('cbohasta', $pintar->ContenidoCombo($anios, $rows[0]['max']), 'html');
+
+        $fun[] = array('$("#txtdesde").numeric();
+					  $("#txthasta").numeric();');
+					 
+       $val[] = array('txtfechproy',date('d/m/Y'),'val');
+        } 
+       $pintar->PintarValor($val);
+       $pintar->EjecutarFuncion($fun);
+       
+       
+
+    
+    }
+
+    public function cargardeudasAction(){
+    	    $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            
+    	$ccontri = $this->_request->getPost('ccontri', '');
+
+     
+        $params[] = $ccontri;
+
+        $dataAdapter = new Model_DataAdapter();
+        $data['data'] = $dataAdapter->executeAssocQuery("pl_function.panel_personaestadoctac", $params);
+          
+          
+        //print_r( explode('*',(String) $rows[0]['tribdeudatodos']));
+
+        /*for ($j=1;$j<count($rows);++$j  ){
+        	 if ($rows[$j]['estado_general']=="0"){
+        	    $tipodeuda[]=array($rows[$j]['ctiprec'] ,$rows[$j]['deuda'] ); 	    
+        	}else{
+  				$tipopagado[]=array($rows[$j]['ctiprec'] ,$rows[$j]['deuda'] ); 	          	        	    
+        	}    	
+        }
+        
+        if (count($tipodeuda)>0){
+         //print_r($tipodeuda);	
+        }
+               
+		if (count($tipopagado)>0){
+		 //print_r($tipopagado); 
+
+			
+			$tmp = array ();
+			
+			foreach ($tipopagado as $row) 
+			    if (!in_array($row,$tmp)) array_push($tmp,$row);
+			
+			//print_r ($tmp);  
+			
+			   */
+       
+        // $data['tipodeuda'] = $rows;
+		       
+        $this->_helper->json($data);
+    }
+		
+}
+    public function borrarcuentaAction() {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $parameters[] = (String) $_POST['mperson'];
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocSelect("pl_function.borrarcuenta", $parameters);
+        }
+    }
+    
+    public function verauditoriaAction(){
+    	
+          $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $parameters[] = (String) $this->_request->getParam('p_nametable','');
+            $parameters[] = (String) $this->_request->getParam('p_idsigma','');
+            
+            
+            $dataAdapter = new Model_DataAdapter();
+            $rows = $dataAdapter->executeAssocQuery("pl_function.listar_tableaudit", $parameters);
+            
+            $pintar=new Libreria_Pintar(); 
+            
+            if(count($rows)>0){
+            	
+            	$val[]=array('lblfechamodaudit',$rows[0]['ddatetm'],'html');
+            	$val[]=array('lblusuarioaudit',$rows[0]['vusernm'],'html');
+            	$val[]=array('lblhostaudit',$rows[0]['vhostnm'],'html');
+            	$val[]=array('txtobservacionaudit',$rows[0]['vobserv'],'html');
+            	$pintar->PintarValor($val);
+            	
+            }
+            
+            //echo count($rows ); 
+        }
+    
+    }
+    
+  public function graficodeudasAction(){
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender();
+    	$this->_helper->getHelper('ajaxContext')->initContext();
+    	if ($this->getRequest()->isXmlHttpRequest()) {
+    		$url = $this->view->util()->getPath();
+    		// Graficas
+    		$vccontri = $this->_request->getPost('ccontri');
+    		 
+    		$store = 'pl_function.panel_personaestadoctac';
+    		$pgraf[] = $vccontri;
+    		$pgraf[] = '5';
+    		 
+    		$cn = new Model_DataAdapter ();
+    		$datosgraf = $cn->ejec_store_procedura_sql($store, $pgraf);
+    		
+    		$store2 = 'pl_function.panel_personaestadoctac';
+    		$pgraf2[] = $vccontri;
+    		$pgraf2[] = '6';
+    		 
+    		$cn2 = new Model_DataAdapter ();
+    		$datosgraf2 = $cn->ejec_store_procedura_sql($store2, $pgraf2);
+    		
+    		$cadgrafcategorias = '';
+    		$cadgrafcancelado = '';
+    		$cadgrafdatospie = '';
+    		$montorecaudado=0.00;
+    		for ($i = 0; $i < count($datosgraf); $i++) {
+    			$cadgrafcategorias .="<category label='" . $datosgraf[$i][2] . "'/>";
+    			$cadgrafcancelado .="<set value='" . $datosgraf[$i][3] . "' />";
+    			$montorecaudado+= $datosgraf[$i][3];
+    		}
+    		
+    		for ($i = 0; $i < count($datosgraf2); $i++) {
+    		$cadgrafdatospie .="<set label='" . $datosgraf2[$i][2] . "' value='" . $datosgraf2[$i][3] . "'/>";
+    		}
+    		
+    		$montorecaudado	=	number_format($montorecaudado, 2, '.', ',');
+    		$htmltotales ="<b>IMPORTE TOTAL DE DEUDA INSOLUTO: $montorecaudado.* &nbsp;<br/>*No Incluyen moras,ni descuento por Amnistias.<b>";
+    		if (count($datosgraf) > 0) {
+    			$cadgrafbarras = "<script >
+				var chart = new FusionCharts('" . $url . "graf/MSColumn3D.swf', 'ChartbarrasId', '500', '400', '0', '0');
+				chart.setDataXML(\"<chart palette='1' caption='ANALISIS POR TIPO DE TRIBUTO' xAxisName='Tipo Deuda' yAxisName='Monto' numberPrefix='S/.' decimals='2'   formatNumberScale='0'    showValues='0'  rotateNames='1'  slantLabels='1' rotateValues='0' placeValuesInside='1' forceYAxisValueDecimals='1'  yAxisValueDecimals='2'>";
+    			$cadgrafbarras .= "<categories>" . $cadgrafcategorias . "</categories>";
+    			$cadgrafbarras .= "<dataset seriesname='Deuda' color='00CC33' showValues='1'>" . $cadgrafcancelado . " </dataset>";
+    			$cadgrafbarras .= "</chart>\");
+				chart.render(\"chartdivbarras\");
+				</script> ";
+    
+    			$cadgrafpie = "<script>
+				var chartpie = new FusionCharts('" . $url . "graf/Pie3D.swf', 'ChartpieId', '500', '200', '0', '0');
+				chartpie.setDataXML(\"<chart palette='1' caption='ANALISIS POR ESTADO DE DEUDA' numberPrefix='S/.' decimals='2' formatNumberScale='0'  enableSmartLabels='1' enableRotation='1' bgColor='99CCFF,FFFFFF' bgAlpha='40,100' bgRatio='0,100' bgAngle='360' showBorder='1' startingAngle='70'>" . $cadgrafdatospie . "</chart>\");
+				chartpie.render(\"chartdivpie\");
+    
+				$('#totalrecaudado').html('".$htmltotales."');
+				</script>";
+    
+    			echo $cadgrafbarras . $cadgrafpie;
+    		}
+    	}
+    }
+
+}
+
+class imgSizer {
+
+    // SET VARIABLES ##############################################################################	
+
+    public $image = ""; // Full orig. img path (ex: $_SERVER['DOCUMENT_ROOT'] . "/path/to/image.jpg")
+    public $type = "width"; // Resize type ('width' or 'height')
+    public $max = 300; // Max width or height (applied to $type)
+    public $quality = 5; // Image quality (1-10)
+    public $square = false; // Crop the image in a square (based on center)
+    public $prefix = ""; // Prefix added to resized images	
+    public $folder = "_sized/"; // Folder for resized images (inside source folder, trailing slash req.)	
+
+    // RESIZE FUNCTION ############################################################################
+
+    public function resize() {
+
+        // Split image parts (path and file)
+        $imgSplit = explode("/", $this->image);
+        $srcName = end($imgSplit);
+        $srcUrl = str_ireplace($srcName, "", $this->image);
+        $srcPath = $_SERVER['DOCUMENT_ROOT'] . str_ireplace($srcName, "", $this->image);
+
+        //echo $srcPath;
+        // Get extension
+        $split = explode(".", $srcName);
+        $ext = strtolower($split[1]);
+
+        // Misc variables
+        $rszUrl = $srcUrl . $this->folder;
+        $rszName = $this->prefix . $srcName;
+        $rszPath = $srcPath . $this->folder;
+        $rszQuality = $this->quality;
+
+        //echo "<br/>1".$rszUrl;
+        //echo "<br/>2".$rszPath;
+        // If save path doesn't exist, create it
+
+        if (!file_exists($rszPath)) {
+            mkdir($rszPath, 0777);
+        }
+
+        // If the resized img doesn't exist, create it
+
+        if (!file_exists("$rszPath/$rszName")) {
+
+            switch ($ext) {
+                case('jpg'): $srcImage = imagecreatefromjpeg("$srcPath$srcName");
+                    break;
+                case('jpeg'): $srcImage = imagecreatefromjpeg("$srcPath$srcName");
+                    break;
+                case('png'): $srcImage = imagecreatefrompng("$srcPath$srcName");
+                    if ($rszQuality == 10) {
+                        $rszQuality = 9;
+                    } break;
+                case('gif'): $srcImage = imagecreatefromgif("$srcPath$srcName");
+                    break;
+            }
+
+            $srcWidth = imagesx($srcImage);
+            $srcHeight = imagesy($srcImage);
+
+            // Determine specs based on type
+
+            if (strtolower($this->type) == "width") {
+                $rszWidth = $this->max;
+                $rszHeight = $srcHeight / ($srcWidth / $rszWidth);
+            } else {
+                $rszHeight = $this->max;
+                $rszWidth = $srcWidth / ($srcHeight / $rszHeight);
+            }
+
+            // Determine specs if crop applied
+
+            $srcX = 0;
+            $srcY = 0;
+            $srcNewWidth = $srcWidth;
+            $srcNewHeight = $srcHeight;
+            $dest = $srcImage;
+
+            // Square crop
+
+            if ($this->square == true) {
+                $rszWidth = $this->max;
+                $rszHeight = $this->max;
+
+                if ($srcHeight > $srcWidth) {
+                    $srcX = 0;
+                    $srcY = floor(($srcHeight - $srcWidth) / 2);
+                    $srcNewHeight = $srcWidth;
+                    $srcNewWidth = $srcWidth;
+                }
+
+                if ($srcWidth > $srcHeight) {
+                    $srcX = floor(($srcWidth - $srcHeight) / 2);
+                    $srcY = 0;
+                    $srcNewHeight = $srcHeight;
+                    $srcNewWidth = $srcHeight;
+                }
+                // Create new image with a new width and height.
+                $dest = imagecreatetruecolor($srcNewWidth, $srcNewHeight);
+
+                // Copy new image to memory after cropping.
+                imagecopy($dest, $srcImage, 0, 0, $srcX, $srcY, $srcNewWidth, $srcNewHeight);
+            }
+
+            $targetImage = imagecreatetruecolor($rszWidth, $rszHeight);
+            imagecopyresampled($targetImage, $dest, 0, 0, 0, 0, $rszWidth, $rszHeight, $srcNewWidth, $srcNewHeight);
+
+            switch ($ext) {
+                case('jpg'): imagejpeg($targetImage, "$rszPath/$rszName", $rszQuality * 10);
+                    break;
+                case('jpeg'): imagejpeg($targetImage, "$rszPath/$rszName", $rszQuality * 10);
+                    break;
+                case('png'): imagepng($targetImage, "$rszPath/$rszName", $rszQuality);
+                    break;
+                case('gif'): imagegif($targetImage, "$rszPath/$rszName");
+                    break;
+            }
+        }
+
+        // Return the resized image
+
+        return($rszUrl . $rszName);
+
+        // Clear temps
+        imagedestroy($dest);
+        imagedestroy($targetImage);
+    }
+
+}
+
+>>>>>>> .r385
