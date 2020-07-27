@@ -12,8 +12,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
                     <label><?php echo $this->dstitulo; ?></label>
                 </div>
                 <br />
-                <table class="ui-table-panelLayout">
-
+                <table class="ui-table-panelLayout" border='0'>
                     <tr>
                         <td style="text-align:left;">
                             N&uacute;mero<br />
@@ -31,14 +30,8 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
                     <tr>
                         <td style="text-align:left;">
                             Tipo<br />
-                            <select id="cboctiprtram" name="cboctiprtram" style="width:100px;">
-                                <?php
-                                //if ($userdata->cidarea != '0000000200') {
-                                echo $this->util()->getComboContenedorCoactivo('0000000619', $this->ctiprtram);
-                                // } else {
-                                //     echo $this->util()->getComboContenedorCoactivo('0000000002', $this->ctiprtram);
-                                // }
-                                ?>
+                            <select id="cboctiprtram" name="cboctiprtram" style="width:150px;">
+                                <?php echo $this->util()->getComboContenedorCoactivo('0000000619', $this->ctiprtram); ?>
                             </select>
                         </td>
                         <td style="text-align:left;">
@@ -63,10 +56,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
                             </button>
                         </td>
                     </tr>
-                    <tr <?php
-                        if ($userdata->cidarea != '0000000200')
-                            echo 'style="display: none;"';
-                        ?>>
+                    <tr style="display: none;">
                         <td style="text-align:left;" colspan="3">
                             Nº Documento Externo<br />
                             <input class="editable ui-text" type="text" id="txtvnrodocini" name="txtvnrodocini" style="width:400px;" maxlength="200" value="<?php echo $this->vnrodocini; ?>" />
@@ -82,11 +72,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
                             </button>
                         </td>
                     </tr>
-                    <tr <?php
-                        if ($userdata->cidarea != '0000000200')
-                            echo 'style="display: none;"';
-                        // echo  $this->ccosini;
-                        ?>>
+                    <tr style="display: row;">
                         <td style="text-align:left;" colspan="3">
                             Area destino<br />
                             <select id="cboccosini" name="cboccosini" style="width:405px;">
@@ -99,9 +85,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
                             Relevancia<br />
                             <select id="cboctiprele" name="cboctiprele" style="width:405px;">
                                 <?php echo $this->util()->getComboContenedorCoactivo('0000000006', $this->ctiprele);
-                                /// echo $this->ctiprele.'dsfg';
                                 ?>
-
                             </select>
                         </td>
                     </tr>
@@ -129,11 +113,12 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
                 <div class="ui-widget ui-state-default ui-corner-top ui-title">
                     <label>Contribuyente</label>
                 </div>
-                <!-- FROM HERE -->
+                <!--Panel Contribuyente desde aqui -->
                 <div class="ui-widget ui-widget-content ui-corner-all" style="width: 95%;margin: 3px;">
                     <div id="panelSesionPersona">
                     </div>
                 </div>
+                <!--Panel Contribuyente hasta aqui -->
             </div>
 
             <div id="panelRegistro3" align="center" class="ui-widget ui-widget-content ui-corner-all " style="width: 500px;margin: 3px;">
@@ -160,10 +145,10 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
         "buttons": "yes",
         "tiptram": "<?php echo $this->ctiprtram; ?>"
     };
-    _postadm = $.post(path + "tramite/paneladministrado", expedparams);
+    _postadm = $.post(path + "coactivo/paneladministrado", expedparams);
     _postadm.success(function(request) {
         $("#panelSesionPersona").html(request);
-        _post = $.post(path + "tramite/panelexpediente", expedparams);
+        _post = $.post(path + "coactivo/panelexpediente", expedparams);
         _post.success(function(request) {
             $("#panelExpedienteInfo").html(request);
             if ($("#hdidsigma").val() != "" && $("#hdidsigma").val() != "0000000000") {
@@ -189,7 +174,6 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
                     $(".clsentrega3").hide();
                     isreadOnly = true;
                 }
-
             }
             var config = {
                 skin: 'v2',
@@ -211,6 +195,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
             CKEDITOR.replace('txtvasunto', config);
         });
     });
+
     if ($("#hdidsigma").val() != "" && $("#hdidsigma").val() !== "0000000000") {
         $("#cboctiprtram").combobox("disable");
     }
@@ -247,11 +232,10 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
     });
 
     function buscardasunto() {
-
-        var ctra = ($("#cboctiprtram").val() == '0000000620' ? '0000000287' : $("#cboctiprtram").val());
-        openDialogData1("tramite/listardasunto", {
+        var ctra = ($("#cboctiprtram").val() == '0000000620' ? '0000000120' : $("#cboctiprtram").val());
+        openDialogData1("coactivo/listardasunto", {
             ctiptra: ctra
-        }, "1000", "500", "Seleccion de asunto...");
+        }, "800", "500", "Seleccion de asunto...");
     }
 
     function clearExpedientePrecedente() {
@@ -268,13 +252,11 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
     }
 
     function retornar() {
-
         if ("<?php echo $this->ctiprtram; ?>" == '0000000620') {
             window.open(path + 'coactivo/bandejadocs', '_self');
         } else {
             window.open(path + 'tramite/listarexpediente', '_self');
         }
-
     }
 
     function guardarExpediente() {
@@ -290,19 +272,9 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
         var dfecdocu = $('#txtdfecdocu').val();
         var nfolios = $('#txtnfolios').val();
         var ctiprtram = $('#cboctiprtram').val();
-        // var
-
-        var ccosini = '';
-        var ccossender = '';
+        var ccosini = $('#cboccosini').val();
+        var ccossender = '0000000287'; //TRAMITE INTERNO DE COACTIVO.MCONTEN
         var nrodocini = $('#txtvnrodocini').val();
-        if ($("#hd_nvcarea").val() == '0000000200') {
-            ccossender = '0000000200'; // XXX
-            ccosini = $('#cboccosini').val();
-        } else {
-            ccossender = '0000000287'; //TRAMITE INTERNO DE COACTIVO.MCONTEN
-            //ccosini = $("#hd_nvcarea").val();
-        }
-        ccosini = $('#cboccosini').val();
         var ctiprele = $('#cboctiprele').val();
         var vnrodocu = $('#txtvnrodocu').val();
         var crepres = $.trim($('#hdcrepres').val());
@@ -312,9 +284,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
         var flagdentrega = $("#hdflagentrega").val();
         var dsadministrado = $.trim($("#showvperson").html());
         var ndias = 0;
-        var listErrors = "";
         if (ctiprtram == "9999999999") {
-            listErrors += "- Seleccionar tipo de tramite<br/>";
             openDialogError("Seleccionar tipo de tramite<br/>", "250", "150", function() {
                 $("#linkctiprtram").focus();
             });
@@ -391,7 +361,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
                 ccossender: ccossender,
                 vnrodocini: nrodocini
             },
-            success: function(requestData) { //Llamada exitosa)
+            success: function(requestData) { //Llamada exitosa
                 if ("<?php echo $this->ctiprtram; ?>" == '0000000620') {
                     window.open(path + 'documentos/bandejadocs', '_self');
                 } else {

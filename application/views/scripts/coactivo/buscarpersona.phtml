@@ -1,0 +1,414 @@
+<div id="panelMantenimientoPersonas" align="center" class="ui-widget ui-widget-content ui-corner-top" style="width: 99%;margin: 3px; height:95%;">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Buscador de personas</label>
+    </div>
+    <div id="dialogBuscarContribuyentePredio">
+        <table class="ui-panelLayout-main">
+            <tr>
+                <td style="vertical-align: top;">
+                    <table border="0" style="margin-left:45px;">
+                        <tr class="rowBuscarContribuyente">
+
+                            <td width="100" style="text-align: left">C&oacute;digo:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="230" style="text-align: left">Apellidos y Nombre:</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="230">&nbsp;</td>
+                            <td width="10">&nbsp;</td>
+                            <td width="230" colspan="5" style="text-align: left">Nro. Documento:</td>
+                            <td width="20">&nbsp;</td>
+                        </tr>
+                        <tr class="rowBuscarContribuyente" id="panelBuscarContribuyente">
+
+                            <td>
+                                <input class="ui-text" id="c_codigocontrib" maxlength="10" style="width:90px" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="3">
+                                <input class="ui-text pnl" id="c_nombrecontrib" style="width:100%" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td colspan="5" style="text-align: left;">
+                                <input class="ui-text pnl" id="c_nrodoc" style="width:50%" />
+                            </td>
+                            <td>
+                                <button id="btnbuscar" name="btnbuscar" onclick="buscarPersona()">Buscar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="13" height="8px"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="dialogMensaje">
+    </div>
+
+    <div id="panelListaPersona" align="center" style="width: 99%;margin: 3px;">
+        <table id="tblListaPersona"></table>
+        <div id="ptblListaPersona"></div>
+    </div>
+    <br /><br />
+</div>
+<script type="text/javascript">
+    optionPersona = {
+        width: 900,
+        height: 250,
+        colNames: [
+            'Codigo',
+            'Persona',
+            'Direccion',
+            'vtipdoc',
+            'Nro Doc',
+            'vpatern',
+            'vmatern',
+            'vnombre',
+            'ctipper',
+            'vtipper',
+            'nestado',
+            'vhostnm',
+            'vusernm',
+            'ddatetm',
+            'ntipers',
+            'ntipper',
+            'cubigeo',
+            'cdenomi',
+            'vdirecc',
+            'vnumero',
+            'vlote',
+            'vmanzan',
+            'vdpto',
+            'vreferen',
+            'ctipdoc',
+            'vtipdoc',
+            'vnrodoc',
+            'dfecnac',
+            'csexo',
+            'dfecinic',
+            'cestciv',
+            'ctelfij',
+            'ctelmov',
+            'vcorreo',
+            'vobserv',
+            'mpredio',
+            'mviadis',
+            'mpoblad',
+            'vinterior',
+            'vletra',
+            'vestacionto',
+            'vdeposito',
+            'vbloque',
+            'vseccion',
+            'vunidinmob',
+        ],
+        colModel: [{
+                name: 'cidpers',
+                index: 'cidpers',
+                width: 100
+            },
+            {
+                name: 'crazsoc',
+                index: 'crazsoc',
+                width: 350
+            },
+            {
+                name: 'direccf',
+                index: 'direccf',
+                hidden: true
+            },
+            {
+                name: 'vtipdoc',
+                index: 'vtipdoc',
+                hidden: true
+            },
+            {
+                name: 'vnrodoc',
+                index: 'vnrodoc',
+                hidden: false
+            },
+            {
+                name: 'vpatern',
+                index: 'vpatern',
+                hidden: true
+            },
+            {
+                name: 'vmatern',
+                index: 'vmatern',
+                hidden: true
+            },
+            {
+                name: 'vnombre',
+                index: 'vnombre',
+                hidden: true
+            },
+            {
+                name: 'ctipper',
+                index: 'ctipper',
+                hidden: true
+            },
+            {
+                name: 'vtipper',
+                index: 'vtipper',
+                hidden: true
+            },
+            {
+                name: 'nestado',
+                index: 'nestado',
+                hidden: true
+            },
+            {
+                name: 'vhostnm',
+                index: 'vhostnm',
+                hidden: true
+            },
+            {
+                name: 'vusernm',
+                index: 'vusernm',
+                hidden: true
+            },
+            {
+                name: 'ddatetm',
+                index: 'ddatetm',
+                hidden: true
+            },
+            {
+                name: 'ntipers',
+                index: 'ntipers',
+                hidden: true
+            },
+            {
+                name: 'ntipper',
+                index: 'ntipper',
+                hidden: true
+            },
+            {
+                name: 'cubigeo',
+                index: 'cubigeo',
+                hidden: true
+            },
+            {
+                name: 'cdenomi',
+                index: 'cdenomi',
+                hidden: true
+            },
+            {
+                name: 'vdirecc',
+                index: 'vdirecc',
+                hidden: true
+            },
+            {
+                name: 'vnumero',
+                index: 'vnumero',
+                hidden: true
+            },
+            {
+                name: 'vlote',
+                index: 'vlote',
+                hidden: true
+            },
+            {
+                name: 'vmanzan',
+                index: 'vmanzan',
+                hidden: true
+            },
+            {
+                name: 'vdpto',
+                index: 'vdpto',
+                hidden: true
+            },
+            {
+                name: 'vreferen',
+                index: 'vreferen',
+                hidden: true
+            },
+            {
+                name: 'ctipdoc',
+                index: 'ctipdoc',
+                hidden: true
+            },
+            {
+                name: 'vtipdoc',
+                index: 'vtipdoc',
+                hidden: true
+            },
+            {
+                name: 'vnrodoc',
+                index: 'vnrodoc',
+                hidden: true
+            },
+            {
+                name: 'dfecnac',
+                index: 'dfecnac',
+                hidden: true
+            },
+            {
+                name: 'csexo',
+                index: 'csexo',
+                hidden: true
+            },
+            {
+                name: 'dfecinic',
+                index: 'dfecinic',
+                hidden: true
+            },
+            {
+                name: 'cestciv',
+                index: 'cestciv',
+                hidden: true
+            },
+            {
+                name: 'ctelfij',
+                index: 'ctelfij',
+                hidden: true
+            },
+            {
+                name: 'ctelmov',
+                index: 'ctelmov',
+                hidden: true
+            },
+            {
+                name: 'vcorreo',
+                index: 'vcorreo',
+                hidden: true
+            },
+            {
+                name: 'vobserv',
+                index: 'vobserv',
+                hidden: true
+            },
+            {
+                name: 'mpredio',
+                index: 'mpredio',
+                hidden: true
+            },
+            {
+                name: 'mviadis',
+                index: 'mviadis',
+                hidden: true
+            },
+            {
+                name: 'mpoblad',
+                index: 'mpoblad',
+                hidden: true
+            },
+            {
+                name: 'vinterior',
+                index: 'vinterior',
+                hidden: true
+            },
+            {
+                name: 'vletra',
+                index: 'vletra',
+                hidden: true
+            },
+            {
+                name: 'vestacionto',
+                index: 'vestacionto',
+                hidden: true
+            },
+            {
+                name: 'vdeposito',
+                index: 'vdeposito',
+                hidden: true
+            },
+            {
+                name: 'vbloque',
+                index: 'vbloque',
+                hidden: true
+            },
+            {
+                name: 'vseccion',
+                index: 'vseccion',
+                hidden: true
+            },
+            {
+                name: 'vunidinmob',
+                index: 'vunidinmob',
+                hidden: true
+            },
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Personas Registradas",
+        ondblClickRow: function(id) {
+            var row = $(this).getRowData(id);
+            dobleclickPersona(row);
+        },
+        onSelectRow: function(id) {
+            var row = $(this).getRowData(id);
+        }
+    };
+
+    nuevaPersona = function() {
+        parameters = {
+            "idsigma": '0000000000'
+        };
+        openDialogData2("mantenimientos/persona", parameters, 460);
+    };
+    verPersona = function() {
+        var selr = $('#tblListaPersona').jqGrid('getGridParam', 'selrow');
+        var row = $("#tblListaPersona").jqGrid('getRowData', selr);
+        if (row.cidpers == "" || row.cidpers == undefined) {
+            openDialogWarning("Seleccione un registro para editar.");
+            return;
+        }
+        parameters = {
+            "idsigma": row.cidpers
+        };
+
+        openDialogData2("mantenimientos/persona", parameters, 460);
+    };
+
+    function buttonsGridPerson() {
+        $("#tblListaPersona")
+            .navGrid('#ptblListaPersona', {
+                edit: false,
+                add: false,
+                del: false,
+                search: false,
+                refresh: false
+            })
+            .navButtonAdd('#ptblListaPersona', {
+                caption: "Agregar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-plus",
+                onClickButton: function() {
+                    nuevaPersona();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd()
+            .navButtonAdd('#ptblListaPersona', {
+                caption: "Editar&nbsp;&nbsp;",
+                buttonicon: "ui-icon-pencil",
+                onClickButton: function() {
+                    verPersona();
+                },
+                position: "last"
+            })
+            .navSeparatorAdd();
+    }
+
+    buscarPersona = function() {
+        var params = '{' +
+            '"@p_nvar1":"' + $("#c_codigocontrib").val() + '",' +
+            '"@p_nvar2":"",' +
+            '"@p_nvar3":"' + $("#c_nombrecontrib").val() + '",' +
+            '"@p_nvar4":"",' +
+            '"@p_nvar5":"' + $("#c_nrodoc").val() + '"' +
+            '}';
+        parameters = {
+            "name": "tblListaPersona",
+            "procedure": "coactivo.buscar_persona",
+            "print": "true",
+            "parameters": params
+        };
+        procesarProcedimientoJSON(
+            "panelListaPersona", "tblListaPersona", optionPersona, parameters, null, buttonsGridPerson
+        );
+    };
+
+    $(function() {
+        // buscarPersona();
+        $("#btnbuscar").button();
+    });
+</script>

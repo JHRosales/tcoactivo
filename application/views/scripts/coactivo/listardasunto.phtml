@@ -1,0 +1,172 @@
+<style type="text/css">
+    input.uppercase {
+        text-transform: uppercase
+    }
+</style>
+<div id="panelListaDAsunto" align="center" style="width: 99%;margin: 3px;">
+    <table id="tblListaDAsunto"></table>
+    <div id="ptblListaDAsunto"></div>
+</div>
+<div id="container" style="display: none; min-width: 400px; height: 150px; margin: 0 auto"></div>
+<script type="text/javascript">
+    function aMays(e, elemento) {
+        tecla = (document.all) ? e.keyCode : e.which;
+        elemento.value = elemento.value.toUpperCase();
+    }
+    optionDAsunto = {
+        width: 770,
+        height: 330,
+        ignoreCase: true,
+        colNames: [
+            'Codigo',
+            'masunto',
+            'Asunto',
+            'ctipasunto',
+            'Dias',
+            'ctipccos',
+            'ctiptra',
+            'nestado',
+            'estacion',
+            'usuario_registro',
+            'fecha_registro',
+            'masunto_estado',
+
+        ],
+        colModel: [{
+                name: 'idsigma',
+                index: 'idsigma',
+                hidden: false
+            },
+            {
+                name: 'masunto',
+                index: 'masunto',
+                hidden: true
+            },
+            {
+                name: 'masunto_descri',
+                index: 'masunto_descri',
+                hidden: false,
+                width: 500
+            },
+            {
+                name: 'ctipasunto',
+                index: 'ctipasunto',
+                hidden: true
+            },
+            {
+                name: 'ndias',
+                index: 'ndias',
+                width: 60
+            },
+            {
+                name: 'ctipccos',
+                index: 'ctipccos',
+                hidden: true
+            },
+            {
+                name: 'ctiptra',
+                index: 'ctiptra',
+                hidden: true
+            },
+            {
+                name: 'nestado',
+                index: 'nestado',
+                hidden: true
+            },
+            {
+                name: 'estacion',
+                index: 'estacion',
+                hidden: true
+            },
+            {
+                name: 'usuario_registro',
+                index: 'usuario_registro',
+                hidden: true
+            },
+            {
+                name: 'fecha_registro',
+                index: 'fecha_registro',
+                hidden: true
+            },
+            {
+                name: 'masunto_estado',
+                index: 'masunto_estado',
+                hidden: true
+            },
+
+
+        ],
+        caption: "&nbsp;&nbsp;&nbsp;Asuntos Registrados",
+        ondblClickRow: function(id) {
+            row = $(this).getRowData(id);
+            $("#hddasunto").val(row.idsigma);
+            $("#txtdasunto").val(row.masunto_descri);
+
+            /**Si el Asunto pertenece a otra Area Destino se cambia el Destino */
+            /* // alert($("#cboccosini").val());
+             // Destruir el combobox
+             $("#cboccosini").combobox("destroy");
+             // Deseleccionar el actual
+             $("#cboccosini option:selected").removeAttr("selected");
+             // Selecciona la opcion del Asunto
+             $("#cboccosini option[value='" + row.ctipccos + "']").attr("selected", "selected");
+             // Crear el combobox nuevamente
+             $("#cboccosini").combobox();*/
+
+            /**Si el Asunto pertenece a otro Tipo se cambia el Tipo */
+            /* // Destruir combobox
+            $("#cboctiprtram").combobox("destroy");
+            // Deseleccionar el actual
+            $("#cboctiprtram option:selected").removeAttr("selected");
+            // Seleccionar el nuevo
+            $("#cboctiprtram option[value='" + row.ctiptra + "']").attr("selected", "selected");
+            // Crear el combobox nuevamente
+            $("#cboctiprtram").combobox();*/
+
+            //Cerrando el Dialog
+            closeDialog("jqDialog1");
+        },
+        onSelectRow: function(id) {
+            row = $(this).getRowData(id);
+        }
+    };
+
+    function buttonsGridDetalleAsunto() {
+        $("#tblListaDAsunto").jqGrid('navGrid', '#ptblListaDAsunto', {
+            edit: false,
+            add: false,
+            del: false,
+            search: false,
+            refresh: false
+        });
+        $("#tblListaDAsunto").jqGrid('filterToolbar', {
+            searchOnEnter: false,
+            stringResult: true,
+            ignoreCase: true,
+            searchOperators: false,
+            defaultSearch: 'cn'
+        });
+
+    }
+
+    buscarDAsunto = function() {
+        parameters = {
+            "name": "tblListaDAsunto",
+            "procedure": "COACTIVO.listar_dasunto",
+            "print": "true",
+            "parameters": '{' +
+                '"p_masunto_estado":"1",' +
+                '"p_idsigma":"%",' +
+                '"p_masunto":"%",' +
+                '"p_ctiptra":"%<?php echo $this->ctiptra; ?>%"' +
+                '}'
+        };
+
+        procesarProcedimientoJSON(
+            "panelListaDAsunto", "tblListaDAsunto", optionDAsunto, parameters, null, buttonsGridDetalleAsunto);
+    };
+
+    $(function() {
+        buscarDAsunto();
+    });
+</script>

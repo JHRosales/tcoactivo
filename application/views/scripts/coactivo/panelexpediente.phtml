@@ -1,0 +1,64 @@
+<table class="ui-table-panelLayout" style="width: 90%; height: 100%; font-size: 90%;" border="0" >
+
+    <tr>
+        <td style="text-align:left;">
+			Tipo :&nbsp;
+        </td>
+		<td style="text-align:left;">
+			<b><span id="showtipo_exped" name="showtipo_exped" ><?php echo $this->dtiprtram; ?></span></b>
+		</td>
+        <td rowspan="5" align="center" valign="top">
+            <img style="" src="<?php echo $this->util()->getImage($this->vindicador); ?>">
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align:left;">
+            N&uacute;mero :&nbsp;
+		</td>
+		<td style="text-align:left;">
+            <b><span id="shownumero_exped" name="shownumero_exped""><?php echo $this->vnrodocu; ?></span></b>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align:left;">
+            Acci&oacute;n :&nbsp;
+		</td>
+		<td style="text-align:left;">
+            <b><span id="showaccion_exped" name="showaccion_exped""><?php echo $this->vaccion; ?></span></b>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align:left;">
+            &Aacute;rea :&nbsp;
+		</td>
+		<td style="text-align:left;">
+            <input type="hidden" id="hdcareapexped" name="hdcareapexped" value="<?php echo $this->carea; ?>" />
+            <b><span id="showarea_exped" name="showarea_exped""><?php echo $this->varea; ?></span></b>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align:left;">
+            Usuario :&nbsp;
+		</td>
+		<td style="text-align:left;">
+            <b><span id="showuser_exped" name="showuser_exped""></span></b>
+        </td>
+    </tr>
+    <tr>
+    	<td colspan="2">
+    	<div class="ui-widget">
+    <div class="ui-state-highlight ui-corner-all" style="margin-top: 0px; padding: 0.7em;">
+        <p>
+            <span class="ui-icon ui-icon-info" style="float:left; margin-right:.3em;">
+
+            </span>
+            <span>
+                Dias transcurridos :<b><?php echo $this->diastranscurridos; ?></b>
+                 - Dias restantes : <b><?php echo $this->diasrestantes; ?></b>
+            </span>
+        </p>
+    </div>
+</div>
+    	</td>
+    </tr>
+</table>

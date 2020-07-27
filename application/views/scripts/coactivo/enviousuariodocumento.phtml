@@ -1,0 +1,82 @@
+
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "  style="width: 340px;margin:1px ; ">
+    <div class="ui-widget ui-state-default ui-corner-top ui-title">
+        <label>Enviar Documento a Usuario</label>
+    </div>
+
+    <table border="0" width="80%">
+        <tr >
+            <td>  <input type="hidden" id="hddselarrrow" name="hddselarrrow" value="" /></td>
+            <td> &nbsp;</td>
+        </tr>
+        <tr>
+            <td><b>Usuario</b></td>
+            <td align ="left" colspan="2"> 
+                 <!--<input id="txtusuario" class="ui-text" style="text-align: left;width: 205px;"/>-->
+                <select id="cbousuario" style="text-align: left;width: 205px;"></select>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Accion</b></td>
+            <td align ="left" colspan="2"> 
+                <select id="cboacciondestino" style="text-align: left;width: 205px;"></select>
+            </td>
+        </tr>
+        <tr >
+            <td colspan="2"> &nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="txtobservacionenvio"></textarea>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+<script>
+    $(document).ready(function() {
+        //$("#txtusuario").inputusuario();
+
+        var hEd = CKEDITOR.instances['txtobservacionenvio'];
+        if (hEd) {
+            CKEDITOR.remove(hEd);
+        }
+        CKEDITOR.replace('txtobservacionenvio', config);
+
+
+
+
+    });
+    function EnviarUsuariodocumentoSave() {
+        var oEditor = CKEDITOR.instances['txtobservacionenvio'];
+        var obs = oEditor.getData();
+
+        var parmter = {};
+        parmter.cidusuario = $('#cbousuario').val();
+        parmter.pctipacc = $('#cboacciondestino').val();
+        parmter.pmdocumentos = $("#hddselarrrow").val();
+        parmter.pvobserv = obs;
+
+        if($('#cbousuario').val()=='9999999999'){
+            openDialogWarning("Seleccione Usuario y Accion",300);
+            return;
+        }
+        if($('#cboacciondestino').val()=='9999999999'){
+            openDialogWarning("Seleccione Usuario y Accion",300);
+            return;
+        }
+
+        $.post(path + "documentos/enviousuariodocumentosave", parmter, updateresultenviousuario, 'json');
+    }
+
+    function updateresultenviousuario(data) {
+        openDialogInfo(data[0].msj, "250", "150", null, function() {
+            closeDialog("jqDialog1");
+            ProcesoBuscarRuta();
+        });
+    }
+
+
+
+</script>

@@ -603,7 +603,7 @@ $vuserlegal =  $userdata->legal;
                     mdocumentos: JSON.stringify(mrutaenvio)
                 }
 
-                openDialogDataFunction1("documentos/enviodocumento", paramtrs, "970", "520", "Enviar Documento", null, {
+                openDialogDataFunction1("coactivo/enviodocumento", paramtrs, "970", "520", "Enviar Documento", null, {
                     'Aceptar': function() {
                         EnviardocumentoSave();
                     },
@@ -664,7 +664,7 @@ $vuserlegal =  $userdata->legal;
                     mdocumentos: JSON.stringify(mrutaenvio),
                     cidarea: $('#cboarea').val()
                 };
-                openDialogDataFunction1("documentos/enviousuariodocumento", paramtrs, "370", "520", "Enviar Documento a Usuario", null, {
+                openDialogDataFunction1("coactivo/enviousuariodocumento", paramtrs, "370", "520", "Enviar Documento a Usuario", null, {
                     'Aceptar': function() {
                         EnviarUsuariodocumentoSave();
                     },
@@ -798,7 +798,7 @@ $vuserlegal =  $userdata->legal;
         var paramtrs = {
             mruta: rowdat.mruta
         };
-        openDialogDataFunction1("documentos/hojaruta", paramtrs, "1200", "625", "Hoja de Ruta ", null, {});
+        openDialogDataFunction1("coactivo/hojaruta", paramtrs, "1200", "625", "Hoja de Ruta ", null, {});
     }
 
     function btndocumt(cellvalue, options, rowObject) {

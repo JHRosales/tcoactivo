@@ -757,7 +757,7 @@ class CoactivoController extends Zend_Controller_Action
     public function expedienteAction()
     {
         $idsigma = '0000000000';
-        $titulo = 'Nuevo Expediente';
+        $titulo = 'Nuevo Expediente Coactivo';
 
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -786,7 +786,7 @@ class CoactivoController extends Zend_Controller_Action
                 $this->view->ctiprtram = $this->_request->getParam('tiptram');
             }
             $this->view->dasunto = '0000000010';
-            $this->view->dasunto_tipasunto = 'DOCUMENTO INTERNO';
+            $this->view->dasunto_tipasunto = 'PROCESO COACTIVO';
 
             $this->view->dtiprtram = '';
             $this->view->nfolios = '';
@@ -814,7 +814,6 @@ class CoactivoController extends Zend_Controller_Action
             $this->view->mdocumento = '';
             $this->view->vmdocumento = '';
         } else {
-
             $parametros[0] =  $idsigma;
             $parametros[1] =  "";
             $parametros[2] =  "";
@@ -873,5 +872,243 @@ class CoactivoController extends Zend_Controller_Action
             $this->view->mdocumento = $datos[0]['mdocumento'];
             $this->view->vmdocumento = $datos[0]['vmdocumento'];
         }
+    }
+    public function listardasuntoAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $cidsigma = $this->_request->getParam('ctryid');
+
+            $ctiptra = $this->_request->getParam('ctiptra');
+
+            if ($ctiptra == '9999999999') {
+                $ctiptra = '';
+            }
+            $this->view->ctiptra = $ctiptra;
+        }
+    }
+    public function paneladministradoAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $buttons = $this->_request->getPost('buttons');
+            $this->view->buttons = $buttons;
+            $idsigma = $this->_request->getPost('idsigma');
+            $tiptram = $this->_request->getPost('tiptram');
+            $this->view->tiptram = $tiptram;
+            if ($idsigma == "") {
+                $idsigma = '0000000000';
+            }
+            $cn = new Model_DataAdapter();
+            $params = null;
+            $params[0] =  $idsigma;
+            $params[1] =  "";
+            $params[2] =  "";
+            $params[3] =  "";
+            $params[4] =  "";
+            $params[5] =  "";
+            $datos = $cn->executeAssocQuery(
+                'coactivo.listar_mdocumento',
+                $params
+            );
+
+            $cdatos = count($datos);
+            if ($cdatos > 0) {
+                $params = null;
+                $params[0] =  $datos[0]['mperson'];
+                $params[1] =  "";
+                $params[2] =  "";
+                $params[3] =  "";
+                $params[4] =  "";
+                $panelPers = $cn->executeAssocQuery(
+                    'coactivo.buscar_persona',
+                    $params
+                );
+                // Panel Administrado
+                $this->view->mperson = $panelPers[0]['cidpers'];
+                $this->view->ctipper = $panelPers[0]['ctipper'];
+                $this->view->vperson = $panelPers[0]['crazsoc'];
+                $this->view->vdirecc = $panelPers[0]['direccf'];
+                $this->view->vdocper = $panelPers[0]['vnrodoc'];
+
+                // -- Representante Legal
+                $this->view->crepres = $datos[0]['crepres'];
+                $this->view->vrepres = $datos[0]['vrepres'];
+                $this->view->vdocrep = $datos[0]['vdocrep'];
+
+                // -- Persona que entrega el documento
+                $this->view->centrega = $datos[0]['centrega'];
+                $this->view->ventrega = $datos[0]['ventrega'];
+                $this->view->dentrega = $datos[0]['dentrega'];
+                $this->view->flagdentrega = $datos[0]['flagdentrega'];
+            }
+        }
+    }
+    public function panelexpedienteAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $idsigma = $this->_request->getPost('idsigma');
+
+            // Panel Expediente
+            //if (count($datos)!=0){
+            if ($idsigma !== '0000000000') {
+                // Obtener datos panel Expediente
+                $cn = new Model_DataAdapter();
+                $params[0] = $idsigma;
+
+                $panelExp = $cn->executeAssocQuery(
+                    'coactivo.panel_expediente',
+                    $params
+                );
+                $cpanelExp = count($panelExp);
+                $params[1] =  "";
+                $params[2] =  "";
+                $params[3] =  "";
+                $params[4] =  "";
+                $params[5] =  "";
+                $userdata = new Zend_Session_Namespace('datosuserlog');
+                $nombrestore = 'coactivo.listar_mdocumento';
+                $datos = $cn->executeAssocQuery(
+                    $nombrestore,
+                    $params
+                );
+
+                $cdatos = count($datos);
+
+
+                if ($cpanelExp > 0) {
+                    $this->view->vaccion = $panelExp[0]['vtipacc'];
+                    $this->view->carea = $panelExp[0]['carea'];
+                    $this->view->varea = $panelExp[0]['varea'];
+                }
+                if ($cdatos > 0) {
+                    $this->view->vnrodocu = $datos[0]['vnrodocu'];
+                    $this->view->vindicador = $datos[0]['vindicador'];
+                    $this->view->dtiprtram = $datos[0]['dtiprtram'];
+                    $this->view->diastranscurridos = $datos[0]['ndias_transcurridos'];
+                    $this->view->diasrestantes = $datos[0]['ndias_restantes'];
+                }
+            } else {
+                $this->view->vindicador = '00ff00-2.png';
+            }
+        }
+    }
+    public function buscarpersonaAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+        }
+    }
+    public function enviodocumentoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $mdocumentos = $this->_request->getParam('mdocumentos');
+
+        $func = new Libreria_Pintar();
+        $val[] = array('cboacciondestino', $this->view->util()->getComboContenedorCoactivo('0000000007', '9999999999'), 'html');
+        $val[] = array('hddselarrrow', $mdocumentos, 'val');
+        //@idsigma
+        $cn = new Model_DataAdapter();
+        $procedure = 'coactivo.obtener_areas_coactivo';
+        $parameters[0] = '0000000001';
+        $records = $cn->executeAssocQuery($procedure, $parameters);
+        $this->view->arrareas = json_encode($records);
+        $parameters[0] =  '0000000007';
+        $dtaccdestino = $cn->executeAssocQuery("coactivo.obtener_tabla", $parameters);
+        $optionsjqcboaccion = '"9999999999" : "SELECCIONAR"';
+        foreach ($dtaccdestino as $values) {
+            $optionsjqcboaccion .= ' , "' . $values["idsigma"] . '" : "' . $values["vdescri"] . '"';
+        }
+        $optionsjqcboaccion = '{' . $optionsjqcboaccion . '}';
+        $this->view->optionsjqcboaccion = $optionsjqcboaccion;
+        $cadgrab = '';
+        $qtDoc = 0;
+        $mdocumento = '';
+        foreach (json_decode($mdocumentos) as $values) {
+            $qtDoc++;
+            $cadgrab .= '|';
+            $cadgrab .=  $values->pmdocumento . '|';
+            $cadgrab .=  $values->pccocsini . '^';
+            $mdocumento = $values->pmdocumento;
+        }
+        $cadgrab = substr($cadgrab, 0, strlen($cadgrab) - 1);
+
+        $ctiprele = '0000000140';
+        $nfolios = 0;
+        if ($mdocumento != '') {
+            $procedurex = 'coactivo.mdocument_get';
+            $parametersx[0] =  $mdocumento;
+            $recordsMdocument = $cn->executeAssocQuery($procedurex, $parametersx);
+            $ctiprele = $recordsMdocument[0]["ctiprele"];
+            $nfolios = $recordsMdocument[0]["nfolios"];
+        }
+
+        $parameters2[0] =  $cadgrab;
+        $parameters2[1] = '^';
+        $parameters2[2] = '|';
+        $recordsareas = $cn->executeAssocQuery("coactivo.areasdestinoxdocumento", $parameters2);
+
+        $xvnrodocu = '';
+        $cadena = '';
+
+        foreach ($recordsareas as $values2) {
+            if ($xvnrodocu != $values2["vnrodocu"]) {
+                $cadena = (strlen($cadena) > 0 ? substr($cadena, 0, strlen($cadena) - 2) : $cadena);
+                $cadena .= ($cadena == '' ? '' : '<br>') . '<b>' . $values2["vnrodocu"] . '</b> : ';
+                $xvnrodocu = $values2["vnrodocu"];
+            }
+            $cadena .= $values2["vcocsdes"] . ", ";
+        }
+        $this->view->qtDoc = $qtDoc;
+        $this->view->ctiprele = $ctiprele;
+        $this->view->nfolios = $nfolios;
+        $this->view->mdocumento = $mdocumento;
+        $cadena = substr($cadena, 0, strlen($cadena) - 2);
+        $val[] = array('cadareas', $cadena, 'html');
+        $func->PintarValor($val);
+        echo '
+		<script>
+			themeComboBox("#cboareadestino");
+			themeComboBox("#cboacciondestino");
+		</script>';
+    }
+    public function enviousuariodocumentoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $mdocumentos = $this->_request->getParam('mdocumentos');
+        $cidarea = $this->_request->getParam('cidarea');
+        $cn = new Model_DataAdapter();
+        $mdocumentosarr = json_decode($mdocumentos);
+        $parameters[0] = $cidarea;
+        $parameters[1] = $mdocumentosarr[0]->pmdocumento;
+        $records = $cn->executeAssocQuery("coactivo.sp_usuario_notdocument_get", $parameters);
+        $combousu = array();
+
+        foreach ($records as $values) {
+            $combousu[] = array($values['cidusuario'], $values['vnombre']);
+        }
+
+        $func = new Libreria_Pintar();
+        $val[] = array('cboacciondestino', $this->view->util()->getComboContenedorCoactivo('0000000007', '9999999999'), 'html');
+        $val[] = array('cbousuario', $func->ContenidoCombo($combousu, "9999999999"), 'html');
+
+        $val[] = array('hddselarrrow', $mdocumentos, 'val');
+
+        $func->PintarValor($val);
+        echo '
+		<script>
+		themeComboBox("#cbousuario");
+		themeComboBox("#cboacciondestino");
+		</script>';
+    }
+    public function hojarutaAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $mruta = $this->_request->getParam('mruta');
+        $this->view->mruta = $mruta;
     }
 }
