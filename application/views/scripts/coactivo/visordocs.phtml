@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .zoomer_wrapper {
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            height: 600px;
+            margin: 0px 0;
+            overflow: hidden;
+            width: 100%;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".zoomer_wrapper").zoomer();
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="mobile-full tablet-full desktop-8 desktop-push-2">
+        <div class="zoomer_wrapper zoomer_basic">
+            <img id="ImgID" src="<?php echo $this->util()->getImageAdjunto($this->img); ?>">
+        </div>
+    </div>
+</body>
+
+</html>

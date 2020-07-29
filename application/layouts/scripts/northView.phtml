@@ -1,118 +1,93 @@
-<?php 
-	$url = $this->util()->getPath();
-	$ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-	$nompers = $ddatosuserlog->nompers;
-    $userlog = $ddatosuserlog->userlogin;
-    $cidarea = $ddatosuserlog->areacod;
-    $area = $ddatosuserlog->arealogin;
+<?php
+$url = $this->util()->getPath();
+$ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+$nompers = $ddatosuserlog->nompers;
+$userlog = $ddatosuserlog->userlogin;
+$cidarea = $ddatosuserlog->areacod;
+$area = $ddatosuserlog->arealogin;
 
 ?>
 <table class="<?php echo $this->util()->getCabecera($nompers); ?>" border="0" style="padding: 0px; margin: 0px;" cellspacing="0" cellpadding="0">
-	<tr >
-		<td ><div class="ui-titleBar" id="div_titulo">
+	<tr>
+		<td>
+			<div class="ui-titleBar" id="div_titulo">
 			</div>
-			<?php if($nompers != '' && $nompers != null && $cidarea=='0000000003') {
+			<?php if ($nompers != '' && $nompers != null && $cidarea == '0000000003') {
 
-					$userdata= new Zend_Session_Namespace('datosuserlog');
-                    //echo $cidarea;
-                    $nombrestore = 'coactivo.resumen_expedientes';
-                    $cn = new Model_DataAdapter();
-                    $params[] =  $cidarea;
-                    $tramiteResum = $cn->executeAssocQuery(
-                        $nombrestore,
-                        $params
-                    );
+				$userdata = new Zend_Session_Namespace('datosuserlog');
+				//echo $cidarea;
+				$nombrestore = 'coactivo.resumen_expedientes';
+				$cn = new Model_DataAdapter();
+				$params[] =  $cidarea;
+				$tramiteResum = $cn->executeAssocQuery(
+					$nombrestore,
+					$params
+				);
 
-                    //$params = null;
-                   // $params[] = $cidarea;
-                   // $docsVencidos = $cn->ejec_store_procedura_sql('coactivo.fx_cantdocvenc', $params);
-                    $npendientes = 0;
-                    $nobservados = 0;
-                    $nvencidos = 0;
-                    if ($this->util()->getRecursiveArraySearch('PENDIENTES', $tramiteResum) !== false){
-                        $npendientes = $tramiteResum[$this->util()->getRecursiveArraySearch('PENDIENTES', $tramiteResum)]['cuenta'];
-                    }
-                    if ($this->util()->getRecursiveArraySearch('OBSERVADOS', $tramiteResum) !== false){
-                        $nobservados = $tramiteResum[$this->util()->getRecursiveArraySearch('OBSERVADOS', $tramiteResum)]['cuenta'];
-                    }
-                    if ($this->util()->getRecursiveArraySearch('VENCIDOS', $tramiteResum) !== false){
-                        $nvencidos = $tramiteResum[$this->util()->getRecursiveArraySearch('VENCIDOS', $tramiteResum)]['cuenta'];
-                    }
-/*
-                    if(1 == 1){
-                        $params = null;
-                        $params[] = array('@p_ccosdes', $cidareagen);
-                        $tramiteResum = $cn->executeAssocQuery(
-                            'tramite.resumen_expedientes',
-                            $params
-                        );
-
-                        $npendientes2 = 0;
-                        $nobservados2 = 0;
-                        $nvencidos2 = 0;
-
-                        if ($this->util()->getRecursiveArraySearch('PENDIENTES', $tramiteResum) !== false){
-                            $npendientes2 = $tramiteResum[$this->util()->getRecursiveArraySearch('PENDIENTES', $tramiteResum)]['cuenta'];
-                        }
-                        if ($this->util()->getRecursiveArraySearch('OBSERVADOS', $tramiteResum) !== false){
-                            $nobservados2 = $tramiteResum[$this->util()->getRecursiveArraySearch('OBSERVADOS', $tramiteResum)]['cuenta'];
-                        }
-                        if ($this->util()->getRecursiveArraySearch('VENCIDOS', $tramiteResum) !== false){
-                            $nvencidos2 = $tramiteResum[$this->util()->getRecursiveArraySearch('VENCIDOS', $tramiteResum)]['cuenta'];
-                        }
-                    }
+				//$params = null;
+				// $params[] = $cidarea;
+				// $docsVencidos = $cn->ejec_store_procedura_sql('coactivo.fx_cantdocvenc', $params);
 				$npendientes = 0;
 				$nobservados = 0;
-				$nvencidos = 0;*/
+				$nvencidos = 0;
+				if ($this->util()->getRecursiveArraySearch('PENDIENTES', $tramiteResum) !== false) {
+					$npendientes = $tramiteResum[$this->util()->getRecursiveArraySearch('PENDIENTES', $tramiteResum)]['cuenta'];
+				}
+				if ($this->util()->getRecursiveArraySearch('OBSERVADOS', $tramiteResum) !== false) {
+					$nobservados = $tramiteResum[$this->util()->getRecursiveArraySearch('OBSERVADOS', $tramiteResum)]['cuenta'];
+				}
+				if ($this->util()->getRecursiveArraySearch('VENCIDOS', $tramiteResum) !== false) {
+					$nvencidos = $tramiteResum[$this->util()->getRecursiveArraySearch('VENCIDOS', $tramiteResum)]['cuenta'];
+				}
 			?>
-			<div id="div-tramite" style="padding:0px 0px 0px 3px;vertical-align: middle;">
-				<button type="button" id="btnTramitePendiente" onclick="expedientesAlerta('PENDIENTES',<?php echo $npendientes;?>)">
-					<img width="12" height="12" src="<?php echo $this->util()->getImage("circle_green_24_ns.png");?>">
-					Tramite (<?php echo $npendientes;?>)
-				</button>
-				<button type="button" id="btnTramiteObservado" onclick="expedientesAlerta('OBSERVADOS',<?php echo $nobservados;?>)">
-					<img width="12" height="12" src="<?php echo $this->util()->getImage("circle_yellow_24_ns.png");?>">
-					Observados (<?php echo $nobservados;?>)
-				</button>
-				<button type="button" id="btnTramiteVencido" onclick="expedientesAlerta('VENCIDOS',<?php echo $nvencidos;?>)">
-					<img width="12" height="12" src="<?php echo $this->util()->getImage("circle_red_24_ns.png");?>">
-					Vencidos (<?php echo $nvencidos;?>)
-				</button>
+				<div id="div-tramite" style="padding:0px 0px 0px 3px;vertical-align: middle;">
+					<button type="button" id="btnTramitePendiente" onclick="expedientesAlerta('PENDIENTES',<?php echo $npendientes; ?>)">
+						<img width="12" height="12" src="<?php echo $this->util()->getImage("circle_green_24_ns.png"); ?>">
+						Tramite (<?php echo $npendientes; ?>)
+					</button>
+					<button type="button" id="btnTramiteObservado" onclick="expedientesAlerta('OBSERVADOS',<?php echo $nobservados; ?>)">
+						<img width="12" height="12" src="<?php echo $this->util()->getImage("circle_yellow_24_ns.png"); ?>">
+						Observados (<?php echo $nobservados; ?>)
+					</button>
+					<button type="button" id="btnTramiteVencido" onclick="expedientesAlerta('VENCIDOS',<?php echo $nvencidos; ?>)">
+						<img width="12" height="12" src="<?php echo $this->util()->getImage("circle_red_24_ns.png"); ?>">
+						Vencidos (<?php echo $nvencidos; ?>)
+					</button>
 
-				<?php
-				$arr = array('1','2');
-				if (in_array($ntramite,array('1','2'))){
-					echo '<button onclick="verTramitesGeneral()" class="ui-state-error">Resumen General</button>';
-				}
-				?>
-
-			</div>
-			<script>
-				function expedientesAlerta(xestado, xcant){
-					if (xcant == 0){
-						openDialogWarning("No tiene expedientes en esta clasificaci&oacute;n. (" + xestado + ")");
-						return;
+					<?php
+					$arr = array('1', '2');
+					if (in_array($ntramite, array('1', '2'))) {
+						echo '<button onclick="verTramitesGeneral()" class="ui-state-error">Resumen General</button>';
 					}
-					var param = {
-						"cidarea": "<?php echo $cidarea;?>",
-						"vestado": xestado
-					};
-					var _post = $.post(path + "tramite/listarexpediente", param);
-					_post.success(function(request){
-						$("#west").html(request);
-					});
-				}
-			</script>
-			<?php }?>
+					?>
+
+				</div>
+				<script>
+					function expedientesAlerta(xestado, xcant) {
+						if (xcant == 0) {
+							openDialogWarning("No tiene expedientes en esta clasificaci&oacute;n. (" + xestado + ")");
+							return;
+						}
+						var param = {
+							"cidarea": "<?php echo $cidarea; ?>",
+							"vestado": xestado
+						};
+						var _post = $.post(path + "coactivo/listarexpediente", param);
+						_post.success(function(request) {
+							$("#west").html(request);
+						});
+					}
+				</script>
+			<?php } ?>
 		</td>
 		<td class="left">&nbsp;</td>
 		<td class="center" style="width: 400px; text-align: center; vertical-align: middle;">
-			<?php if($nompers != '' && $nompers != null) {?>
-            <input type="hidden" id="hd_usuario_login" name="hd_usuario_login" value="<?php echo $userlog?>"/>
-			Bienvenido: <b><?php echo $nompers;?></b> 
-			<!-- onclick="window.close();" -->
-			<br/> Fecha: <b><?php echo date("d-m-Y"); ?></b> | <a title="Cerrar Sesi&oacute;n" href="<?php echo $this->util()->getLink('logeo/logout'); ?>" >Cerrar Sesi&oacute;n</a>
-			| <a href="#" title="Cambiar Contrase&ntilde;a" onclick="openventcambiarpsswd();">Cambiar Contrase&ntilde;a</a>
+			<?php if ($nompers != '' && $nompers != null) { ?>
+				<input type="hidden" id="hd_usuario_login" name="hd_usuario_login" value="<?php echo $userlog ?>" />
+				Bienvenido: <b><?php echo $nompers; ?></b>
+				<!-- onclick="window.close();" -->
+				<br /> Fecha: <b><?php echo date("d-m-Y"); ?></b> | <a title="Cerrar Sesi&oacute;n" href="<?php echo $this->util()->getLink('logeo/logout'); ?>">Cerrar Sesi&oacute;n</a>
+				| <a href="#" title="Cambiar Contrase&ntilde;a" onclick="openventcambiarpsswd();">Cambiar Contrase&ntilde;a</a>
 			<?php } ?>
 		</td>
 	</tr>

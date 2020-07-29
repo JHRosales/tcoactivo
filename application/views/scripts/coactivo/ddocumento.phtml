@@ -1,0 +1,623 @@
+<table border="0">
+    <tr>
+        <td style="vertical-align:top;">
+            <div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all " style="width: 515px;margin: 5px 8px 8px 0px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                    <label>Carpeta Documentaria</label>
+                </div>
+
+                <table border="0" width="515px">
+
+                    <tr>
+                        <td><b>Nro. Expediente</b></td>
+                        <td align="left">
+                            <input type="text" id="mtxtnroexpe" class="ui-text" style="text-align: left;width: 150px;" readonly="true" disabled />
+                        </td>
+                        <td><b>Fec.Ingreso</b></td>
+                        <td align="left">
+                            <input type="text" id="mtxtfecingreso" class="ui-text" style="text-align: left;width: 100px; " readonly="true" disabled />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Folios</b></td>
+                        <td align="left" colspan="4"><input type="text" id="mtxtfolios" class="ui-text" style="text-align: left; width: 30px;" readOnly="true" disabled />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Administrado</b></td>
+                        <td align="left" colspan="3">
+                            <input type="text" id="mtxtrecurrente" class="ui-text" style="text-align: left;width: 94%;" readonly="true" disabled />
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" id="cidsigma" value="<?php echo $this->cidsigma; ?>" />
+                <input type="hidden" id="ctipjerar" value="<?php echo $this->ctipjerar; ?>" />
+                <input type="hidden" id="mdocumento" value="<?php echo $this->mdocumento; ?>" />
+                <input type="hidden" id="stconcluido" value="<?php echo $this->stconcluido; ?>" />
+            </div>
+
+            <div id="panelResultDoc">
+                <table id="tblResultDoc">
+                </table>
+                <div id="ptblResultDoc">
+                </div>
+                <input type="hidden" id="ctblResultDoc" name="ctblResultDoc" value="" />
+            </div>
+        </td>
+        <td style="vertical-align:top;">
+
+            <div id="panelbusquedaAdjunto" align="center" class="ui-widget ui-widget-content ui-corner-all " style="width: 440px;margin: 5px 8px 8px 0px;">
+                <div class="ui-widget ui-state-default ui-corner-top ui-title">
+                    <label>Observacion</label>
+                </div>
+
+                <table border="0" width="440px">
+                    <tr>
+                        <td align="center" height="72px">
+                            <div id="divobservacion"></div>
+                        </td>
+
+                    </tr>
+                </table>
+
+            </div>
+
+            <div id="panelResultDocAdjunto">
+                <table id="tblResultDocAdjunto">
+                </table>
+                <div id="ptblResultDocAdjunto">
+                </div>
+                <input type="hidden" id="ctblResultDocAdjunto" name="ctblResultDocAdjunto" value="" />
+            </div>
+        </td>
+    </tr>
+</table>
+<div id="div_requisitos"></div>
+
+<script>
+    var isEditable = "<?php echo $this->editable; ?>"; //# 0 : No Editable / 1: Editable
+    $(document).ready(function() {
+        gridConfigDoc = {
+            height: 230,
+            width: 515,
+            colNames: ["Cod. Documento", "ctipdocu", "Tipo Documento", "Nro Documento", "Fecha Doc.", "Observacion", "ctiprele", "Relevancia", "Folio", "ctipjerar", "cidsigma", ""],
+            colModel: [{
+                    name: 'idsigma',
+                    index: 'idsigma',
+                    width: 100,
+                    align: 'center',
+                    hidden: true
+                },
+                {
+                    name: 'ctipdocu',
+                    index: 'ctipdocu',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'dstipdocu',
+                    index: 'dstipdocu',
+                    width: 130,
+                    align: 'left'
+                },
+                {
+                    name: 'vnrodocu',
+                    index: 'vnrodocu',
+                    width: 110,
+                    align: 'left'
+                },
+                {
+                    name: 'dfecdocu',
+                    index: 'dfecdocu',
+                    width: 70,
+                    align: 'left'
+                },
+                {
+                    name: 'vobserv',
+                    index: 'vobserv',
+                    width: 200,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'ctiprele',
+                    index: 'ctiprele',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'vtiprele',
+                    index: 'vtiprele',
+                    width: 90,
+                    align: 'left'
+                },
+                {
+                    name: 'vfolios',
+                    index: 'vfolios',
+                    width: 30,
+                    align: 'left'
+                },
+                {
+                    name: 'ctipjerar',
+                    index: 'ctipjerar',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'cidsigma',
+                    index: 'cidsigma',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'trash',
+                    index: 'trash',
+                    width: 20
+                }
+            ],
+            caption: " Documentos",
+            rowNum: 10,
+            rownumbers: true,
+            onSelectRow: function(id) {
+                var row = jQuery("#tblResultDoc").jqGrid('getRowData', id);
+                ProcesoBuscarDocAdjunto(row.idsigma);
+                $("#divobservacion").html(row.vobserv);
+            },
+            gridComplete: function() {
+                isGridComplete = true;
+                $("#tblResultDoc").jqGrid('setSelection', 1, true);
+
+                var ids = jQuery("#tblResultDoc").jqGrid('getDataIDs');
+                if (isEditable == '1') {
+                    for (var i = 0; i < ids.length; i++) {
+                        var cl = ids[i];
+                        var rowdat = jQuery("#tblResultDoc").jqGrid('getRowData', cl);
+                        butttrash = '<div title="Eliminar ' + rowdat.dstipdocu + ' - ' + rowdat.vnrodocu + '" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\')" onclick="eliminarDDocumento(\'' + rowdat.idsigma + '\');"><span class="ui-icon ui-icon-trash"></span></div>';
+
+                        jQuery("#tblResultDoc").jqGrid('setRowData', ids[i], {
+                            trash: butttrash
+                        });
+                    }
+                }
+
+            }
+        };
+
+        inicializarGrid("tblResultDoc", gridConfigDoc);
+        navPanelDocumentos();
+        ProcesoBuscarDoc();
+
+
+        gridConfigDocAdjunto = {
+            height: 230,
+            width: 440,
+            colNames: ["idsigma", "ddocumento", "Nro.", "Adjunto", "Adjunto2", "", ""],
+            colModel: [{
+                    name: 'idsigma',
+                    index: 'idsigma',
+                    width: 100,
+                    align: 'center',
+                    hidden: true
+                },
+                {
+                    name: 'ddocumento',
+                    index: 'ddocumento',
+                    width: 20,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'norden',
+                    index: 'norden',
+                    width: 40,
+                    align: 'left'
+                },
+                {
+                    name: 'vadjunto',
+                    index: 'vadjunto',
+                    width: 305,
+                    align: 'left',
+                    formatter: linkadjunto
+                },
+                {
+                    name: 'vadjunto',
+                    index: 'vadjunto',
+                    width: 305,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'visor',
+                    index: 'visor',
+                    width: 20
+                },
+                {
+                    name: 'trash',
+                    index: 'trash',
+                    width: 20
+                }
+            ],
+            caption: " Adjunto",
+            rowNum: 10,
+            rownumbers: true,
+            gridComplete: function() {
+                isGridComplete = true;
+                $("#tblResultDocAdjunto").jqGrid('setSelection', 1, true);
+
+                var ids = jQuery("#tblResultDocAdjunto").jqGrid('getDataIDs');
+
+                for (var i = 0; i < ids.length; i++) {
+                    var cl = ids[i];
+                    var rowdat = jQuery("#tblResultDocAdjunto").jqGrid('getRowData', cl);
+                    buttvisor = '<div title="Visor de ' + rowdat.vadjunto + '" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\')" onclick="visorarchivo(\'' + rowdat.ddocumento + '_' + rowdat.vadjunto + '\');"><span class="ui-icon ui-icon-search"></span></div>';
+
+                    jQuery("#tblResultDocAdjunto").jqGrid('setRowData', ids[i], {
+                        visor: buttvisor
+                    });
+                    if (isEditable == '1') {
+                        butttrash = '<div title="Eliminar ' + rowdat.vadjunto + '" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\')" onclick="eliminarDocAdjunto(\'' + rowdat.idsigma + '\');"><span class="ui-icon ui-icon-trash"></span></div>';
+
+                        jQuery("#tblResultDocAdjunto").jqGrid('setRowData', ids[i], {
+                            trash: butttrash
+                        });
+                    }
+                }
+
+            }
+        };
+
+        inicializarGrid("tblResultDocAdjunto", gridConfigDocAdjunto);
+
+    });
+
+    function InsertarDocRequisito(xctipdocreq) {
+        openDialogDataFunction3(
+            "coactivo/ddocumentomante", {
+                type: "N",
+                mdocumento: $('#mdocumento').val(),
+                ddocument: "",
+                cidsigma: $('#cidsigma').val(),
+                ctipjerar: $('#ctipjerar').val(),
+                ctipdocreq: xctipdocreq,
+                ccate: "2"
+            },
+            "980",
+            "630",
+            "Nuevo Documento (Digitalizacion)",
+            function() {}, {
+                'Aceptar': function() {
+                    DdocumentoSave('N');
+                },
+                'Cancelar': function() {
+                    closeDialog("jqDialog3");
+                }
+            }
+        );
+    }
+
+
+
+    var btnInsertarDoc = {
+            caption: "",
+            title: "Agregar Documento",
+            buttonicon: "ui-icon-plus",
+            onClickButton: function() {
+                InsertarDoc("2");
+            }
+        },
+
+        btnEditarDoc = {
+            caption: "",
+            title: "Editar Documento seleccionado",
+            buttonicon: "ui-icon-pencil",
+            onClickButton: function() {
+                var gsr = $("#tblResultDoc").jqGrid('getGridParam', 'selrow');
+                if (gsr) {
+                    var row = jQuery("#tblResultDoc").jqGrid('getRowData', gsr);
+                    openDialogDataFunction3("coactivo/ddocumentomante", {
+                        type: "M",
+                        mdocumento: $('#mdocumento').val(),
+                        ddocument: row.idsigma,
+                        cidsigma: $('#cidsigma').val(),
+                        ctipjerar: $('#ctipjerar').val()
+                    }, "980", "630", "Modificar Documento " + row.dstipdocu, null, {
+                        'Aceptar': function() {
+                            DdocumentoSave('M');
+                        },
+                        'Cancelar': function() {
+                            closeDialog("jqDialog3");
+                        }
+                    });
+                } else {
+                    openDialogWarning("Seleccione la fila a editar.", 380, 150);
+                }
+            }
+        },
+        btnEliminarDoc = {
+            caption: "",
+            title: "Eliminar el Documento seleccionado",
+            buttonicon: "ui-icon-trash",
+            onClickButton: function() {
+                var gsr = $("#tblResultDoc").jqGrid('getGridParam', 'selrow');
+                if (gsr) {
+                    var row = jQuery("#tblResultDoc").jqGrid('getRowData', gsr);
+                    openDialogConfirm1("\u00BFEst\u00E1 seguro de eliminar", 350, {
+                        "Si": function() {
+                            var parmter = {};
+                            parmter.type = "E";
+                            parmter.id_sigma = row.idsigma;
+
+                            closeDialog("jqDialogConfirmacion1");
+                        },
+                        "No": function() {
+                            closeDialog("jqDialogConfirmacion1");
+                        }
+                    });
+                } else {
+                    openDialogWarning("Seleccione la fila a eliminar.", 380, 150);
+                }
+            }
+        },
+        btnActualizarDoc = {
+            caption: "Actualizar&nbsp;&nbsp;",
+            title: "Actualizar",
+            buttonicon: "ui-icon-arrowrefresh-1-w",
+            onClickButton: function() {
+                ProcesoBuscarDoc();
+            }
+        };
+
+    function navPanelDocumentos() {
+        $("#tblResultDoc").jqGrid('navGrid', '#ptblResultDoc', {
+            edit: false,
+            add: false,
+            del: false,
+            search: false,
+            refresh: false
+        });
+        if (isEditable == '1') {
+            $("#tblResultDoc").jqGrid('navButtonAdd', '#ptblResultDoc', btnInsertarDoc);
+            $("#tblResultDoc").jqGrid('navSeparatorAdd', '#ptblResultDoc');
+            $("#tblResultDoc").jqGrid('navButtonAdd', '#ptblResultDoc', btnEditarDoc);
+        }
+
+        //$("#tblResultDoc").jqGrid('navSeparatorAdd', '#ptblResultDoc');
+        //$("#tblResultDoc").jqGrid('navButtonAdd', '#ptblResultDoc', btnEliminarDoc);
+        //$("#tblResultDoc").jqGrid('navSeparatorAdd', '#ptblResultDoc');
+        //$("#tblResultDoc").jqGrid('navButtonAdd', '#ptblResultDoc', btnActualizarDoc);
+    };
+
+    function InsertarDoc(pCate) {
+        openDialogDataFunction3(
+            "coactivo/ddocumentomante", {
+                type: "N",
+                mdocumento: $('#mdocumento').val(),
+                ddocument: "",
+                cidsigma: $('#cidsigma').val(),
+                ctipjerar: $('#ctipjerar').val(),
+                ccate: pCate
+            },
+            "980",
+            "630",
+            "Nuevo Documento " + (pCate === "1" ? "(Creacion)" : "(Digitalizacion)"),
+            function() {}, {
+                'Aceptar': function() {
+                    DdocumentoSave('N');
+                },
+                'Cancelar': function() {
+                    closeDialog("jqDialog3");
+                }
+            }
+        );
+    };
+
+    function ProcesoBuscarDoc() {
+        var paramtrs = '{' +
+            '"pcidsigma":"<?php echo $this->cidsigma; ?>",' +
+            '"pctipjerar":"<?php echo $this->ctipjerar; ?>",' +
+            '"pidsigma":"",' +
+            '"pvusernm":"<?php echo $this->cidusuario; ?>"' +
+            '}';
+        parameters = {
+            "name": "tblResultDoc",
+            "procedure": "coactivo.ddocument_get",
+            "print": "true",
+            "parameters": paramtrs
+        };
+
+        procesarConsultaSubProceso('registrar', parameters, procesoDoc, 'json');
+
+        var _post = $.post(path + "coactivo/dasuntoreq", {
+            dasunto: "<?php echo $this->dasunto ?>",
+            mdocumento: "<?php echo $this->mdocumento; ?>"
+        });
+        _post.success(function(request) {
+            $("#div_requisitos").html(request);
+        });
+
+    };
+
+    function procesoDoc(request) {
+        var
+            records = (request === null ? 0 : request.length),
+            bindkeysDoc = {
+                "onEnter": OnEnterKeyDoc
+            },
+            gridConfigdoc2 = $.extend(gridConfigDoc, {
+                data: request,
+                datatype: "local"
+            });
+
+        $("#panelResultDoc").html('<table id="tblResultDoc"></table><div id="ptblResultDoc"></div><input type="hidden" id="ctblResultDoc" name="ctblResultDoc" value="' + records + '" />');
+        inicializarGrid("tblResultDoc", gridConfigdoc2, bindkeysDoc);
+        navPanelDocumentos();
+
+    };
+
+    OnEnterKeyDoc = function() {};
+
+    ProcesoBuscarDocAdjunto = function(pddocumento) {
+        var paramtrs = '{' +
+            '"pddocumento":"' + pddocumento + '"' +
+            '}';
+        parameters = {
+            "name": "tblResultDocAdjunto",
+            "procedure": "COACTIVO.madjunto_get",
+            "print": "true",
+            "parameters": paramtrs
+        };
+        procesarConsultaSubProceso('registrar', parameters, procesoDocAdjunto, 'json');
+    };
+
+
+    procesoDocAdjunto = function(request) {
+        var records = (request == null ? 0 : request.length),
+            bindkeysDoc = {
+                "onEnter": OnEnterKeyDoc
+            },
+            gridConfigdocAdjunto2 = $.extend(gridConfigDocAdjunto, {
+                data: request,
+                datatype: "local"
+            });
+
+        $("#panelResultDocAdjunto").html('<table id="tblResultDocAdjunto"></table><div id="ptblResultDocAdjunto"></div><input type="hidden" id="ctblResultDocAdjunto" name="ctblResultDocAdjunto" value="' + records + '" />');
+        inicializarGrid("tblResultDocAdjunto", gridConfigdocAdjunto2);
+    };
+
+
+    function linkadjunto(cellvalue, options, rowObject) {
+        return '<a href="#" onclick="linkadjuntoOpen(\'' + options.rowId + '\',\'' + cellvalue + '\')" > ' + cellvalue + '</a>'
+    }
+
+    function linkadjuntoOpen(rowId, cellvalue) {
+        var row = jQuery("#tblResultDocAdjunto").jqGrid('getRowData', rowId);
+        window.open(path + "coactivo/forzardescarga?file=" + row.ddocumento + '_' + cellvalue);
+    }
+
+    function eliminarDocAdjunto(madjunto) {
+        openDialogConfirm1('Esta seguro de eliminar el adjunto seleccionado ?', 400, {
+            " Si ": function() {
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "coactivo/docadjuntodelete", {
+                    pmadjunto: madjunto
+                }, function(dt) {
+                    openDialogConfirm1(dt.msj, 300, {
+                        "Aceptar": function() {
+                            closeDialog("jqDialogConfirmacion1");
+                            var selr = jQuery('#tblResultDoc').jqGrid('getGridParam', 'selrow');
+                            $("#tblResultDoc").jqGrid('setSelection', selr, true);
+                        }
+                    });
+
+                }, 'json');
+            },
+            " No ": function() {
+                closeDialog("jqDialogConfirmacion1");
+            }
+        });
+
+
+    }
+
+    function eliminarDDocumento(ddocumento) {
+        openDialogConfirm1('Se eliminara el documento seleccionado y sus adjuntos, <br>esta seguro de continuar ?', 400, {
+            " Si ": function() {
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "coactivo/ddocumentodelete", {
+                    pddocumento: ddocumento
+                }, function(dt) {
+                    openDialogConfirm1(dt.msj, 250, {
+                        "Aceptar": function() {
+                            closeDialog("jqDialogConfirmacion1");
+                            procesoDocAdjunto({});
+                            ProcesoBuscarDoc();
+                        }
+                    });
+
+                }, 'json');
+            },
+            " No ": function() {
+                closeDialog("jqDialogConfirmacion1");
+            }
+        });
+    }
+
+    function visorarchivo(nom_archivo) {
+        var page = '';
+        arrarchivo = nom_archivo.split(".");
+        extarchivo = arrarchivo[1];
+
+        if (extarchivo == 'png' || extarchivo == 'jpg' || extarchivo == 'gif') {
+
+            if (navigator.appName == 'Microsoft Internet Explorer') {
+
+                var ver = getInternetExplorerVersion();
+                if (ver > -1) {
+                    // alert(ver);
+                    if (ver <= 9.0) {
+                        page = jQuery.scriptPath + 'uploadDdocuments/' + nom_archivo;
+                        var $dialog = $('<div></div>')
+                            .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
+                            .dialog({
+                                autoOpen: false,
+                                modal: true,
+                                height: 700,
+                                width: 800,
+                                title: "Visor de Archivos"
+                            });
+                        $dialog.dialog('open');
+
+                    }
+                } else {
+                    page = path + "coactivo/visordocs?img=" + nom_archivo;
+                    var $dialog = $('<div></div>')
+                        .load(page)
+                        .dialog({
+                            autoOpen: false,
+                            modal: true,
+                            height: 650,
+                            width: 800,
+                            title: "Visor de Archivos"
+                        });
+                    $dialog.dialog('open');
+
+
+                }
+            } else {
+
+                page = path + "coactivo/visordocs?img=" + nom_archivo;
+                var $dialog = $('<div></div>')
+                    .load(page)
+                    .dialog({
+                        autoOpen: false,
+                        modal: true,
+                        height: 650,
+                        width: 800,
+                        title: "Visor de Archivos"
+                    });
+                $dialog.dialog('open');
+
+            }
+
+
+
+
+        } else {
+            page = jQuery.scriptPath + 'uploadDdocuments/' + nom_archivo;
+            var $dialog = $('<div></div>')
+                .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
+                .dialog({
+                    autoOpen: false,
+                    modal: true,
+                    height: 700,
+                    width: 800,
+                    title: "Visor de Archivos"
+                });
+            $dialog.dialog('open');
+        }
+    }
+</script>

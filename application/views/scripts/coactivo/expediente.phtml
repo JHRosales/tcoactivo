@@ -338,7 +338,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: path + "tramite/guardarexpediente/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
+            url: path + "coactivo/guardarexpediente/", // Ruta donde se encuentra nuestro action que procesa la peticion XmlHttpRequest
             data: {
                 idsigma: idsigma,
                 dasunto: dasunto,
@@ -363,7 +363,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
             },
             success: function(requestData) { //Llamada exitosa
                 if ("<?php echo $this->ctiprtram; ?>" == '0000000620') {
-                    window.open(path + 'documentos/bandejadocs', '_self');
+                    window.open(path + 'coactivo/bandejadocs', '_self');
                 } else {
                     window.open(path + 'tramite/listarexpediente', '_self');
                 }

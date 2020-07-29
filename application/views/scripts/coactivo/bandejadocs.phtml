@@ -4,7 +4,7 @@ $userdata = new Zend_Session_Namespace('datosuserlog');
 $vuserlegal =  $userdata->legal;
 ?>
 <!--liz fin obtener flglegal-->
-<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all " style="width: 99.8%;margin-top:2px;margin-left : 0px;margin-right :0px;margin-bottom:2px;">
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all " style="width: 100%;margin-top:2px;margin-left : 0px;margin-right :0px;margin-bottom:2px;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
         <table border="0" width="100%">
             <tr>
@@ -37,8 +37,6 @@ $vuserlegal =  $userdata->legal;
                             <select id="cbo_bus">
                                 <option value="1">FECHA</option>
                                 <option value="2">Nº EXPEDIENTE</option>
-                                <option value="3">Nº DOCUMENTO ADJUNTO</option>
-                                <option value="4">Nº DOCUMENTO EXTERNO</option>
                             </select>
                         </td>
                         <td>
@@ -57,18 +55,6 @@ $vuserlegal =  $userdata->legal;
                                     <td width="50"><b>Nro Exp.</b></td>
                                     <td>
                                         <input type="text" id="id_nroExp" class="ui-text" style="text-align: left;width: 250px;" />
-                                    </td>
-                                </tr>
-                                <tr class="selFiltroDoc" style="display: none;">
-                                    <td width="50"><b>Nro Doc.</b></td>
-                                    <td>
-                                        <input type="text" id="id_nroDoc" class="ui-text" style="text-align: left;width: 250px;" />
-                                    </td>
-                                </tr>
-                                <tr class="selFiltroDocex" style="display: none;">
-                                    <td width="50"><b>Nro Doc.</b></td>
-                                    <td>
-                                        <input type="text" id="id_nroDocex" class="ui-text" style="text-align: left;width: 250px;" />
                                     </td>
                                 </tr>
                             </table>
@@ -105,16 +91,14 @@ $vuserlegal =  $userdata->legal;
 <script type="text/javascript">
     var filtro = {
         FECHA: "1",
-        EXPED: "2",
-        DOC: "3",
-        DOCEX: "4"
+        EXPED: "2"
     };
 
     gridConfigRuta = {
         height: 300,
         width: '20%',
         ignoreCase: true,
-        colNames: ["", "idsigma", "mdocumento", "Nro", "Administrado", "Asunto Detallado", "Recep", "st_recep2", "Fec. Envio", "Fec. Recepcion", "ccocsini", "Area Inicio", "ccocsdes", "Area Destino", "Origen", "vobserv", "ctipacc", "Accion", "Ruta", "mruta", "ctipasunto", "Adj.", "Docs.", "Cerrar", "Concluir", "stConcluir2", "ctiptram", '', "Elim."],
+        colNames: ["", "idsigma", "mdocumento", "Nro", "Administrado", "Asunto Detallado", "Recep", "st_recep2", "Fec. Envio", "Fec. Recepcion", "ccocsini", "Area Inicio", "ccocsdes", "Area Destino", "Origen", "vobserv", "ctipacc", "Accion", "Ruta", "mruta", "ctipasunto", "Adj.", "Docs.", "Cerrar", "Concluir", "stConcluir2", "ctiptram", "Elim."],
         colModel: [{
                 name: 'bnd',
                 index: 'bnd',
@@ -141,7 +125,7 @@ $vuserlegal =  $userdata->legal;
             {
                 name: 'vnrodocu',
                 index: 'vnrodocu',
-                width: 130,
+                width: 105,
                 align: 'left'
             },
             {
@@ -161,7 +145,7 @@ $vuserlegal =  $userdata->legal;
             {
                 name: 'st_recep',
                 index: 'st_recep',
-                width: 30,
+                width: 50,
                 align: 'center',
                 formatter: chkFormatrecep,
                 search: false
@@ -219,7 +203,7 @@ $vuserlegal =  $userdata->legal;
             {
                 name: 'orgdes',
                 index: 'orgdes',
-                width: 210,
+                width: 180,
                 align: 'left'
             },
             {
@@ -245,7 +229,7 @@ $vuserlegal =  $userdata->legal;
             {
                 name: 'btnmruta',
                 index: 'btnmruta',
-                width: 30,
+                width: 35,
                 align: 'center',
                 formatter: btnruta,
                 search: false
@@ -307,14 +291,14 @@ $vuserlegal =  $userdata->legal;
                 align: 'left',
                 hidden: true
             },
-            {
-                name: 'btnexplegal',
-                index: 'btnexplegal',
-                width: 30,
-                align: 'center',
-                formatter: btnexplegal,
-                search: false
-            },
+            /* {
+                 name: 'btnexplegal',
+                 index: 'btnexplegal',
+                 width: 30,
+                 align: 'center',
+                 formatter: btnexplegal,
+                 search: false
+             },*/
             {
                 name: 'delete',
                 index: 'delete',
@@ -336,7 +320,6 @@ $vuserlegal =  $userdata->legal;
                     'font-weight': 'bold'
                 });
             }
-
             //Asuntos importante se cambia de color
             var ctipasuntoImportant = ["0000000647", "0000000652", "0000000649", "0000000654", "0000000653", "0000000648"];
             if (ctipasuntoImportant.indexOf(aData.ctipasunto) > -1) {
@@ -402,14 +385,12 @@ $vuserlegal =  $userdata->legal;
 
     function changecheckboxDelete(rowId) {
         var row = jQuery("#tblRuta").jqGrid('getRowData', rowId);
-
-
         openDialogConfirm1(" Esta seguro de eliminar el paso seleccionado?", 350, {
             "Si": function() {
                 var parmter = {};
                 parmter.pmruta = row.idsigma;
                 closeDialog("jqDialogConfirmacion1");
-                $.post(path + "documentos/mrutadelete", parmter, updChangeDelete, 'json');
+                $.post(path + "coactivo/mrutadelete", parmter, updChangeDelete, 'json');
             },
             "No": function() {
                 closeDialog("jqDialogConfirmacion1");
@@ -420,14 +401,12 @@ $vuserlegal =  $userdata->legal;
     }
 
     function updChangeDelete(data) {
-        openDialogInfo(data.msj, "250", "150", null, function() {
+        openDialogInfo(data[0].msj, "250", "150", null, function() {
             ProcesoBuscarRuta('');
         });
     }
 
 
-    // <------- btndocumt
-    // -----> btndocumtall Boton que llama a los documentos del del expediente en general
     function btndocumtall(cellvalue, options, rowObject) {
         return '<div align="center" class="ui-pg-button " title="Documentos" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtndocumtall(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-document-b"></span></div></div>';
     }
@@ -438,10 +417,9 @@ $vuserlegal =  $userdata->legal;
             pmdocumento: rowdat.mdocumento
         };
 
-        openDialogDataFunction3("documentos/lstdocumentos", paramtrs, "1000", "520", "Documentos", null, {});
+        openDialogDataFunction3("coactivo/lstdocumentos", paramtrs, "1000", "520", "Documentos", null, {});
     }
 
-    // ----> ChkBox Cierre de Envio
     function chkFormatcierreenv(cellvalue, options, rowObject) {
         return '<input  type="checkbox" title="Cerrar Envio" id="chkcierreenv_' + options.rowId + '" ' + (cellvalue == '1' ? ' checked="checked"' : '') +
             'onclick="changecheckboxcierreenv(' + options.rowId + ')" />';
@@ -465,7 +443,7 @@ $vuserlegal =  $userdata->legal;
                 var parmter = {};
                 parmter.pmruta = row.idsigma;
                 closeDialog("jqDialogConfirmacion1");
-                $.post(path + "documentos/cierreenvio", parmter, updCheckcierreenv, 'json');
+                $.post(path + "coactivo/cierreenvio", parmter, updCheckcierreenv, 'json');
             },
             "No": function() {
                 $("#chkcierreenv_" + rowId).attr('checked', false);
@@ -480,10 +458,7 @@ $vuserlegal =  $userdata->legal;
         });
     }
 
-
-    //  ChkBox Cierre de Envio <----
-
-    var vuserlegal = "<?php echo $vuserlegal; ?>";
+    /*var vuserlegal = "<?php echo $vuserlegal; ?>";
 
     function btnexplegal(cellvalue, options, rowObject) {
         if (vuserlegal == '1' && rowObject.ctiprtram == '0000000123') {
@@ -491,10 +466,10 @@ $vuserlegal =  $userdata->legal;
         } else {
             return '';
         }
-    }
+    }*/
 
 
-    function accionbtnlegaledit(rowId) {
+    /*function accionbtnlegaledit(rowId) {
         var rowdat = $("#tblRuta").jqGrid('getRowData', rowId);
         parameters = {
             mdocumento: rowdat.mdocumento,
@@ -503,9 +478,9 @@ $vuserlegal =  $userdata->legal;
             accion: ''
         };
         openDialogData1("tramite/explegal", parameters, 520);
-    }
+    }*/
 
-    function accionbtnexplegalrecep(rowId) {
+    /*function accionbtnexplegalrecep(rowId) {
 
         var rowdat = $("#tblRuta").jqGrid('getRowData', rowId);
         parameters = {
@@ -515,7 +490,7 @@ $vuserlegal =  $userdata->legal;
             accion: 'recep'
         };
         openDialogData1("tramite/explegal", parameters, 520);
-    }
+    }*/
 
 
     function chkFormatconcluido(cellvalue, options, rowObject) {
@@ -530,10 +505,9 @@ $vuserlegal =  $userdata->legal;
                 var parmter = {};
                 parmter.pmruta = row.idsigma;
                 closeDialog("jqDialogConfirmacion1");
-                $.post(path + "documentos/concluirexp", parmter, updCheckconcluir, 'json');
+                $.post(path + "coactivo/concluirexp", parmter, updCheckconcluir, 'json');
             },
             "No": function() {
-                //ProcesoBuscarRuta(''); chkrecep_5
                 $("#chkconcluirexp_" + rowId).attr('checked', false);
                 closeDialog("jqDialogConfirmacion1");
 
@@ -571,14 +545,12 @@ $vuserlegal =  $userdata->legal;
                     return false;
                 }
                 if (row.st_recep2 == '0') {
-                    //msjrecep +='Documento '+row.vnrodocu +' no recepcionado.<br>';
                     jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
                     openDialogWarning('Documento ' + row.vnrodocu + ' no recepcionado.', 380, 150);
                     return false;
 
                 }
                 if (row.stconcluido2 == '1') {
-                    //msjrecep +='Documento '+row.vnrodocu +' no recepcionado.<br>';
                     jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
                     openDialogWarning('El documento ' + row.vnrodocu + ' esta concluido.', 380, 150);
                     return false;
@@ -628,7 +600,6 @@ $vuserlegal =  $userdata->legal;
             var msjrecep = '';
             for (var i = 0; i < gsrr.length; i++) {
                 var row = jQuery("#tblRuta").jqGrid('getRowData', gsrr[i]);
-                //console.log(row);
                 if (row.bnd == 'S') {
                     jQuery("#tblRuta").jqGrid('setSelection', gsrr[i]);
                     openDialogWarning('El Documento Nro. ' + row.vnrodocu + ' ya fue enviado a ' + row.orgdes + '.', 380, 150);
@@ -653,7 +624,6 @@ $vuserlegal =  $userdata->legal;
                 var mrutaenvio = [];
                 for (var i = 0; i < gsrr.length; i++) {
                     var row = jQuery("#tblRuta").jqGrid('getRowData', gsrr[i]);
-                    //console.log(row);
                     mrutaenvio[i] = {
                         pidsigma: row.idsigma,
                         pmdocumento: row.mdocumento,
@@ -722,19 +692,6 @@ $vuserlegal =  $userdata->legal;
                 fecdesde = "";
                 fechasta = "";
                 id_nroDocex = "";
-                break;
-            case filtro.DOC:
-                fecdesde = "";
-                fechasta = "";
-                id_nroExp = "";
-                id_nroDocex = "";
-                _sp = "coactivo.mruta_get_busDoc";
-                break;
-            case filtro.DOCEX:
-                fecdesde = "";
-                fechasta = "";
-                id_nroExp = "";
-                _sp = "coactivo.mruta_get_busDocEx";
                 break;
             default:
                 alert("...");
@@ -818,15 +775,12 @@ $vuserlegal =  $userdata->legal;
             return false;
 
         }
-
-
-
         var paramtrs = {
             cidsigma: rowdat.idsigma,
             ctipjerar: '0000000131',
             mdocumento: rowdat.mdocumento
         };
-        openDialogDataFunction1("documentos/ddocumento", paramtrs, "1000", "520", "Documentos ", null, {});
+        openDialogDataFunction1("coactivo/ddocumento", paramtrs, "1000", "520", "Documentos ", null, {});
     }
 
     function chkFormatrecep(cellvalue, options, rowObject) {
@@ -836,30 +790,25 @@ $vuserlegal =  $userdata->legal;
     }
 
     function changecheckboxrecep(rowId) {
-
         var row = jQuery("#tblRuta").jqGrid('getRowData', rowId);
-
-        if (vuserlegal == '1' && row.ctiprtram == '0000000123') {
-            accionbtnexplegalrecep(rowId);
-        } else {
-            openDialogConfirm1("Recepcionar el Documento?", 350, {
-                "Si": function() {
+        openDialogConfirm1("Recepcionar el Documento?", 350, {
+            "Si": function() {
 
 
-                    var parmter = {};
-                    parmter.pmruta = row.idsigma;
-                    closeDialog("jqDialogConfirmacion1");
-                    $.post(path + "documentos/rutarecepcion", parmter, updCheckrecep, 'json');
+                var parmter = {};
+                parmter.pmruta = row.idsigma;
+                closeDialog("jqDialogConfirmacion1");
+                $.post(path + "coactivo/rutarecepcion", parmter, updCheckrecep, 'json');
 
-                },
-                "No": function() {
-                    //ProcesoBuscarRuta(''); chkrecep_5
-                    $("#chkrecep_" + rowId).attr('checked', false);
-                    closeDialog("jqDialogConfirmacion1");
+            },
+            "No": function() {
+                //ProcesoBuscarRuta(''); chkrecep_5
+                $("#chkrecep_" + rowId).attr('checked', false);
+                closeDialog("jqDialogConfirmacion1");
 
-                }
-            });
-        }
+            }
+        });
+
     }
 
 
@@ -908,8 +857,6 @@ $vuserlegal =  $userdata->legal;
             selected: function(event, ui) {
                 $(".selFiltroFecha").hide();
                 $(".selFiltroExped").hide();
-                $(".selFiltroDoc").hide();
-                $(".selFiltroDocex").hide();
 
                 switch ($("#cbo_bus").val()) {
                     case filtro.FECHA:
@@ -917,12 +864,6 @@ $vuserlegal =  $userdata->legal;
                         break;
                     case filtro.EXPED:
                         $(".selFiltroExped").show();
-                        break;
-                    case filtro.DOC:
-                        $(".selFiltroDoc").show();
-                        break;
-                    case filtro.DOCEX:
-                        $(".selFiltroDocex").show();
                         break;
                     default:
                         alert("...");

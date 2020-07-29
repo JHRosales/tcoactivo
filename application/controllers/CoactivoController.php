@@ -113,17 +113,6 @@ class CoactivoController extends Zend_Controller_Action
     }
 
 
-    public function forzardescargaAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
-        $carpeta = "uploadDdocuments/";
-        $file = $carpeta . $_GET['file'];
-        header("Content-disposition: attachment; filename=$file");
-        header("Content-type: application/octet-stream");
-        readfile($file);
-    }
-
 
     public function cargarauxiliarsesionAction()
     {
@@ -590,36 +579,6 @@ class CoactivoController extends Zend_Controller_Action
     }
 
     /**FIN*/
-    /**Consultas*/
-    public function consultasAction()
-    {
-
-        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-        $this->view->cidusuario = $ddatosuserlog->cidusuario;
-
-        $func = new Libreria_Pintar();
-        $getdate = date("d/m/Y");
-        $val[] = array('fecdesde', $getdate, 'val');
-        $val[] = array('fechasta', $getdate, 'val');
-        $func->PintarValor($val);
-    }
-    /**FIN*/
-
-    /**Reportes*/
-    public function reportesAction()
-    {
-
-        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-        $this->view->cidusuario = $ddatosuserlog->cidusuario;
-
-        $func = new Libreria_Pintar();
-        $getdate = date("d/m/Y");
-        $val[] = array('fecdesde', $getdate, 'val');
-        $val[] = array('fechasta', $getdate, 'val');
-        $func->PintarValor($val);
-    }
-
-    /**FIN*/
 
     public function drutarecepdevolAction()
     {
@@ -651,30 +610,7 @@ class CoactivoController extends Zend_Controller_Action
         $this->view->jsonArbol = json_encode($recordsresult);
     }
 
-    public function visordocsAction()
-    {
 
-        $img = $this->_request->getParam('img', '');
-        $this->_helper->layout->disableLayout();
-        $this->view->img = $img;
-    }
-
-
-    public function concluirexpAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
-        $this->_helper->getHelper('ajaxContext')->initContext();
-
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $pmruta = $this->_request->getParam('pmruta');
-            $cn = new Model_DataAdapter();
-            $procedure = 'coactivo.concluirexp';
-            $parameters[0] = $pmruta;
-            $recordsresult = $cn->executeAssocQuery($procedure, $parameters);
-            echo $this->_helper->json($recordsresult);
-        }
-    }
 
     public function iframedocumentuploadAction()
     {
@@ -1111,4 +1047,550 @@ class CoactivoController extends Zend_Controller_Action
         $mruta = $this->_request->getParam('mruta');
         $this->view->mruta = $mruta;
     }
+    public function guardarexpedienteAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+
+            $idsigma = $this->_request->getPost('idsigma');
+            $dasunto = $this->_request->getPost('dasunto');
+            $mperson = $this->_request->getPost('mperson');
+            $dfecdocu = $this->_request->getPost('dfecdocu');
+            $nfolios = $this->_request->getPost('nfolios');
+            $ctiprtram = $this->_request->getPost('ctiprtram');
+            $vasunto = $this->_request->getPost('vasunto');
+            $ccosini = $this->_request->getPost('ccosini');
+            $ctiprele = $this->_request->getPost('ctiprele');
+            $vobserv = $this->_request->getPost('vobserv');
+            $vnrodocu = $this->_request->getPost('vnrodocu');
+            $crepres = $this->_request->getPost('crepres');
+            $centrega = $this->_request->getPost('centrega');
+            $mdocumento = $this->_request->getPost('mdocumento');
+            $dentrega = $this->_request->getPost('dentrega');
+            $flagdentrega = $this->_request->getPost('flagdentrega');
+            $ccossender = $this->_request->getPost('ccossender');
+
+            $dsadministrado = $this->_request->getPost('dsadministrado');
+            $ndias = $this->_request->getPost('ndias');
+
+            $vnrodocini = $this->_request->getPost('vnrodocini');
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $cusuario_registro = $ddatosuserlog->cidusuario;
+            $cidpers = $ddatosuserlog->cidpers;
+
+            $cn = new Model_DataAdapter();
+
+            $userdata = new Zend_Session_Namespace('datosuserlog');
+            $nombrestore = 'coactivo.guardar_mdocumento_1' . ($userdata->nvista);
+
+            $parametros[0] =  $idsigma;
+            $parametros[1] =  $dasunto;
+            $parametros[2] =  $mperson;
+            $parametros[3] =  $dfecdocu;
+            $parametros[4] =  $nfolios;
+            $parametros[5] =  $ctiprtram;
+            $parametros[6] =  $vasunto;
+            $parametros[7] =  $ccosini;
+            $parametros[8] =  $ctiprele;
+            $parametros[9] = $vobserv;
+            $parametros[10] =  strtoupper($vnrodocu);
+            $parametros[11] =  $crepres;
+            $parametros[12] =  '';
+            $parametros[13] =  '';
+            $parametros[14] =  $centrega;
+            $parametros[15] =  $cusuario_registro;
+            $parametros[16] =  $mdocumento;
+            $parametros[17] =  strtoupper($dentrega);
+            $parametros[18] = $flagdentrega;
+            $parametros[19] =  strtoupper($dsadministrado);
+            $parametros[20] =  $ndias;
+            $parametros[21] =  $ccossender;
+            $parametros[22] = strtoupper($vnrodocini);
+
+            $datos = $cn->executeAssocQuery($nombrestore, $parametros);
+            $cdatos = count($datos);
+
+            if ($cdatos == 1) {
+                echo json_encode($datos[0]);
+            } else {
+                echo json_encode(array("st" => "0", "msj" => 'Error en el guardado...'));
+            }
+        }
+    }
+    public function panelobsenvioAction()
+    {
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $pctipjerar = $this->_request->getPost('pctipjerar');
+            $pidsigma = $this->_request->getPost('pidsigma');
+
+            // Obtener datos panel Expediente
+            $cn = new Model_DataAdapter();
+            $params[] =  $pctipjerar;
+            $params[] =  $pidsigma;
+            $panelobs = $cn->executeAssocQuery('coactivo.sp_obsenvio_get', $params);
+
+            $this->view->ctipjerar = $pctipjerar;
+            $this->view->idsigma = $pidsigma;
+            $this->view->vobserv = $panelobs[0]['vobserv'];
+            $this->view->vtipacc = $panelobs[0]['vtipacc'];
+        }
+    }
+    public function obsbigpanelAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+
+            $idsigma = $this->_request->getPost('idsigma', '');
+            $ctipjerar = $this->_request->getPost('ctipjerar', '');
+
+            $cn = new Model_DataAdapter();
+            $params[0] =  $ctipjerar;
+            $params[1] =  $idsigma;
+            $panelobs = $cn->executeAssocQuery('coactivo.sp_obsenvio_get', $params);
+
+            $this->view->vobserv = $panelobs[0]['vobserv'];
+        }
+    }
+    public function ddocumentoAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->getHelper('ajaxContext')->initContext();
+            $this->_helper->layout->disableLayout();
+            //$this->_helper->viewRenderer->setNoRender();
+        }
+
+        $editable = $this->_request->getParam('editable'); # 0 : No Editable / 1: Editable
+        $cidsigma = $this->_request->getParam('cidsigma');
+        $ctipjerar = $this->_request->getParam('ctipjerar');
+        $mdocumento = $this->_request->getParam('mdocumento');
+
+        $cn = new Model_DataAdapter();
+
+        $procedure = 'coactivo.Mdocument_get';
+        $parameters[0] =  $mdocumento;
+        $recordsMdocument1 = $cn->executeAssocQuery($procedure, $parameters);
+        $stconcluido = $recordsMdocument1[0]["stconcluido"];
+
+        $dasunto = $this->_request->getParam('dasunto');
+        if ((string) $dasunto !== '') {
+            $this->view->dasunto = (string) $dasunto;
+        }
+        if ($editable == '') {
+            $editable = '1';
+        }
+        if ($cidsigma == '') {
+            $cidsigma = "0000000001";
+        }
+        if ($ctipjerar == '') {
+            $ctipjerar = "0000000113";
+        }
+        if ($mdocumento == '') {
+            $mdocumento = '0000000001';
+        }
+
+        $this->view->ctipjerar = $ctipjerar;
+        $this->view->cidsigma = $cidsigma;
+        $this->view->mdocumento = $mdocumento;
+        $this->view->editable = $editable;
+
+        $this->view->stconcluido = $stconcluido;
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+
+        $this->view->nvista = $ddatosuserlog->nvista;
+        $this->view->cidusuario = '';
+        if ($ddatosuserlog->nvista == '0') {
+            $this->view->cidusuario = $ddatosuserlog->cidusuario;
+        }
+
+        $procedure2 = 'coactivo.mdocument_get';
+        $parameters2[0] =  $mdocumento;
+        $recordsMdocument = $cn->executeAssocQuery($procedure2, $parameters2);
+
+        $val[] = array('mtxtnroexpe', $recordsMdocument[0]["vnrodocu"], 'val');
+        $val[] = array('mtxtrecurrente', $recordsMdocument[0]["dsperson"], 'val');
+        $val[] = array('mtxtfecingreso', $recordsMdocument[0]["dfecdocu"], 'val');
+        $val[] = array('mtxtfolios', $recordsMdocument[0]["nfolios"], 'val');
+        $func = new Libreria_Pintar();
+
+        $func->PintarValor($val);
+    }
+    public function dasuntoreqAction()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender();
+            $dasunto = $this->_request->getParam('dasunto');
+            $mdocumento = $this->_request->getParam('mdocumento');
+            if ((string) $dasunto !== '') {
+                echo $this->view->util()->getAsuntoRequisitos($mdocumento, $dasunto);
+            } else {
+                echo '';
+            }
+        }
+    }
+    public function ddocumentomanteAction()
+    {
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        $this->_helper->layout->disableLayout();
+        $type = $this->_request->getParam('type');
+        $mdocumento = $this->_request->getParam('mdocumento');
+        $ddocument = $this->_request->getParam('ddocument');
+        $cidsigma = $this->_request->getParam('cidsigma');
+        $ctipjerar = $this->_request->getParam('ctipjerar');
+        $ccate = $this->_request->getParam('ccate');
+        $reqdoc = $this->_request->getParam('ctipdocreq');
+
+        $func = new Libreria_Pintar();
+        $cn = new Model_DataAdapter();
+
+        $procedure2 = 'coactivo.mdocument_get';
+        $parameters2[0] = $mdocumento;
+        $recordsMdocument = $cn->executeAssocQuery($procedure2, $parameters2);
+
+        $cbotipodoc = '9999999999';
+        $txtobservacion = "";
+        $txtvfolios = '0';
+        $txtnrodoc = '';
+        $cborelevancia = '9999999999';
+        $txtfecingresodoc = date("d/m/Y");
+
+        $this->view->ddocumento = $ddocument;
+        $this->view->cidsigma = $cidsigma;
+        $this->view->ctipjerar = $ctipjerar;
+        $this->view->ccate = $ccate;
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $ddatosuserlog->ddocumento = $ddocument;
+
+        if ($type == 'N') {
+            if ((string) $reqdoc !== '') {
+                $cbotipodoc = (string) $reqdoc;
+            }
+            $cborelevancia = '0000000140';
+        } elseif ($type == 'M' || $type == 'C') {
+            $procedure = 'coactivo.ddocument_get';
+            $parameters[0] =  '';
+            $parameters[1] =  '';
+            $parameters[2] =  $ddocument;
+            $parameters[3] =  '';
+            $recordsDdocument = $cn->executeAssocQuery($procedure, $parameters);
+            $cbotipodoc = $recordsDdocument[0]["ctipdocu"];
+            $txtvfolios = $recordsDdocument[0]["vfolios"];
+            $txtobservacion = $recordsDdocument[0]["vobserv"];
+            $txtnrodoc = $recordsDdocument[0]["vnrodocu"];
+            $txtfecingresodoc = $recordsDdocument[0]["dfecdocu"];
+            $cborelevancia = $recordsDdocument[0]["ctiprele"];
+        }
+
+
+        $prmtrs[0] =  $ddatosuserlog->cidusuario;
+        $rDocuUsuAct = $cn->ejec_store_procedura_sql('coactivo.sp_mDocuUsuActivo', $prmtrs);
+        $func->ContenidoCombo((is_array($rDocuUsuAct) ? $rDocuUsuAct : array(array("", "Sin documentos agignados"))), $cbotipodoc, (is_array($rDocuUsuAct) ? '1' : '0'));
+
+        if ($ccate === '1') {
+            $val[] = array('cbotipodoc', $func->ContenidoCombo((is_array($rDocuUsuAct) ? $rDocuUsuAct : array(array("9999999999", "Sin documentos agignados"))), $cbotipodoc, (is_array($rDocuUsuAct) ? '1' : '0')), 'html');
+        } else {
+            $val[] = array('cbotipodoc', $this->view->util()->getComboContenedorCoactivo('0000000001', $cbotipodoc), 'html');
+        }
+
+        $val[] = array('cborelevancia', $this->view->util()->getComboContenedorCoactivo('0000000006', $cborelevancia), 'html');
+        $val[] = array('cbotipadjunto', $this->view->util()->getComboContenedorCoactivo('0000000012', '9999999999'), 'html');
+        $this->view->observ = $txtobservacion;
+        $val[] = array('txtnrodoc', $txtnrodoc, 'val');
+        $val[] = array('txtvfolios', $txtvfolios, 'val');
+        $val[] = array('txtnroexpe', $recordsMdocument[0]["vnrodocu"], 'val');
+        $val[] = array('txtrecurrente', $recordsMdocument[0]["dsperson"], 'val');
+        $val[] = array('txtfecingreso', $recordsMdocument[0]["dfecdocu"], 'val');
+        $val[] = array('txtfolios', $recordsMdocument[0]["nfolios"], 'val');
+        $val[] = array('txtfecingresodoc', $txtfecingresodoc, 'val');
+
+
+        $func->PintarValor($val);
+
+        echo '
+            <script>
+		themeComboBox("#cbotipodoc");
+		themeComboBox("#cborelevancia");
+		themeComboBox("#cbotipadjunto");
+			
+			 $("#txttipodoc").autocomplete({
+                select: function(event, ui) {
+                    optionvalue = $(ui.item.option).val()
+                    $("#cbotipodoc").val(optionvalue);
+                     ProcesoBuscarDocdet(optionvalue);
+
+                }
+            });
+ 		ProcesoBuscarDocdet("' . (string) $reqdoc . '");
+		</script>';
+        $evt[] = array("txtvfolios", "keypress", "return validarnumerossinespacios(event);");
+        $func->PintarEvento($evt);
+    }
+    public function forzardescargaAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $carpeta = "uploadDdocuments/";
+        $file = $carpeta . $_GET['file'];
+        header("Content-disposition: attachment; filename=$file");
+        header("Content-type: application/octet-stream");
+        readfile($file);
+    }
+
+    public function docadjuntodeleteAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $pmadjunto = $this->_request->getPost('pmadjunto');
+
+            $cn = new Model_DataAdapter();
+            $procedure = 'coactivo.sp_madjunto_delete';
+            $parameters[0] =  $pmadjunto;
+            $records = $cn->executeAssocQuery($procedure, $parameters);
+            echo $this->_helper->json($records[0]);
+        }
+    }
+    public function ddocumentodeleteAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $pddocumento = $this->_request->getPost('pddocumento');
+
+            $cn = new Model_DataAdapter();
+            $procedure = 'coactivo.sp_ddocumento_delete';
+            $parameters[0] =  $pddocumento;
+            $records = $cn->executeAssocQuery($procedure, $parameters);
+            echo $this->_helper->json($records[0]);
+        }
+    }
+    public function visordocsAction()
+    {
+
+        $img = $this->_request->getParam('img', '');
+        $this->_helper->layout->disableLayout();
+        $this->view->img = $img;
+    }
+    public function rutarecepcionAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $pmruta = $this->_request->getParam('pmruta');
+            $cn = new Model_DataAdapter();
+            $procedure = 'coactivo.mrutaRecep_upd';
+            $parameters[0] =  $pmruta;
+            $recordsresult = $cn->executeAssocQuery($procedure, $parameters);
+            echo $this->_helper->json($recordsresult);
+        }
+    }
+    public function mrutadeleteAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $pmruta = $this->_request->getPost('pmruta');
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $userlogin =  $ddatosuserlog->cidusuario;
+            $cn = new Model_DataAdapter();
+            $procedure = 'coactivo.sp_mrutaDelete';
+            $parameters[0] =  $pmruta;
+            $parameters[1] =  $userlogin;
+            $records = $cn->executeAssocQuery($procedure, $parameters);
+            echo $this->_helper->json($records);
+        }
+    }
+
+    public function cierreenvioAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $pmruta = $this->_request->getParam('pmruta');
+            $cn = new Model_DataAdapter();
+            $procedure = 'coactivo.mrutaCierreEnv_upd';
+            $parameters[0] = $pmruta;
+            $recordsresult = $cn->executeAssocQuery($procedure, $parameters);
+            echo $this->_helper->json($recordsresult);
+        }
+    }
+    public function concluirexpAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $pmruta = $this->_request->getParam('pmruta');
+            $cn = new Model_DataAdapter();
+            $procedure = 'coactivo.concluirexp';
+            $parameters[0] = $pmruta;
+            $recordsresult = $cn->executeAssocQuery($procedure, $parameters);
+            echo $this->_helper->json($recordsresult);
+        }
+    }
+    public function uploadddocumentsAction()
+    {
+        //$this->_helper->layout->disableLayout();
+        //$this->_helper->viewRenderer->setNoRender();
+        //$this->_helper->getHelper('ajaxContext')->initContext();
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $ddocumento = $ddatosuserlog->ddocumento;
+
+            $name = $_FILES['qqfile']['name'];
+            $size = $_FILES['qqfile']['size'];
+            //echo $name; 
+
+            if ($size == 0) {
+                return array('error' => 'File is empty.');
+            }
+
+            $nomadjunto = $ddocumento . "_" . $_FILES['qqfile']['name'];
+            $carpeta = "uploadDdocuments/";
+            opendir($carpeta);
+            $destino = $carpeta . $nomadjunto;
+            copy($_FILES['qqfile']['tmp_name'], $destino);
+            //closedir($carpeta);
+
+
+            $cn = new Model_DataAdapter();
+            $procedure = 'coactivo.madjunto_ins';
+            $parameters[0] =  $ddocumento;
+            $parameters[1] =  $_FILES['qqfile']['name'];
+            $recordsAdjunto = $cn->executeAssocQuery($procedure, $parameters);
+
+
+
+            echo $this->_helper->json(array('success' => true));
+        }
+    }
+    public function ddocumentomantesaveAction()
+    {
+
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $type = $this->_request->getParam('type');
+            $detalle = $this->_request->getParam('detalle');
+            $pidsigma = $this->_request->getParam('pidsigma');
+            $pctipdocu = $this->_request->getParam('pctipdocu');
+            $pvnrodocu = $this->_request->getParam('pvnrodocu');
+            $pvfolios = $this->_request->getParam('pvfolios');
+            $pvobserv = $this->_request->getParam('pvobserv');
+            $pctiprele = $this->_request->getParam('pctiprele');
+            $pctipjerar = $this->_request->getParam('pctipjerar');
+            $pcidsigma = $this->_request->getParam('pcidsigma');
+            $pfecingresodoc = $this->_request->getParam('pfecingresodoc');
+            $detalleDdocument = json_decode($detalle);
+            $pchknrodoc = $this->_request->getParam('pchknrodoc');
+            $pccate = $this->_request->getParam('ccate');
+            $xmlDdocument = "";
+
+            foreach ($detalleDdocument as $values) {
+                $xmlDdocument .= '|';
+                $xmlDdocument .= $values->idsigma . '|';
+                $xmlDdocument .=  $values->mconfigdoc . '|';
+                $xmlDdocument .=  $values->vdatoitem . '^';
+            }
+
+            $xmlDdocument = substr($xmlDdocument, 0, strlen($xmlDdocument) - 1);
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $cn = new Model_DataAdapter();
+            $procedure = ' coactivo.ddocumento_ins';
+            $parameters[0] =  $type;
+            $parameters[1] = $pidsigma;
+            $parameters[2] =  $pctipdocu;
+            $parameters[3] =  $pvnrodocu;
+            $parameters[4] =  $pvfolios;
+            $parameters[5] = $pvobserv;
+            $parameters[6] =  $pctiprele;
+            $parameters[7] =  $pctipjerar;
+            $parameters[8] =  $pcidsigma;
+            $parameters[9] = $xmlDdocument;
+            $parameters[10] =  $pchknrodoc;
+            $parameters[11] =  $ddatosuserlog->cidusuario;
+            $parameters[12] =  $pccate;
+            $parameters[13] =  $pfecingresodoc;
+            $parameters[14] = '^';
+            $parameters[15] = '|';
+            $recordsDdocument = $cn->executeAssocQuery($procedure, $parameters);
+
+            $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+            $ddatosuserlog->ddocumento = $recordsDdocument[0]["ddocument"];
+            echo json_encode($recordsDdocument);
+        }
+    }
+    public function listarexpedienteAction()
+    {
+        $cidarea = '';
+        $vestado = '';
+        $vnrodoc = $this->_request->getParam('vnrodoc');
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->_helper->layout->disableLayout();
+            $post_cidarea = $this->_request->getPost('cidarea');
+            $post_vestado = $this->_request->getPost('vestado');
+
+            if (isset($post_cidarea)) {
+                $cidarea = $post_cidarea;
+            }
+            if (isset($post_vestado)) {
+                $vestado = $post_vestado;
+            }
+        }
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $this->view->cusuario = $ddatosuserlog->cidusuario;
+        $this->view->cidareauser = $ddatosuserlog->areacod;
+        $this->view->cidarea = $cidarea; //Cambiar con el area del Usuario
+        $this->view->vestado = $vestado;
+        $this->view->vnrodoc = $vnrodoc;
+    }
+    /**Consultas*/
+    public function consultasAction()
+    {
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $this->view->cidusuario = $ddatosuserlog->cidusuario;
+
+        $func = new Libreria_Pintar();
+        $getdate = date("d/m/Y");
+        $val[] = array('fecdesde', $getdate, 'val');
+        $val[] = array('fechasta', $getdate, 'val');
+        $func->PintarValor($val);
+    }
+    /**FIN*/
+
+    /**Reportes*/
+    public function reportesAction()
+    {
+
+        $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
+        $this->view->cidusuario = $ddatosuserlog->cidusuario;
+
+        $func = new Libreria_Pintar();
+        $getdate = date("d/m/Y");
+        $val[] = array('fecdesde', $getdate, 'val');
+        $val[] = array('fechasta', $getdate, 'val');
+        $func->PintarValor($val);
+    }
+    /**FIN*/
 }

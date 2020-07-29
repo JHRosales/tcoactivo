@@ -146,10 +146,10 @@
 
         var rowHRuta = $(this).jqGrid('getRowData', id);
 
-        $("#divpanelrecurrente").load(path + "tramite/paneladministrado", {
+        $("#divpanelrecurrente").load(path + "coactivo/paneladministrado", {
           idsigma: rowHRuta.mdocumento
         });
-        $("#divpanelexp").load(path + "tramite/panelexpediente", {
+        $("#divpanelexp").load(path + "coactivo/panelexpediente", {
           idsigma: rowHRuta.mdocumento
         });
 
@@ -157,13 +157,13 @@
           $("#divpanelobs").html('');
         }
         if (rowHRuta.level == '2') {
-          $("#divpanelobs").load(path + "documentos/panelobsenvio", {
+          $("#divpanelobs").load(path + "coactivo/panelobsenvio", {
             pidsigma: rowHRuta.cidsigma,
             pctipjerar: rowHRuta.ctipjerar
           });
         }
         if (rowHRuta.level == '3') {
-          $("#divpanelobs").load(path + "documentos/panelobsenvio", {
+          $("#divpanelobs").load(path + "coactivo/panelobsenvio", {
             pidsigma: rowHRuta.cidsigma,
             pctipjerar: rowHRuta.ctipjerar
           });
@@ -258,7 +258,7 @@
       mdocumento: rowdat.mdocumento,
       editable: rowdat.isEditable
     };
-    openDialogDataFunction2("documentos/ddocumento", paramtrs, "1000", "520", "Documentos ", null, {});
+    openDialogDataFunction2("coactivo/ddocumento", paramtrs, "1000", "520", "Documentos ", null, {});
   }
 
   //-------------> H_btnhojaruta

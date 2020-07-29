@@ -1,0 +1,47 @@
+<input type="hidden" id="obsHojaRuta_IDSIGMA" name="obsHojaRuta_IDSIGMA" value="<?php echo $this->idsigma; ?>" />
+<input type="hidden" id="obsHojaRuta_CTIPJERAR" name="obsHojaRuta_CTIPJERAR" value="<?php echo $this->ctipjerar; ?>" />
+<input type="hidden" id="" name="" value="" />
+<table class="ui-table-panelLayout" style="width: 90%; height: 100%; font-size: 90%;" border="0">
+    <tr>
+        <td>
+            Accion :&nbsp;
+            <b>
+                <span id="taccion" name="taccion">
+                    <?php echo $this->vtipacc; ?>
+                </span>
+            </b>
+        </td>
+        <td style="text-align: right;">
+            <button id="btnOpenBigObs">Ver Observaci&oacute;n</button>
+        </td>
+    </tr>
+    <tr style="height: 90%">
+        <td colspan="2">
+            <b>
+                <span id="obsenvio" name="obsenvio">
+                    <?php echo $this->vobserv; ?>
+                </span>
+            </b>
+        </td>
+    </tr>
+</table>
+<script>
+    $('#btnOpenBigObs').button({
+        text: false,
+        icons: {
+            'primary': 'ui-icon-zoomin'
+        }
+    }).bind('click', function() {
+        openDialogDataFunction2(
+            'coactivo/obsbigpanel', {
+                idsigma: $('#obsHojaRuta_IDSIGMA').val(),
+                ctipjerar: $('#obsHojaRuta_CTIPJERAR').val()
+            },
+            1000,
+            300,
+            'Observacion',
+            null,
+            null
+        );
+    });
+</script>
