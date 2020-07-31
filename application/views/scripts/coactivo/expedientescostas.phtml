@@ -15,16 +15,16 @@
         </tr>
     </table>
 
-        <div id="panelResultEC">
-            <table id="tblResultEC"></table>
-            <div id="ptblResultEC"></div>
-        </div>
+    <div id="panelResultEC">
+        <table id="tblResultEC"></table>
+        <div id="ptblResultEC"></div>
+    </div>
 
     <table border="0" width="100%" name="tbl1">
         <tr>
             <td><b>Descripci&oacute;n Item.</b></td>
             <td colspan="3">
-                <input type="text" id="descrip" class="ui-text-disable" disabled  size="70px" >
+                <input type="text" id="descrip" class="ui-text-disable" disabled size="70px">
             </td>
         </tr>
         <tr>
@@ -35,42 +35,45 @@
         </tr>
         <tr>
             <td><b>Valor de UIT</b></td>
-            <td align="left" colspan="3"><input type="text" id="valuit"  size="25px"  class="ui-text-disable" disabled />
+            <td align="left" colspan="3"><input type="text" id="valuit" size="25px" class="ui-text-disable" disabled />
             </td>
-            </tr>
+        </tr>
         <tr>
             <td><b>UIT</b></td>
-            <td align="left"><input type="text"  name="uit" id="uit" size="25px"  class="ui-text-disable" disabled/>
+            <td align="left"><input type="text" name="uit" id="uit" size="25px" class="ui-text-disable" disabled />
 
             </td>
             <td style="width: 30px"><b>MONTO</b></td>
-            <td align="left"><input type="text"  name="montouit" id="montouit" size="25px" class="ui-text-disable" disabled/>
+            <td align="left"><input type="text" name="montouit" id="montouit" size="25px" class="ui-text-disable" disabled />
             </td>
 
-            </tr>
-<tr>
-    <td colspan="4"><hr></td>
-</tr>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <hr>
+            </td>
+        </tr>
         <tr>
             <td><b>Cantidad</b></td>
-            <td align="left" colspan="3"><input type="text"  name="cantidad" id="cantidad" size="25px" class="ui-text" maxlength="3" onKeyPress="return soloNumeros(event);"
-                                                onkeyup="cambiar()"/>
+            <td align="left" colspan="3"><input type="text" name="cantidad" id="cantidad" size="25px" class="ui-text" maxlength="3" onKeyPress="return soloNumeros(event);" onkeyup="cambiar()" value="<?php echo $this->cantidad; ?>" />
             </td>
         </tr>
         <tr>
             <td><b>MONTO</b></td>
-            <td align="left" colspan="3"><input type="text"  name="txtmonto" id="txtmonto" size="25px" class="ui-text-disable" readonly/>
+            <td align="left" colspan="3"><input type="text" name="txtmonto" id="txtmonto" size="25px" class="ui-text-disable" readonly />
             </td>
         </tr>
         <tr>
-            <td colspan="2"><hr></td>
+            <td colspan="2">
+                <hr>
+            </td>
         </tr>
         <tr>
             <td><b>Costa Procesal</b></td>
             <td align="left" colspan="1">
-                <input type="text"  name="txtcostas" id="txtcostas" size="25px" class="ui-text-disable" readonly/>
+                <input type="text" name="txtcostas" id="txtcostas" size="25px" class="ui-text-disable" readonly />
             </td>
-        <td align="right" colspan="2"><button id="btnguardar">Guardar</button>
+            <td align="right" colspan="2"><button id="btnguardar">Guardar</button>
                 <button type="button" id="btnregresar">Cancelar</button></td>
         </tr>
 
@@ -81,146 +84,202 @@
 <script type="text/javascript">
     //Tabla costas contenido
     themeComboBox("#cbofiltro_tipo");
-    $('#btnregresar').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog1');});
-    $('#btnguardar').button({ icons: {primary:'ui-icon-disk'} }).click(function(){
+    $('#btnregresar').button({
+        icons: {
+            primary: 'ui-icon-closethick'
+        }
+    }).click(function() {
+        closeDialog('jqDialog1');
+    });
+    $('#btnguardar').button({
+        icons: {
+            primary: 'ui-icon-disk'
+        }
+    }).click(function() {
         grabar();
     });
-    $("#txtfecdoc").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
-    function cambiar(){
-        if($("#cantidad").val()>=0 && $("#cantidad").val()!=undefined){
-            var monto= $("#txtmonto").val();
-            var cantid= $("#cantidad").val();
-            if(monto==''){
-                monto=0;
+    $("#txtfecdoc").datepicker({
+        showOn: "button",
+        buttonImage: jQuery.scriptPath + "img/calendar.gif",
+        buttonImageOnly: true,
+        dateFormat: "dd/mm/yy"
+    });
+
+    function cambiar() {
+        if ($("#cantidad").val() >= 0 && $("#cantidad").val() != undefined) {
+            var monto = $("#txtmonto").val();
+            var cantid = $("#cantidad").val();
+            if (monto == '') {
+                monto = 0;
             }
-            $("#txtcostas").val(monto*cantid);
+            $("#txtcostas").val(monto * cantid);
         }
     }
-    function soloNumeros(e){
+
+    function soloNumeros(e) {
         var key = window.Event ? e.which : e.keyCode
         return (key >= 48 && key <= 57)
     }
 
-        //++++++++++++++++
-        //-- -->INICIO EXPEDIENTES COSTAS
-        //
-        var navPanelCentroP3 = function() {
-            $("#tblResultEC").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
-        };
-        optionCaja = {
-            width: 510,
-            height: 180,
-            colNames:['CODIGO','Concepto', '%UIT','MONTO'],
-            colModel:[
-                {name:'idsigma',index:'idsigma', width:90, sorttype:"int",align:'center',hidden:true, editable: false},
-                {name:'vdescri',index:'vdescri', width:430,editable: false},
-                {name:'cidcostas',index:'cidcostas', width:70, editable: false,hidden:true},
-                {name:'monto',index:'monto', width:80,sortable:false, editable: true}
-
-            ],
-            onSelectRow: function(){
-                var grid = $("#tblResultEC");
-                var rowid = grid.jqGrid('getGridParam','selrow');
-                var row = grid.jqGrid('getRowData', rowid);
-                $("#valuit").val('3950.00');
-                $("#uit").val('0');
-                $("#descrip").val(row.vdescri);
-                $("#codigo").val(row.idsigma);
-                $("#txtmonto").val(row.monto);
-                $("#montouit").val(row.monto);
-                $("#cantidad").val(1);
-                cambiar();
-                //closeDialog("jqDialogCargando");
+    //++++++++++++++++
+    //-- -->INICIO EXPEDIENTES COSTAS
+    //
+    var navPanelCentroP3 = function() {
+        $("#tblResultEC").jqGrid('filterToolbar', {
+            searchOnEnter: false,
+            stringResult: true,
+            ignoreCase: true,
+            searchOperators: false,
+            defaultSearch: 'cn'
+        });
+    };
+    optionCaja = {
+        width: 510,
+        height: 180,
+        colNames: ['CODIGO', 'Concepto', '%UIT', 'MONTO'],
+        colModel: [{
+                name: 'idsigma',
+                index: 'idsigma',
+                width: 90,
+                sorttype: "int",
+                align: 'center',
+                hidden: true,
+                editable: false
             },
-            caption:"Agregar Costas Procesales",
-            rowNum:20,
-            rownumbers:false,
-            ignoreCase:true,
-            viewrecords: false,
-            hidegrid: true,
-            gridComplete: function(){
-
+            {
+                name: 'vdescri',
+                index: 'vdescri',
+                width: 430,
+                editable: false
             },
-            afterInsertRow: function(rowid, aData){
-                switch (aData.nestado) {
-                    case '1':
-                        break;
-                    case '0':
-                        jQuery("#tblResultEC").jqGrid('setCell',rowid,'idsigma','',{color:'red'});
-                        jQuery("#tblResultEC").jqGrid('setCell',rowid,'vnrodocu','',{color:'red'});
-                        break;
-                }
+            {
+                name: 'cidcostas',
+                index: 'cidcostas',
+                width: 70,
+                editable: false,
+                hidden: true
+            },
+            {
+                name: 'monto',
+                index: 'monto',
+                width: 80,
+                sortable: false,
+                editable: true
             }
-            // ondblClickRow: editCentro
-        };
 
-        xmanteUpdatemcaja = function(numberrow,_row){};
-        bindkeysCaja = {"onEnter": xmanteUpdatemcaja};
-        buscarc = function() {
-            valid = true;
-            if(valid==true) {
-                var params = {
-                    "name": "tblResult",
-                    "procedure": "coactivo.lst_dcostasprocesalesactivo",
-                    "print": "true",
-                    "parameters": '{' +
-                    '}'
-                };
-                procesar = function(requestData){
-                    options = $.extend(optionCaja, {
-                        data: requestData,
-                        datatype: "local",
-                        gridComplete: function(){
-                            isGridComplete = true;
-                            $("#tblResultEC").jqGrid('setSelection', 1, true);
-                        }
+        ],
+        onSelectRow: function() {
+            var grid = $("#tblResultEC");
+            var rowid = grid.jqGrid('getGridParam', 'selrow');
+            var row = grid.jqGrid('getRowData', rowid);
+            $("#valuit").val('3950.00');
+            $("#uit").val('0');
+            $("#descrip").val(row.vdescri);
+            $("#codigo").val(row.idsigma);
+            $("#txtmonto").val(row.monto);
+            $("#montouit").val(row.monto);
+            $("#cantidad").val(1);
+            cambiar();
+            //closeDialog("jqDialogCargando");
+        },
+        caption: "Agregar Costas Procesales",
+        rowNum: 20,
+        rownumbers: false,
+        ignoreCase: true,
+        viewrecords: false,
+        hidegrid: true,
+        gridComplete: function() {
+
+        },
+        afterInsertRow: function(rowid, aData) {
+            switch (aData.nestado) {
+                case '1':
+                    break;
+                case '0':
+                    jQuery("#tblResultEC").jqGrid('setCell', rowid, 'idsigma', '', {
+                        color: 'red'
                     });
-                    procesarProcedimientoJSON('panelResultEC', 'tblResultEC', optionCaja, params, bindkeysCaja,navPanelCentroP3);
-                };
-                procesarConsultaSubProceso("registrar", params, procesar, 'json');
-            } else {
-                openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+                    jQuery("#tblResultEC").jqGrid('setCell', rowid, 'vnrodocu', '', {
+                        color: 'red'
+                    });
+                    break;
             }
-        };
+            if () {
+                $("#tblResultEC").jqGrid('setSelection', rowid, true);
+            } else {
+                $("#tblResultEC").jqGrid('setSelection', 1, true);
+            }
+        }
+        // ondblClickRow: editCentro
+    };
 
-        //++++++++++++++++
-        //-- -->FIN EXPEDIENTES COSTAS
-        //
+    xmanteUpdatemcaja = function(numberrow, _row) {};
+    bindkeysCaja = {
+        "onEnter": xmanteUpdatemcaja
+    };
+    buscarc = function() {
+        valid = true;
+        if (valid == true) {
+            var params = {
+                "name": "tblResult",
+                "procedure": "coactivo.lst_dcostasprocesalesactivo",
+                "print": "true",
+                "parameters": '{' +
+                    '}'
+            };
+            procesar = function(requestData) {
+                options = $.extend(optionCaja, {
+                    data: requestData,
+                    datatype: "local",
+                    gridComplete: function() {
+                        isGridComplete = true;
+                        //$("#tblResultEC").jqGrid('setSelection', 1, true);
+                    }
+                });
+                procesarProcedimientoJSON('panelResultEC', 'tblResultEC', optionCaja, params, bindkeysCaja, navPanelCentroP3);
+            };
+            procesarConsultaSubProceso("registrar", params, procesar, 'json');
+        } else {
+            openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+        }
+    };
 
-    $(function(){
+    //++++++++++++++++
+    //-- -->FIN EXPEDIENTES COSTAS
+    //
+
+    $(function() {
         buscarc();
     });
 
-    function grabar(){
+    function grabar() {
         var correcto = true;
         var form = $('#frmexpedientescostas');
-        if(correcto){
+        if (correcto) {
             openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?", 350, {
-                "Si" : function() {
+                "Si": function() {
                     $.ajax({
                         url: jQuery.scriptPath + "index.php/coactivo/expdientescostassave",
                         type: 'POST',
                         cache: false,
                         data: form.serialize(),
-                        beforeSend : function(data) {
-                        },
-                        success : function(requestData) {
+                        beforeSend: function(data) {},
+                        success: function(requestData) {
                             closeDialog("jqDialogConfirmacion1");
-                            openDialogInfo(requestData,400);
+                            openDialogInfo(requestData, 400);
                             closeDialog("jqDialogCargando");
                             closeDialog('jqDialog1');
                             buscarCostas($("#codmdocum").val());
 
                         },
-                        error : function(requestData, strError, strTipoError) {
+                        error: function(requestData, strError, strTipoError) {
                             $("#result").html("Error " + strTipoError + ': ' + strError);
                         },
-                        complete : function(requestData, exito) {
-                        }
+                        complete: function(requestData, exito) {}
                     });
 
                 },
-                "No" : function() {
+                "No": function() {
                     closeDialog("jqDialogConfirmacion1");
                 }
             });

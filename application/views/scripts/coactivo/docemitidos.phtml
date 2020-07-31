@@ -15,10 +15,10 @@
         </tr>
     </table>
 
-        <div id="panelResultEC">
-            <table id="tblResultEC"></table>
-            <div id="ptblResultEC"></div>
-        </div>
+    <div id="panelResultEC">
+        <table id="tblResultEC"></table>
+        <div id="ptblResultEC"></div>
+    </div>
 
 </form>
 
@@ -26,115 +26,178 @@
 <script type="text/javascript">
     //Tabla costas contenido
     themeComboBox("#cbofiltro_tipo");
-    $('#btnregresar').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog1');});
+    $('#btnregresar').button({
+        icons: {
+            primary: 'ui-icon-closethick'
+        }
+    }).click(function() {
+        closeDialog('jqDialog1');
+    });
 
-    $("#txtfecdoc").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
-    function cambiar(){
-        if($("#cantidad").val()>=0 && $("#cantidad").val()!=undefined){
-            var monto= $("#txtmonto").val();
-            var cantid= $("#cantidad").val();
-            if(monto==''){
-                monto=0;
+    $("#txtfecdoc").datepicker({
+        showOn: "button",
+        buttonImage: jQuery.scriptPath + "img/calendar.gif",
+        buttonImageOnly: true,
+        dateFormat: "dd/mm/yy"
+    });
+
+    function cambiar() {
+        if ($("#cantidad").val() >= 0 && $("#cantidad").val() != undefined) {
+            var monto = $("#txtmonto").val();
+            var cantid = $("#cantidad").val();
+            if (monto == '') {
+                monto = 0;
             }
-            $("#txtcostas").val(monto*cantid);
+            $("#txtcostas").val(monto * cantid);
         }
     }
-    function soloNumeros(e){
+
+    function soloNumeros(e) {
         var key = window.Event ? e.which : e.keyCode
         return (key >= 48 && key <= 57)
     }
 
-        //++++++++++++++++
-        //-- -->INICIO EXPEDIENTES COSTAS
-        //
-        var navPanelCentroP3 = function() {
-            $("#tblResultEC").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
-        };
-        optionCaja = {
-            width: 510,
-            height: 180,
-            colNames:['CODIGO','Docuemnto', '%UIT','Fecha'],
-            colModel:[
-                {name:'idsigma',index:'idsigma', width:90, sorttype:"int",align:'center',hidden:true, editable: false},
-                {name:'dtipodoc',index:'vdescri', width:430,editable: false},
-                {name:'nro',index:'cidcostas', width:70, editable: false,hidden:true},
-                {name:'fecha_creacion',index:'monto', width:80,sortable:false, editable: true}
-
-            ],
-            onSelectRow: function(){
-                var grid = $("#tblResultEC");
-                var rowid = grid.jqGrid('getGridParam','selrow');
-                var row = grid.jqGrid('getRowData', rowid);
-                $("#valuit").val('3950.00');
-                $("#uit").val('0');
-                $("#descrip").val(row.vdescri);
-                $("#codigo").val(row.idsigma);
-                $("#txtmonto").val(row.monto);
-                $("#montouit").val(row.monto);
-                $("#cantidad").val(1);
-                cambiar();
-                //closeDialog("jqDialogCargando");
+    //++++++++++++++++
+    //-- -->INICIO EXPEDIENTES COSTAS
+    //
+    var navPanelCentroP3 = function() {
+        $("#tblResultEC").jqGrid('filterToolbar', {
+            searchOnEnter: false,
+            stringResult: true,
+            ignoreCase: true,
+            searchOperators: false,
+            defaultSearch: 'cn'
+        });
+    };
+    optionCaja = {
+        width: 510,
+        height: 180,
+        colNames: ['CODIGO', 'Docuemnto', '%UIT', 'Fecha', 'Imp'],
+        colModel: [{
+                name: 'idsigma',
+                index: 'idsigma',
+                width: 90,
+                sorttype: "int",
+                align: 'center',
+                hidden: true,
+                editable: false
             },
-            caption:"Agregar Costas Procesales",
-            rowNum:20,
-            rownumbers:false,
-            ignoreCase:true,
-            viewrecords: false,
-            hidegrid: true,
-            gridComplete: function(){
-
+            {
+                name: 'dtipodoc',
+                index: 'vdescri',
+                width: 400,
+                editable: false
             },
-            afterInsertRow: function(rowid, aData){
-                switch (aData.nestado) {
-                    case '1':
-                        break;
-                    case '0':
-                        jQuery("#tblResultEC").jqGrid('setCell',rowid,'idsigma','',{color:'red'});
-                        jQuery("#tblResultEC").jqGrid('setCell',rowid,'vnrodocu','',{color:'red'});
-                        break;
-                }
+            {
+                name: 'nro',
+                index: 'cidcostas',
+                width: 70,
+                editable: false,
+                hidden: true
+            },
+            {
+                name: 'fecha_creacion',
+                index: 'monto',
+                width: 80,
+                sortable: false,
+                editable: true
+            },
+            {
+                name: 'btnprint',
+                index: 'btnprint',
+                width: 30,
+                align: 'center',
+                formatter: btnprint,
+                search: false
             }
-            // ondblClickRow: editCentro
-        };
+        ],
+        onSelectRow: function() {
+            var grid = $("#tblResultEC");
+            var rowid = grid.jqGrid('getGridParam', 'selrow');
+            var row = grid.jqGrid('getRowData', rowid);
+            $("#valuit").val('3950.00');
+            $("#uit").val('0');
+            $("#descrip").val(row.vdescri);
+            $("#codigo").val(row.idsigma);
+            $("#txtmonto").val(row.monto);
+            $("#montouit").val(row.monto);
+            $("#cantidad").val(1);
+            cambiar();
+            //closeDialog("jqDialogCargando");
+        },
+        caption: "Agregar Costas Procesales",
+        rowNum: 20,
+        rownumbers: false,
+        ignoreCase: true,
+        viewrecords: false,
+        hidegrid: true,
+        gridComplete: function() {
 
-        xmanteUpdatemcaja = function(numberrow,_row){};
-        bindkeysCaja = {"onEnter": xmanteUpdatemcaja};
-        buscarc = function(mpoblad) {
-            valid = true;
-            if(valid==true) {
-                var params = {
-                    "name": "tblResult",
-                    "procedure": "coactivo.lst_documentos",
-                    "print": "true",
-                    "parameters": '{' +
-                    '"p_mdocument":"'+mpoblad+'"' +
-                    '}'
-                };
-                procesar = function(requestData){
-                    options = $.extend(optionCaja, {
-                        data: requestData,
-                        datatype: "local",
-                        gridComplete: function(){
-                            isGridComplete = true;
-                            $("#tblResultEC").jqGrid('setSelection', 1, true);
-                        }
+        },
+        afterInsertRow: function(rowid, aData) {
+            switch (aData.nestado) {
+                case '1':
+                    break;
+                case '0':
+                    jQuery("#tblResultEC").jqGrid('setCell', rowid, 'idsigma', '', {
+                        color: 'red'
                     });
-                    procesarProcedimientoJSON('panelResultEC', 'tblResultEC', optionCaja, params, bindkeysCaja,navPanelCentroP3);
-                };
-                procesarConsultaSubProceso("registrar", params, procesar, 'json');
-            } else {
-                openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+                    jQuery("#tblResultEC").jqGrid('setCell', rowid, 'vnrodocu', '', {
+                        color: 'red'
+                    });
+                    break;
             }
-        };
+        }
+        // ondblClickRow: editCentro
+    };
 
-        //++++++++++++++++
-        //-- -->FIN EXPEDIENTES COSTAS
-        //
+    xmanteUpdatemcaja = function(numberrow, _row) {};
+    bindkeysCaja = {
+        "onEnter": xmanteUpdatemcaja
+    };
+    buscarc = function(mpoblad) {
+        valid = true;
+        if (valid == true) {
+            var params = {
+                "name": "tblResult",
+                "procedure": "coactivo.lst_documentos",
+                "print": "true",
+                "parameters": '{' +
+                    '"p_mdocument":"' + mpoblad + '"' +
+                    '}'
+            };
+            procesar = function(requestData) {
+                options = $.extend(optionCaja, {
+                    data: requestData,
+                    datatype: "local",
+                    gridComplete: function() {
+                        isGridComplete = true;
+                        $("#tblResultEC").jqGrid('setSelection', 1, true);
+                    }
+                });
+                procesarProcedimientoJSON('panelResultEC', 'tblResultEC', optionCaja, params, bindkeysCaja, navPanelCentroP3);
+            };
+            procesarConsultaSubProceso("registrar", params, procesar, 'json');
+        } else {
+            openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+        }
+    };
 
-    $(function(){
-        var doc=$("#codmdocum").val();
+    //++++++++++++++++
+    //-- -->FIN EXPEDIENTES COSTAS
+    // 
+    function btnprint(cellvalue, options, rowObject) {
+
+        return '<div align="center" class="ui-pg-button " title="Hoja de tramite" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnprint(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
+    }
+
+    function accionbtnprint(rowId) {
+        var rowdat = $("#tblListaExp").jqGrid('getRowData', rowId);
+        window.open(pathReportPDF + "Resolucion02.php?param=P_MDOCUMENTO^" + rowdat.idsigma + "|P_USUARIO^<?php echo $this->cusuario; ?>");
+    }
+
+    $(function() {
+        var doc = $("#codmdocum").val();
         buscarc(doc);
     });
-
-
 </script>

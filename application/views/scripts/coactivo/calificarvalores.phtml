@@ -243,18 +243,20 @@
     }
 
     function ImprimirReporte(data) {
-        console.log(data['cidpers']);
-        host = '<?php echo $this->util()->getPath(); ?>report/';
-        vParam = "cidpers=" + data['cidpers'];
-        window.open(host + "MemorandumDevolucion.php?" + vParam, '_blank');
-
-        var vidsigmatrib = '0000000273-0000000279-0000000283-0000007267-0000008509-0000000312-0000001260-1000003127';
-        var videstado = '0-B-D-F-I-J-K-P-N';
-        host = '<?php echo $this->util()->getPath(); ?>report/';
-        vParam = "fechaProyectado=<?php echo $this->util()->getNow(); ?>&usuario=" + 'userlogin' + "&contrib=" + data['cidpers'];
-        vParam = vParam + "&desde=1990&hasta=2025&tributo=" + vidsigmatrib + "&estado=" + videstado;
-        vParam = vParam + "&predio=" + '0000000000' + "&p_userimpr=" + 'userlogin'; + "|DESDE^" + '1990' + "|HASTA^" + '2024' + "|FPROYE^<?php echo $this->util()->getNow(); ?>|TRIBUTO^" + vidsigmatrib + "|NESTADO^" + videstado + "|P_USERIMPR^" + 'userlogin'
-        window.open(host + "estadoCuenta.php?" + vParam, '_blank');
+        //console.log(data);
+        if (data['a'] == '0') { //No Tiene Deuda, Imprime memorandum de Devolucion
+            host = '<?php echo $this->util()->getPath(); ?>report/';
+            vParam = "cidpers=" + data['cidpers'];
+            window.open(host + "MemorandumDevolucion.php?" + vParam, '_blank');
+        } else { //Tiene Deuda Imprime Estado de Cuenta
+            var vidsigmatrib = '0000000273-0000000279-0000000283-0000007267-0000008509-0000000312-0000001260-1000003127';
+            var videstado = '0-B-D-F-I-J-K-P-N';
+            host = '<?php echo $this->util()->getPath(); ?>report/';
+            vParam = "fechaProyectado=<?php echo $this->util()->getNow(); ?>&usuario=" + VAR_USERLOGIN + "&contrib=" + data['cidpers'];
+            vParam = vParam + "&desde=1990&hasta=2025&tributo=" + vidsigmatrib + "&estado=" + videstado;
+            vParam = vParam + "&predio=" + '0000000000' + "&p_userimpr=" + VAR_USERLOGIN + "|DESDE^" + '1990' + "|HASTA^" + '2024' + "|FPROYE^<?php echo $this->util()->getNow(); ?>|TRIBUTO^" + vidsigmatrib + "|NESTADO^" + videstado + "|P_USERIMPR^" + VAR_USERLOGIN
+            window.open(host + "estadoCuenta.php?" + vParam, '_blank');
+        }
     }
 
     $(function() {

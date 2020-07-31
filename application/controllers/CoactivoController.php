@@ -463,6 +463,7 @@ class CoactivoController extends Zend_Controller_Action
             $this->_helper->layout->disableLayout();
             $p_idsigma = $this->_request->getPost('idsigma');
             $p_pcostas = $this->_request->getParam('idcostas');
+            $p_cantidad = $this->_request->getParam('cantidad');
             //$pcostasenvio = json_decode($p_pcostas);
             //$dataAdapter = new Model_DataAdapter();
             //$procedure = 'coactivo.obtener_tabla';
@@ -471,6 +472,7 @@ class CoactivoController extends Zend_Controller_Action
             //$this->view->arrareas = json_encode($records);
             $this->view->codmdocum = $p_idsigma;
             $this->view->idsigma = $p_pcostas;
+            $this->view->cantidad = $p_cantidad;
         }
     }
 
@@ -512,16 +514,12 @@ class CoactivoController extends Zend_Controller_Action
             $parametersu[5] = $p_nestado;
             $parametersu[6] = $p_idsigma;
 
-            $datosusuarios = $dataAdapter->ejec_store_procedura_sql("coactivo.guardar_docemitido", $parametersu);
-            /*echo "<pre>";
-             print_r($datosusuarios);
-             echo "</pre>";*/
-
-            if ($datosusuarios[0][0] > '0') {
-                echo ("Generado Correctamente");
-            } else {
-                echo ("Status: Error ->" . "El documento no se puede generar");
-            }
+            //$datosusuarios = $dataAdapter->ejec_store_procedura_sql("coactivo.guardar_docemitido", $parametersu);
+            $datosusuarios = $dataAdapter->executeAssocQuery("coactivo.guardar_docemitido", $parametersu);
+            /* echo "<pre>";
+            print_r($datosusuarios);
+            echo "</pre>";*/
+            echo json_encode($datosusuarios[0]);
         }
     }
 

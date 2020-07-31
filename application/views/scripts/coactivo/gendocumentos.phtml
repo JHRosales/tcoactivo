@@ -9,37 +9,34 @@
 
         <tr>
             <td colspan="3">
-                <input type="radio" class="squaredOne" name="tipo" id="rec" onclick="mostrar()" checked
-                       value="01"> <b>Resoluci&oacute;n de Ejecuci&oacute;n Coactiva</b>
+                <input type="radio" class="squaredOne" name="tipo" id="rec" onclick="mostrar()" checked value="01"> <b>Resoluci&oacute;n de Ejecuci&oacute;n Coactiva</b>
             </td>
         </tr>
         <tr>
             <td colspan="3">
-                <input type="radio" class="squaredOne" name="tipo" id="suspen" onclick="mostrar()"
-                       value="02"> <b>Resoluci&oacute;n de Suspenci&oacute;n de Procedimiento Coactivo</b>
+                <input type="radio" class="squaredOne" name="tipo" id="suspen" onclick="mostrar()" value="02"> <b>Resoluci&oacute;n de Suspenci&oacute;n de Procedimiento Coactivo</b>
             </td>
         </tr>
         <tr>
             <td colspan="3">
-                <input type="radio" class="squaredOne" name="tipo" id="otras" onclick="mostrar()"
-                       value="03">  <b>Otras Resoluciones</b>
+                <input type="radio" class="squaredOne" name="tipo" id="otras" onclick="mostrar()" value="03"> <b>Otras Resoluciones</b>
             </td>
         </tr>
         <tr id="recs">
             <td colspan="3"><br>
-                <div  class="ui-widget ui-state-active ui-corner-top ui-corner-bottom " ><br>
+                <div class="ui-widget ui-state-active ui-corner-top ui-corner-bottom "><br>
                     <b style="margin-left: 20px; margin-top: 1px; margin-bottom: 1px">Modelo de Resoluci&oacute;n</b><br>
                     &nbsp; &nbsp; &nbsp;&nbsp;
                     <select id="cbomodrec" name="cbomodrec" style="width: 300px;">
                         <?php echo $this->util()->getComboContenedorCoactivo('0000000008', $this->cborec);
-                          ?>
+                        ?>
                     </select>
                 </div>
             </td>
         </tr>
         <tr id="otrasre">
             <td colspan="3"><br>
-                <div  class="ui-widget ui-state-active ui-corner-top ui-corner-bottom "><br>
+                <div class="ui-widget ui-state-active ui-corner-top ui-corner-bottom "><br>
                     <b style="margin-left: 20px;">Modelo de Resoluci&oacute;n</b><br>
                     &nbsp; &nbsp; &nbsp;&nbsp; <select id="cbomodotras" name="cbomodotras" style="width: 300px;">
                         <?php echo $this->util()->getComboContenedorCoactivo('0000000012', $this->cbotros);
@@ -51,7 +48,13 @@
 
         <tr>
             <td colspan="3"><br>
-                <b>Estado</b>  <input type="checkbox" id="nestado" name="nestado"  value="1" offvalue="0" class="ui-text" <?php if ($this->estado!=''){ if($this->estado==1){echo 'checked';}}else{echo 'checked';} ?>>
+                <b>Estado</b> <input type="checkbox" id="nestado" name="nestado" value="1" offvalue="0" class="ui-text" <?php if ($this->estado != '') {
+                                                                                                                            if ($this->estado == 1) {
+                                                                                                                                echo 'checked';
+                                                                                                                            }
+                                                                                                                        } else {
+                                                                                                                            echo 'checked';
+                                                                                                                        } ?>>
             </td>
         </tr>
     </table>
@@ -59,20 +62,23 @@
 <br>
 
 <table border="0" style="width:98%;">
-    <tr ><td align="right"> <button id="btnguardar">Guardar</button></td><td>
-            <button type="button" id="btnregresar">Cancelar</button></td></tr>
+    <tr>
+        <td align="right"> <button id="btnguardar">Guardar</button></td>
+        <td>
+            <button type="button" id="btnregresar">Cancelar</button></td>
+    </tr>
 </table>
 
 
 <script type="text/javascript">
-    function mostrar(){
-        if(document.getElementById('rec').checked){
+    function mostrar() {
+        if (document.getElementById('rec').checked) {
             document.getElementById('recs').style.display = 'block';
             document.getElementById('otrasre').style.display = 'none';
-        } else  if(document.getElementById('suspen').checked){
+        } else if (document.getElementById('suspen').checked) {
             document.getElementById('recs').style.display = 'none';
             document.getElementById('otrasre').style.display = 'none';
-        } else{
+        } else {
             document.getElementById('recs').style.display = 'none';
             document.getElementById('otrasre').style.display = 'block';
         }
@@ -82,48 +88,78 @@
     //themeComboBox("#cbomodrec");
     //themeComboBox("#cbomodotras");
 
-    $('#btnregresar').button({ icons: {primary:'ui-icon-closethick'} }).click(function(){closeDialog('jqDialog1');});
-    $('#btnguardar').button({ icons: {primary:'ui-icon-disk'} }).click(function(){
+    $('#btnregresar').button({
+        icons: {
+            primary: 'ui-icon-closethick'
+        }
+    }).click(function() {
+        closeDialog('jqDialog1');
+    });
+    $('#btnguardar').button({
+        icons: {
+            primary: 'ui-icon-disk'
+        }
+    }).click(function() {
         grabar();
     });
 
-    $("#txtfecdoc").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+    $("#txtfecdoc").datepicker({
+        showOn: "button",
+        buttonImage: jQuery.scriptPath + "img/calendar.gif",
+        buttonImageOnly: true,
+        dateFormat: "dd/mm/yy"
+    });
 
     $(document).ready(function() {
         mostrar();
     });
-    function grabar(){
+
+    function grabar() {
         var correcto = true;
         var form = $('#frmgendocuments');
-        if(correcto){
+        var modeloRes = $('#cbomodrec').val();
+        var modeloOtros = $('#cbomodotras').val();
+        var radioSuspen = $('#suspen').val();
+        if (modeloRes == "9999999999" && radioSuspen != "02") {
+            openDialogError("Seleccionar el Modelo de Resolucion", "250", "150", function() {
+                $("#cbomodrec").focus();
+                correcto = false;
+            });
+            return;
+        }
+        if (modeloOtros == "9999999999" && radioSuspen != "02") {
+            openDialogError("Seleccionar el Modelo de Resolucion", "250", "150", function() {
+                $("#cbomodotras").focus();
+                correcto = false;
+            });
+            return;
+        }
+        if (correcto) {
             openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?", 350, {
-                "Si" : function() {
+                "Si": function() {
                     $.ajax({
                         url: jQuery.scriptPath + "index.php/coactivo/gendocumentossave",
                         type: 'POST',
                         cache: false,
                         data: form.serialize(),
-                        beforeSend : function(data) {
-                        },
-                        success : function(requestData) {
+                        beforeSend: function(data) {},
+                        success: function(requestData) {
+                            json_result = JSON.parse(requestData);
                             closeDialog("jqDialogConfirmacion1");
-                            openDialogInfo(requestData);
+                            openDialogInfo(json_result['b']);
                             closeDialog('jqDialog1');
                             buscardocumento($("#idsigma").val());
-                            imprimir('0000000047');
-                            if(requestData[0][1]=="Generado Correctamente"){
-                                //imprimir('00000000045');
-
+                            if (json_result['a'] > '0') {
+                                imprimir('00000000047');
                             }
                         },
-                        error : function(requestData, strError, strTipoError) {
+                        error: function(requestData, strError, strTipoError) {
                             $("#result").html("Error " + strTipoError + ': ' + strError);
                         },
-                        complete : function(requestData, exito) {
-                        }
+                        complete: function(requestData, exito) {}
                     });
                 },
-                "No" : function() {
+                "No": function() {
                     closeDialog("jqDialogConfirmacion1");
                 }
             });
@@ -131,13 +167,10 @@
     }
 
 
-    function imprimir(param){
+    function imprimir(param) {
         //var f = new Date();
         //var fecha = f.getDate() + "-" + (f.getMonth() + 1) + "-" + f.getFullYear();
         //var fproyec = fecha;
-
-
-
         var fproyec = '0000000273';
         var videstado = '0';
         host = 'http://<?php echo $this->util()->getHost(); ?>/tcoactivo/public/report/';

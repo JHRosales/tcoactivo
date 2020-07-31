@@ -9,8 +9,8 @@ select * from coactivo.dasunto_req 	-- Destalle de Asuntos requeridos ?
 select * from coactivo.dcostasprocesales -- Detalle de las costas procesales (Tarifas)
 select * from coactivo.ddocumento  	-- Detalle de los expedientes creados
 select * from coactivo.ddocumestr  	-- ??
-select * from coactivo.doc_emitidodet 	-- Documentos emitidos detalle ?
-select * from coactivo.doc_emitidos 	-- Documentos emitidos ?
+select * from coactivo.doc_emitidodet 	-- Documentos emitidos detalle, informacion de la deuda al momento de genera una resolucion en el expediente Coactivo
+select * from coactivo.doc_emitidos 	-- Documentos emitidos, Resoluciones en el expediente Coactivo
 select * from coactivo.druta 		-- Detalle de la ruta??
 select * from coactivo.expedientescostas  -- Costas procesales agregados a cada expediente
 select * from coactivo.madjunto  	-- Archivos Adjuntos al Expediente Coactivo
@@ -20,5 +20,17 @@ select * from coactivo.mdocumento 	-- datos generales del Expediente coactico
 select * from coactivo.mruta  		-- detalle de los movimientos transferencias del expediente
 select * from coactivo.mruta_audit  	-- registro de auditoria de la tala mruta (cuando se elimina una movimiento)
 select * from coactivo.pagostesoreria   -- pagos para la pagina principal del Modulo Coactivo
+
+select * from coactivo.mconten where cidtabl='0000000008'
+--Actualizar
+update coactivo.mconten set vdescri='EXPEDIENTE COACTIVO' where idsigma='0000001010' 
+
+--Depurar Tabla Mconten
+Delete from coactivo.mconten where cidtabl='0000000009' and idsigma not in ('0000000009','0000001010')
+Delete from coactivo.mconten where cidtabl='0000000001'
+Delete from coactivo.mconten where cidtabl='0000000005'
+Delete from coactivo.mconten where cidtabl='0000014874'
+Delete from coactivo.mconten where cidtabl='0000014900'
+
 
 
