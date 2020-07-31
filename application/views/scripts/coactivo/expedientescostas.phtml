@@ -3,8 +3,10 @@
     <table border="0" cellspacing="2px">
         <tr>
             <td colspan="5">
-                <input type="hidden" id="codmdocum" name="codmdocum" value="<?php echo $this->codmdocum; ?>">
-                <input type="hidden" id="idsigmaexpcos" name="idsigmaexpcos" value="<?php echo $this->idsigma; ?>">
+                <input type="hidden" id="codmdocum" name="codmdocum" value="<?php echo $this->p_mdocum; ?>">
+                <input type="hidden" id="idsigmaexpcos" name="idsigmaexpcos" value="<?php echo $this->p_pcostas; ?>">
+                <input type="hidden" id="p_tipocostas" name="p_tipocostas" value="<?php echo $this->p_tipocostas; ?>">
+
             </td>
         </tr>
         <tr>
@@ -178,7 +180,9 @@
             $("#codigo").val(row.idsigma);
             $("#txtmonto").val(row.monto);
             $("#montouit").val(row.monto);
-            $("#cantidad").val(1);
+            if (row.idsigma != $("#p_tipocostas").val()) {
+                $("#cantidad").val(1);
+            }
             cambiar();
             //closeDialog("jqDialogCargando");
         },
@@ -204,10 +208,9 @@
                     });
                     break;
             }
-            if () {
+            if (aData.idsigma == $("#p_tipocostas").val()) {
                 $("#tblResultEC").jqGrid('setSelection', rowid, true);
-            } else {
-                $("#tblResultEC").jqGrid('setSelection', 1, true);
+                $("#cantidad").val(<?php echo $this->cantidad; ?>);
             }
         }
         // ondblClickRow: editCentro
@@ -231,9 +234,9 @@
                 options = $.extend(optionCaja, {
                     data: requestData,
                     datatype: "local",
-                    gridComplete: function() {
+                    gridComplete: function(aData) {
                         isGridComplete = true;
-                        //$("#tblResultEC").jqGrid('setSelection', 1, true);
+                        // $("#tblResultEC").jqGrid('setSelection', 1, true);
                     }
                 });
                 procesarProcedimientoJSON('panelResultEC', 'tblResultEC', optionCaja, params, bindkeysCaja, navPanelCentroP3);
@@ -255,8 +258,26 @@
     function grabar() {
         var correcto = true;
         var form = $('#frmexpedientescostas');
+        var cantidad = $("#cantidad").val();
+        var codigoCostas = $("#codigo").val();
+        var total = $("#txtcostas").val();
+        var msg = '';
+        if (cantidad == 0 || cantidad == '') {
+            openDialogInfo("Ingrese una cantidad Valida", 400);
+            correcto = false;
+            return;
+        }
+        if (codigoCostas == 0 || codigoCostas == '') {
+            openDialogInfo("Seleccione la costa Procesal del Listado", 400);
+            correcto = false;
+            return;
+        }
+        if (total == 0 || total == '' || total == '0') {
+            msg = "El total es Cero es Correcto? desea continuar?";
+        }
+
         if (correcto) {
-            openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?", 350, {
+            openDialogConfirm1("\u00BFEst\u00E1 seguro de guardar los datos?<br>" + msg, 350, {
                 "Si": function() {
                     $.ajax({
                         url: jQuery.scriptPath + "index.php/coactivo/expdientescostassave",

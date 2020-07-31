@@ -1,11 +1,10 @@
-<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all "
-     style="width: 99.8%;margin-top:2px;margin-left : 0px;margin-right :0px;margin-bottom:2px;">
+<div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all " style="width: 99.8%;margin-top:2px;margin-left : 0px;margin-right :0px;margin-bottom:2px;">
     <div class="ui-widget ui-state-default ui-corner-top ui-title">
-        <table border="0" width="100%" >
-            <tr >
+        <table border="0" width="100%">
+            <tr>
                 <td width="3%">
                     <A href="index">
-                        <img width="25" height="25" src="<?php echo $this->util()->getImage("home-icon.png");?>">
+                        <img width="25" height="25" src="<?php echo $this->util()->getImage("home-icon.png"); ?>">
                     </A></td>
                 <td align="center" width="97%">
                     <label style="font-size:12px !important;">GESTI&Oacute;N DE EXPEDIENTES</label>
@@ -22,15 +21,15 @@
                 </div>
             </td>
             <td>
-                <div  class="ui-widget ui-state-error ui-corner-top ui-corner-bottom ">
-                    <table border="0"  style="width: 100%;">
+                <div class="ui-widget ui-state-error ui-corner-top ui-corner-bottom ">
+                    <table border="0" style="width: 100%;">
                         <tr>
-                            <td> <span style="font-family: 'Courier New', Monospace; font-size: 12px;"><b>Contribuyente</b></span>  </td>
+                            <td> <span style="font-family: 'Courier New', Monospace; font-size: 12px;"><b>Contribuyente</b></span> </td>
                             <td><span style="font-family: 'Courier New', Monospace; font-size: 12px;"><b>Expediente</b></span></td>
                             <td><span style="font-family: 'Courier New', Monospace; font-size: 12px;"><b> Estado:</b></span></td>
                         </tr>
                         <tr>
-                            <td>  <span style="font-size: 13px;" > <b><label id="txtcontrib"></label></b></span>  </td>
+                            <td> <span style="font-size: 13px;"> <b><label id="txtcontrib"></label></b></span> </td>
                             <td> <span style="font-size: 13px;"> <b><label id="txtnrodoc"></label></b></span> </td>
                             <td><span style="font-family: 'Courier New', Monospace; font-size: 13px; color: #d60907"><b> <label id="txtestado"></label></b></span></td>
                         </tr>
@@ -49,374 +48,573 @@
             </td>
         </tr>
     </table>
-   
+
 </div>
-<div id="panelDocUser" >
-        <table id="tblDocUser"></table><div id="ptblDocUser"></div>
+<div id="panelDocUser">
+    <table id="tblDocUser"></table>
+    <div id="ptblDocUser"></div>
 </div>
 <script>
-/*********************
+    /*********************
 --> Expedientes
 **********************/
-var navPanelCentroP3 = function() {
-    $("#tblResult").jqGrid('filterToolbar', {searchOnEnter: false, stringResult: true, ignoreCase: true, searchOperators: false, defaultSearch: 'cn'});
-};
-optionCaja = {
-    height: 440,
-    width: 280,
-    colNames: ["C\u00F3digo", "Expediente","mperson", "contrib", "dfecdocu", "flagcalificado"],
-    colModel: [
-        //{name:'idsigma', index:'idsigma', width:80,editable:true,hidden:true},
-        {name:'idsigma', index:'idsigma', width:80},
-        {name:'vnrodocu', index:'vnrodocu', width:150, align: 'center'},
-        {name:'mperson', index:'mperson', width:67,hidden:true},
-        {name:'contrib', index:'contrib', width:140 ,hidden:true},
-        {name:'dfecdocu', index:'dfecdocu', width:125,hidden:true},
-        {name:'flagcalificado', index:'flagcalificado', width:67,hidden:true}
-    ],
-    onSelectRow: function(){
-        var grid = $("#tblResult");
-        var rowid = grid.jqGrid('getGridParam','selrow');
-        var row = grid.jqGrid('getRowData', rowid);
-        buscardocumento(row.idsigma);
-        buscarCostas(row.idsigma);
-        navPanelCentroP3();
-        closeDialog("jqDialogCargando");
-        document.getElementById("txtcontrib").innerHTML  =row.contrib;
-        document.getElementById("txtnrodoc").innerHTML  =row.vnrodocu;
-        document.getElementById("txtestado").innerHTML  ="En Proceso";
-    },
-    caption:"Expedientes Coactivos",
-    rowNum:20,
-    rownumbers:true,
-    ignoreCase:true,
-    viewrecords: false,
-    hidegrid: true,
-    afterInsertRow: function(rowid, aData){
-        switch (aData.nestado) {
-            case '1':
-                break;
-            case '0':
-                jQuery("#tblResult").jqGrid('setCell',rowid,'idsigma','',{color:'red'});
-                jQuery("#tblResult").jqGrid('setCell',rowid,'vnrodocu','',{color:'red'});
-                break;
+    var navPanelCentroP3 = function() {
+        $("#tblResult").jqGrid('filterToolbar', {
+            searchOnEnter: false,
+            stringResult: true,
+            ignoreCase: true,
+            searchOperators: false,
+            defaultSearch: 'cn'
+        });
+    };
+    optionCaja = {
+        height: 440,
+        width: 280,
+        colNames: ["C\u00F3digo", "Expediente", "mperson", "contrib", "dfecdocu", "flagcalificado"],
+        colModel: [
+            //{name:'idsigma', index:'idsigma', width:80,editable:true,hidden:true},
+            {
+                name: 'idsigma',
+                index: 'idsigma',
+                width: 80
+            },
+            {
+                name: 'vnrodocu',
+                index: 'vnrodocu',
+                width: 150,
+                align: 'center'
+            },
+            {
+                name: 'mperson',
+                index: 'mperson',
+                width: 67,
+                hidden: true
+            },
+            {
+                name: 'contrib',
+                index: 'contrib',
+                width: 140,
+                hidden: true
+            },
+            {
+                name: 'dfecdocu',
+                index: 'dfecdocu',
+                width: 125,
+                hidden: true
+            },
+            {
+                name: 'flagcalificado',
+                index: 'flagcalificado',
+                width: 67,
+                hidden: true
+            }
+        ],
+        onSelectRow: function() {
+            var grid = $("#tblResult");
+            var rowid = grid.jqGrid('getGridParam', 'selrow');
+            var row = grid.jqGrid('getRowData', rowid);
+            buscardocumento(row.idsigma);
+            buscarCostas(row.idsigma);
+            navPanelCentroP3();
+            closeDialog("jqDialogCargando");
+            document.getElementById("txtcontrib").innerHTML = row.contrib;
+            document.getElementById("txtnrodoc").innerHTML = row.vnrodocu;
+            document.getElementById("txtestado").innerHTML = "En Proceso";
+        },
+        caption: "Expedientes Coactivos",
+        rowNum: 20,
+        rownumbers: true,
+        ignoreCase: true,
+        viewrecords: false,
+        hidegrid: true,
+        afterInsertRow: function(rowid, aData) {
+            switch (aData.nestado) {
+                case '1':
+                    break;
+                case '0':
+                    jQuery("#tblResult").jqGrid('setCell', rowid, 'idsigma', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblResult").jqGrid('setCell', rowid, 'vnrodocu', '', {
+                        color: 'red'
+                    });
+                    break;
+            }
         }
-    }
-    // ondblClickRow: editCentro
-};
+        // ondblClickRow: editCentro
+    };
 
-xmanteUpdatemcaja = function(numberrow,_row){};
-bindkeysCaja = {"onEnter": xmanteUpdatemcaja};
-buscarExp = function() {
-    valid = true;
-    if(valid==true) {
-        var params = {
-            "name": "tblResult",
-            "procedure": "coactivo.lst_expedientes",
-            "print": "true",
-            "parameters": '{' +
-            '}'
-        };
-        procesar = function(requestData){
-            options = $.extend(optionCaja, {
-                data: requestData,
-                datatype: "local",
-                gridComplete: function(){
-                    isGridComplete = true;
-                    $("#tblResult").jqGrid('setSelection', 1, true);
+    xmanteUpdatemcaja = function(numberrow, _row) {};
+    bindkeysCaja = {
+        "onEnter": xmanteUpdatemcaja
+    };
+    buscarExp = function() {
+        valid = true;
+        if (valid == true) {
+            var params = {
+                "name": "tblResult",
+                "procedure": "coactivo.lst_expedientes",
+                "print": "true",
+                "parameters": '{' +
+                    '}'
+            };
+            procesar = function(requestData) {
+                options = $.extend(optionCaja, {
+                    data: requestData,
+                    datatype: "local",
+                    gridComplete: function() {
+                        isGridComplete = true;
+                        $("#tblResult").jqGrid('setSelection', 1, true);
+                    }
+                });
+                procesarProcedimientoJSON('panelResult', 'tblResult', optionCaja, params, bindkeysCaja, null);
+            };
+            procesarConsultaSubProceso("registrar", params, procesar, 'json');
+        } else {
+            openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+        }
+    };
+    /*************************
+    <----Expedientes
+    **************************/
+
+
+    /************************
+    ---> Documentos
+    *************************/
+    newDocumento = function() {
+        rowid = jQuery("#tblResult").jqGrid('getGridParam', 'selrow');
+        if (rowid == undefined) {
+            openDialogInfo("Seleccione una fila", 300);
+            return false;
+        }
+        row = $("#tblResult").jqGrid('getRowData', rowid);
+        openDialogDataFunction1("coactivo/gendocumentos", {
+                idsigma: row.idsigma,
+                iddocum: '',
+                nroexp: row.vnrodocu
+            }, "415", "250",
+            "Agregar Documento");
+
+    };
+    editDocumento = function() {
+        rowid = jQuery("#tblResult2").jqGrid('getGridParam', 'selrow');
+        if (rowid == undefined) {
+            openDialogInfo("Seleccione una fila", 300);
+            return false;
+        }
+        row = $("#tblResult2").jqGrid('getRowData', rowid);
+        openDialogDataFunction1("coactivo/gendocumentos", {
+                idsigma: row.idsigma,
+                iddocum: ''
+            },
+            "415", "220", "Modificar Documento");
+    };
+    ListarDocumento = function() {
+        rowid = jQuery("#tblResult").jqGrid('getGridParam', 'selrow');
+        if (rowid == undefined) {
+            openDialogInfo("Seleccione una fila", 300);
+            return false;
+        }
+        row = $("#tblResult").jqGrid('getRowData', rowid);
+        openDialogDataFunction1("coactivo/docemitidos", {
+            idsigma: row.idsigma
+        }, "550", "400", "Ver Documentos Emitidos");
+    };
+    btnAgregarDocumentos = {
+        caption: 'Agregar &nbsp;',
+        title: 'Agregar Series',
+        buttonicon: 'ui-icon-plusthick',
+        onClickButton: function() {
+            newDocumento();
+        }
+    };
+
+    btnEditarDocumento = {
+        caption: 'Editar &nbsp;',
+        title: 'Editar Series',
+        buttonicon: 'ui-icon-pencil',
+        onClickButton: function() {
+            editDocumento();
+        }
+    };
+    btnVerDocumento = {
+        caption: 'Ver Docs',
+        title: 'Ver documentos Emitidos',
+        buttonicon: 'ui-icon-pencil',
+        onClickButton: function() {
+            ListarDocumento();
+        }
+    };
+    var navPanelCentroP2 = function() {
+        $("#tblResult2").jqGrid('navGrid', '#ptblResult2', {
+            edit: false,
+            add: false,
+            del: false,
+            search: false,
+            refresh: false
+        });
+        $("#tblResult2").jqGrid('navButtonAdd', '#ptblResult2', btnAgregarDocumentos);
+        //$("#tblResult2").jqGrid('navSeparatorAdd', '#ptblResult2');
+        // $("#tblResult2").jqGrid('navButtonAdd', '#ptblResult2', btnEditarDocumento);
+        $("#tblResult2").jqGrid('navSeparatorAdd', '#ptblResult2');
+        $("#tblResult2").jqGrid('navButtonAdd', '#ptblResult2', btnVerDocumento);
+        $("#tblResult2").jqGrid('filterToolbar', {
+            searchOnEnter: true,
+            stringResult: true,
+            ignoreCase: true,
+            searchOperators: true,
+            defaultSearch: 'cn'
+        });
+    };
+
+    optionDocumentos = {
+        height: 190,
+        width: 650,
+        colNames: ["C\u00F3digo", "Fecha Creacion", "Tipo doc", "Tipo Documento", "Descripcion", "Fecha Notificacion"],
+        colModel: [{
+                name: 'idsigma',
+                index: 'idsigma',
+                width: 80,
+                editable: true,
+                hidden: false,
+                align: 'center',
+                frozen: false,
+                search: true,
+                editoptions: {
+                    readonly: true,
+                    size: 10
                 }
-            });
-            procesarProcedimientoJSON('panelResult', 'tblResult', optionCaja, params, bindkeysCaja,null);
-        };
-        procesarConsultaSubProceso("registrar", params, procesar, 'json');
-    } else {
-        openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
-    }
-};
-/*************************
-<----Expedientes
-**************************/
+            },
+            {
+                name: 'fecha_creacion',
+                index: 'fecha_creacion',
+                width: 80,
+                editable: true,
+                align: 'center',
+                hidden: false
+            },
+            {
+                name: 'dtipodoc',
+                index: 'dtipodoc',
+                width: 350,
+                editable: true,
+                align: 'center',
+                hidden: false
+            },
+            {
+                name: 'nrodoc',
+                index: 'nrodoc',
+                width: 90,
+                editable: true,
+                hidden: true
+            },
+            {
+                name: 'tipodoc',
+                index: 'tipodoc',
+                width: 140,
+                editable: true,
+                align: 'left',
+                hidden: true
+            },
+            {
+                name: 'fecha_notificacion',
+                index: 'fecha_notificacio',
+                width: 80,
+                editable: true,
+                hidden: false
+            }
+        ],
+        onSelectRow: function() {
+            var grid = $("#tblResult2");
+            var rowid = grid.jqGrid('getGridParam', 'selrow');
+            var row = grid.jqGrid('getRowData', rowid);
+            closeDialog("jqDialogCargando");
+        },
+        caption: "Resultado de busqueda de Cajeros",
+        ignoreCase: true,
+        hidegrid: true,
+        viewrecords: true,
+        rowNum: 999999,
+        loadComplete: function() {
+            navPanelCentroP2();
+        },
+        afterInsertRow: function(rowid, aData) {
+            switch (aData.nestado) {
+                case '1':
+                    break;
+                case '0':
+                    jQuery("#tblResult2").jqGrid('setCell', rowid, 'idsigma', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblResult2").jqGrid('setCell', rowid, 'ciduser', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblResult2").jqGrid('setCell', rowid, 'usuario', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblResult2").jqGrid('setCell', rowid, 'nomusuario', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblResult2").jqGrid('setCell', rowid, 'cnrocaja', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblResult2").jqGrid('setCell', rowid, 'cidlocal', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblResult2").jqGrid('setCell', rowid, 'dfecini', '', {
+                        color: 'red'
+                    });
+                    break;
+            }
+        }
+    };
 
-
-/************************
----> Documentos
-*************************/
-newDocumento=function(){
-    rowid= jQuery("#tblResult").jqGrid('getGridParam','selrow');
-    if (rowid == undefined){
-        openDialogInfo("Seleccione una fila",300);
-        return false;
-    }
-    row = $("#tblResult").jqGrid('getRowData', rowid);
-    openDialogDataFunction1("coactivo/gendocumentos",{idsigma: row.idsigma,iddocum: '',nroexp: row.vnrodocu},"415", "250",
-        "Agregar Documento");
-
-};
-editDocumento=function(){
-    rowid= jQuery("#tblResult2").jqGrid('getGridParam','selrow');
-    if (rowid == undefined){
-        openDialogInfo("Seleccione una fila",300);
-        return false;
-    }
-    row = $("#tblResult2").jqGrid('getRowData', rowid);
-    openDialogDataFunction1("coactivo/gendocumentos",{idsigma: row.idsigma,iddocum: ''},
-        "415", "220", "Modificar Documento");
-};
-ListarDocumento=function(){
-    rowid= jQuery("#tblResult").jqGrid('getGridParam','selrow');
-    if (rowid == undefined){
-        openDialogInfo("Seleccione una fila",300);
-        return false;
-    }
-    row = $("#tblResult").jqGrid('getRowData', rowid);
-    openDialogDataFunction1("coactivo/docemitidos",{idsigma:row.idsigma},"550", "400", "Ver Documentos Emitidos");
-};
-btnAgregarDocumentos = {
-    caption: 'Agregar &nbsp;',
-    title: 'Agregar Series',
-    buttonicon: 'ui-icon-plusthick',
-    onClickButton: function () {
-        newDocumento();
-    }
-};
-
-btnEditarDocumento = {
-    caption: 'Editar &nbsp;',
-    title: 'Editar Series',
-    buttonicon: 'ui-icon-pencil',
-    onClickButton: function () {
-        editDocumento();
-    }
-};
-btnVerDocumento = {
-    caption: 'Ver Docs',
-    title: 'Ver documentos Emitidos',
-    buttonicon: 'ui-icon-pencil',
-    onClickButton: function () {
-        ListarDocumento();
-    }
-};
-var navPanelCentroP2 = function() {
-    $("#tblResult2").jqGrid('navGrid', '#ptblResult2', {edit: false, add: false, del: false, search: false, refresh: false});
-    $("#tblResult2").jqGrid('navButtonAdd', '#ptblResult2', btnAgregarDocumentos);
-    //$("#tblResult2").jqGrid('navSeparatorAdd', '#ptblResult2');
-   // $("#tblResult2").jqGrid('navButtonAdd', '#ptblResult2', btnEditarDocumento);
-    $("#tblResult2").jqGrid('navSeparatorAdd', '#ptblResult2');
-    $("#tblResult2").jqGrid('navButtonAdd', '#ptblResult2', btnVerDocumento);
-    $("#tblResult2").jqGrid('filterToolbar', {searchOnEnter: true, stringResult: true, ignoreCase: true, searchOperators: true, defaultSearch: 'cn'});
-};
-
-optionCajero = {
-    height: 190,
-    width: 650,
-    colNames: ["C\u00F3digo", "Fecha Creacion","Tipo doc","Tipo Documento", "Descripcion", "Fecha Notificacion"],
-    colModel: [
-        {name:'idsigma', index:'idsigma', width:80,editable: true,hidden:false, align: 'center', frozen: false,search: true,editoptions:{readonly:true,size:10}},
-        {name:'fecha_creacion', index:'fecha_creacion', width:80,editable: true, align: 'center',hidden:false},
-        {name:'dtipodoc', index:'dtipodoc', width:350,editable: true, align: 'center',hidden:false},
-        {name:'nrodoc', index:'nrodoc', width:90,editable: true,hidden:true},
-        {name:'tipodoc', index:'tipodoc', width:140,editable: true, align: 'left',hidden:true},
-        {name:'fecha_notificacion', index:'fecha_notificacio', width:80,editable: true,hidden:false}
-    ],
-    onSelectRow: function(){
-        var grid = $("#tblResult2");
-        var rowid = grid.jqGrid('getGridParam','selrow');
-        var row = grid.jqGrid('getRowData', rowid);
-        closeDialog("jqDialogCargando");
-    },
-    caption:"Resultado de busqueda de Cajeros",
-    ignoreCase:true,
-    hidegrid: true,
-    viewrecords: true,
-    rowNum:999999,
-    loadComplete: function(){
-        navPanelCentroP2();
-    },
-    afterInsertRow: function(rowid, aData){
-        switch (aData.nestado) {
-            case '1':
-                break;
-            case '0':
-                jQuery("#tblResult2").jqGrid('setCell',rowid,'idsigma','',{color:'red'});
-                jQuery("#tblResult2").jqGrid('setCell',rowid,'ciduser','',{color:'red'});
-                jQuery("#tblResult2").jqGrid('setCell',rowid,'usuario','',{color:'red'});
-                jQuery("#tblResult2").jqGrid('setCell',rowid,'nomusuario','',{color:'red'});
-                jQuery("#tblResult2").jqGrid('setCell',rowid,'cnrocaja','',{color:'red'});
-                jQuery("#tblResult2").jqGrid('setCell',rowid,'cidlocal','',{color:'red'});
-                jQuery("#tblResult2").jqGrid('setCell',rowid,'dfecini','',{color:'red'});
-                break;
+    function buscardocumento(mpoblad) {
+        valid = true;
+        if (valid == true) {
+            var params = {
+                "name": "tblResult2",
+                "procedure": "coactivo.lst_documentos",
+                "print": "true",
+                "parameters": '{' +
+                    '"p_mdocument":"' + mpoblad + '"' +
+                    '}'
+            };
+            optionDocumentos.caption = "Documentos";
+            procesar = function(requestData) {
+                options = $.extend(optionDocumentos, {
+                    data: requestData,
+                    gridComplete: function() {
+                        isGridComplete = true;
+                        $("#tblResult2").jqGrid('setSelection', 1, true);
+                    }
+                });
+                procesarProcedimientoJSON('panelResult2', 'tblResult2', optionDocumentos, params, null, null);
+            };
+            procesarConsultaSubProceso("registrar", params, procesar, 'json');
+        } else {
+            openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
         }
     }
-};
-function buscardocumento(mpoblad){
-    valid = true;
-    if(valid==true) {
-        var params = {
-            "name": "tblResult2",
-            "procedure": "coactivo.lst_documentos",
-            "print": "true",
-            "parameters": '{' +
-            '"p_mdocument":"'+mpoblad+'"' +
-            '}'
-        };
-        optionCajero.caption = "Documentos";
-         //procesarProcedimientoJSON('panelResult2','tblResult2',optionCajero,params,null,navPanelCentroP2);
-        procesar = function(requestData){
-            options = $.extend(optionCajero, {
-                data: requestData,
-                gridComplete: function(){
-                    isGridComplete = true;
-                    $("#tblResult2").jqGrid('setSelection', 1, true);
-                }
-            });
-            procesarProcedimientoJSON('panelResult2','tblResult2',optionCajero,params,null,null);
-        };
-        procesarConsultaSubProceso("registrar", params, procesar, 'json');
-    } else {
-        openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
-    }
-}
-/*********************
-* <--Documentos
-**********************/
+    /*********************
+     * <--Documentos
+     **********************/
 
 
- /******************
- --> Costas Procesales
-  ******************/
-newCostasProcesa=function(){
-    rowid= jQuery("#tblResult").jqGrid('getGridParam','selrow');
-    if (rowid == undefined){
-        openDialogInfo("Seleccione una fila",300);
-        return false;
-    }
-    row = $("#tblResult").jqGrid('getRowData', rowid);
-    openDialogDataFunction1("coactivo/expedientescostas",{idsigma: row.idsigma,idcostas: ''},
-        "550", "520", "Agregar Costas Procesales");
-};
-editCostasPro=function(){
-    rowid= jQuery("#tblResult").jqGrid('getGridParam','selrow');
-    if (rowid == undefined){
-        openDialogInfo("Seleccione una fila",300);
-        return false;
-    }
-    row = $("#tblResult").jqGrid('getRowData', rowid);
-
-    rowid1= jQuery("#tblExpcostas").jqGrid('getGridParam','selrow');
-    if (rowid1 == undefined){
-        openDialogInfo("Seleccione una fila",300);
-        return false;
-    }
-    row1 = $("#tblExpcostas").jqGrid('getRowData', rowid1);
-    openDialogDataFunction1("coactivo/expedientescostas",{idsigma: row.idsigma,idcostas: row1.idsigma},"550", "520", "Modificar Costas Procesales");
-};
-btnAgregaCostasProce = {
-    caption: '&nbsp; Agregar &nbsp;',
-    title: 'Agregar Series',
-    buttonicon: 'ui-icon-plusthick',
-    onClickButton: function () {
-        newCostasProcesa();
-    }
-};
-
-btnEditarCostasPro = {
-    caption: '&nbsp; Editar &nbsp;',
-    title: 'Editar Costas Procesales',
-    buttonicon: 'ui-icon-pencil',
-    onClickButton: function () {
-        editCostasPro();
-    }
-};
-var navPanelCentroP = function() {
-    $("#tblExpcostas").jqGrid('navGrid', '#ptblExpcostas', {edit: false, add: false, del: false, search: false, refresh: false});
-    $("#tblExpcostas").jqGrid('navButtonAdd', '#ptblExpcostas', btnAgregaCostasProce);
-    $("#tblExpcostas").jqGrid('navSeparatorAdd', '#ptblExpcostas');
-    $("#tblExpcostas").jqGrid('navButtonAdd', '#ptblExpcostas', btnEditarCostasPro);
-    $("#tblExpcostas").jqGrid('filterToolbar', {searchOnEnter: true, stringResult: true, ignoreCase: true, searchOperators: true, defaultSearch: 'cn'});
-};
-optionmcaja = {
-    height: 90,
-    width: 650,
-    editurl: "seriessave",
-    colNames: ["C\u00F3digo", "Tipo","Costa Procesal", "Fecha","Monto","Cantidad", "Total"],
-    colModel: [
-        {name:'idsigma', index:'idsigma', width:90,editable: true, align: 'center', frozen: false,search: true},
-        {name:'tipocosta', index:'tipocosta', width:70,editable: true, align: 'center',hidden:true,search: true},
-        {name:'costaprocesal', index:'costaprocesal', width:300,search: true,editable: true, align: 'left',hidden:false},
-        {name:'fecha', index:'fecha', align: 'center', width:80,editable: true,edittype:"select"},
-        {name:'ctipdoc', index:'ctipdoc', align: 'center', width:60,hidden:false},
-        {name:'ccajdes', index:'ccajdes', align: 'center', width:60,hidden:false},
-        {name:'nestado', index:'nestado', width:60,search: false,align:"center"}
-    ],
-    ignoreCase:true,
-    rowNum:9999999,
-    viewrecords: true,
-    caption: "ghj",
-    //ondblClickRow: editCostasPro,
-    afterInsertRow: function(rowid, aData){
-        switch (aData.nestado) {
-            case '1':
-                break;
-            case '0':
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'idsigma','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'ccajero','',{color:'red'});//,backgroundColor:'#D8D8D8'
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'cseries','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'cnroact','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'ctipdoc','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'ccajdes','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'vdatetm','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'vhostnm','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'vusernm','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'nipmapl','',{color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'destado','',{Color:'red'});
-                jQuery("#tblExpcostas").jqGrid('setCell',rowid,'nestado','',{color:'red'});
-                break;
+    /******************
+    --> Costas Procesales
+     ******************/
+    newCostasProcesa = function() {
+        rowid = jQuery("#tblResult").jqGrid('getGridParam', 'selrow');
+        if (rowid == undefined) {
+            openDialogInfo("Seleccione una fila", 300);
+            return false;
         }
-    }
-};
+        row = $("#tblResult").jqGrid('getRowData', rowid);
+        openDialogDataFunction1("coactivo/expedientescostas", {
+                idsigma: row.idsigma,
+                idcostas: ''
+            },
+            "550", "520", "Agregar Costas Procesales");
+    };
+    editCostasPro = function() {
+        rowid = jQuery("#tblResult").jqGrid('getGridParam', 'selrow');
+        if (rowid == undefined) {
+            openDialogInfo("Seleccione una fila", 300);
+            return false;
+        }
+        row = $("#tblResult").jqGrid('getRowData', rowid);
 
-xmanteUpdatemcajero = function(numberrow,_row){
+        rowid1 = jQuery("#tblExpcostas").jqGrid('getGridParam', 'selrow');
+        if (rowid1 == undefined) {
+            openDialogInfo("Seleccione una fila", 300);
+            return false;
+        }
+        row1 = $("#tblExpcostas").jqGrid('getRowData', rowid1);
+        openDialogDataFunction1("coactivo/expedientescostas", {
+            idsigma: row.idsigma,
+            idcostas: row1.idsigma,
+            idtipoCosta: row1.tipocosta,
+            cantidad: row1.cantidad
+        }, "550", "520", "Modificar Costas Procesales");
+    };
+    btnAgregaCostasProce = {
+        caption: '&nbsp; Agregar &nbsp;',
+        title: 'Agregar Series',
+        buttonicon: 'ui-icon-plusthick',
+        onClickButton: function() {
+            newCostasProcesa();
+        }
+    };
 
-    if(numberrow == undefined || numberrow == null) {
-        row = _row
-    }else{
-        row = $(this).getRowData(numberrow);
-    }
-    row.action='update';
-    editCostasPro(row);
-    //viewmcajero(row);
-};
-bindkeysmcajero = {"onEnter": xmanteUpdatemcajero};
-buscarCostas = function(mdocumento) {
-    valid = true;
-    if(valid==true) {
-        var parameters = {
-            "name": "tblExpcostas",
-            "procedure": "coactivo.lst_expedcostas",
-            "parameters": '{' +
-            '"p_mdocument":"'+mdocumento+'"' +
-            '}'
-        };
-        optionmcaja.caption = "Costas Procesales";
-        proceso = function(requestData){
-            $("#panelExpcostas").html(requestData);
-            records = $("#ctblExpcostas").val();
-            actualizarGrid("tblExpcostas", optionmcaja, bindkeysmcajero);
-            navPanelCentroP();
-        };
-        procesarConsultaSubProceso('registrar', parameters, proceso);
-    } else {
-        openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
-    }
-};
+    btnEditarCostasPro = {
+        caption: '&nbsp; Editar &nbsp;',
+        title: 'Editar Costas Procesales',
+        buttonicon: 'ui-icon-pencil',
+        onClickButton: function() {
+            editCostasPro();
+        }
+    };
+    var navPanelCentroP = function() {
+        $("#tblExpcostas").jqGrid('navGrid', '#ptblExpcostas', {
+            edit: false,
+            add: false,
+            del: false,
+            search: false,
+            refresh: false
+        });
+        $("#tblExpcostas").jqGrid('navButtonAdd', '#ptblExpcostas', btnAgregaCostasProce);
+        $("#tblExpcostas").jqGrid('navSeparatorAdd', '#ptblExpcostas');
+        $("#tblExpcostas").jqGrid('navButtonAdd', '#ptblExpcostas', btnEditarCostasPro);
+        $("#tblExpcostas").jqGrid('filterToolbar', {
+            searchOnEnter: true,
+            stringResult: true,
+            ignoreCase: true,
+            searchOperators: true,
+            defaultSearch: 'cn'
+        });
+    };
+    optionCostasProcesales = {
+        height: 90,
+        width: 650,
+        editurl: "seriessave",
+        colNames: ["C\u00F3digo", "CodigoCostaPr", "Costa Procesal", "Fecha", "Monto", "Cantidad", "Total"],
+        colModel: [{
+                name: 'idsigma',
+                index: 'idsigma',
+                width: 90,
+                editable: true,
+                align: 'center',
+                frozen: false,
+                search: true
+            },
+            {
+                name: 'tipocosta',
+                index: 'tipocosta',
+                width: 70,
+                editable: true,
+                align: 'center',
+                hidden: true,
+                search: true
+            },
+            {
+                name: 'costaprocesal',
+                index: 'costaprocesal',
+                width: 300,
+                search: true,
+                editable: true,
+                align: 'left',
+                hidden: false
+            },
+            {
+                name: 'fecha',
+                index: 'fecha',
+                align: 'center',
+                width: 80,
+                editable: true,
+                edittype: "select"
+            },
+            {
+                name: 'monto',
+                index: 'monto',
+                align: 'center',
+                width: 60,
+                hidden: false
+            },
+            {
+                name: 'cantidad',
+                index: 'cantidad',
+                align: 'center',
+                width: 60,
+                hidden: false
+            },
+            {
+                name: 'total',
+                index: 'total',
+                width: 60,
+                search: false,
+                align: "center"
+            }
+        ],
+        ignoreCase: true,
+        rowNum: 9999999,
+        viewrecords: true,
+        caption: "ghj",
+        //ondblClickRow: editCostasPro,
+        afterInsertRow: function(rowid, aData) {
+            switch (aData.nestado) {
+                case '1':
+                    break;
+                case '0':
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'idsigma', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'tipocosta', '', {
+                        color: 'red'
+                    }); //,backgroundColor:'#D8D8D8'
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'costaprocesal', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'fecha', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'monto', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'cantidad', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'total', '', {
+                        color: 'red'
+                    });
+                    break;
+            }
+        }
+    };
 
-/****************************
-<--Costas Procesales
- ****************************/
-$(function(){
-buscarExp();
+    xmanteUpdatemcajero = function(numberrow, _row) {
 
-});
+        if (numberrow == undefined || numberrow == null) {
+            row = _row
+        } else {
+            row = $(this).getRowData(numberrow);
+        }
+        row.action = 'update';
+        editCostasPro(row);
+        //viewmcajero(row);
+    };
+    bindkeysmcajero = {
+        "onEnter": xmanteUpdatemcajero
+    };
+    buscarCostas = function(mdocumento) {
+        valid = true;
+        if (valid == true) {
+            var parameters = {
+                "name": "tblExpcostas",
+                "procedure": "coactivo.lst_expedcostas",
+                "parameters": '{' +
+                    '"p_mdocument":"' + mdocumento + '"' +
+                    '}'
+            };
+            optionCostasProcesales.caption = "Costas Procesales";
+            proceso = function(requestData) {
+                $("#panelExpcostas").html(requestData);
+                records = $("#ctblExpcostas").val();
+                actualizarGrid("tblExpcostas", optionCostasProcesales, bindkeysmcajero);
+                navPanelCentroP();
+            };
+            procesarConsultaSubProceso('registrar', parameters, proceso);
+        } else {
+            openDialogWarning("Ingrese un valor en los campos de busqueda.", 380, 150);
+        }
+    };
 
+    /****************************
+    <--Costas Procesales
+     ****************************/
+    $(function() {
+        buscarExp();
 
+    });
 </script>

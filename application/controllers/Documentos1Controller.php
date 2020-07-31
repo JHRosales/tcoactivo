@@ -1,16 +1,18 @@
 <?php
 
-class DocumentosController extends Zend_Controller_Action {
+class Documentos1Controller extends Zend_Controller_Action
+{
 
-    public function init() {
-        
+    public function init()
+    {
     }
 
-    public function indexAction() {
-        
+    public function indexAction()
+    {
     }
 
-   public function mrutadeleteAction() {
+    public function mrutadeleteAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -20,7 +22,7 @@ class DocumentosController extends Zend_Controller_Action {
 
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
             $userlogin =  $ddatosuserlog->cidusuario;
-            
+
 
 
             $cn = new Model_DataAdapter();
@@ -32,7 +34,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function docadjuntodeleteAction() {
+    public function docadjuntodeleteAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -48,7 +51,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function ddocumentodeleteAction() {
+    public function ddocumentodeleteAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -64,7 +68,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function ddocumentoAction() {
+    public function ddocumentoAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
@@ -72,18 +77,18 @@ class DocumentosController extends Zend_Controller_Action {
         }
 
 
-        $editable = $this->_request->getParam('editable');# 0 : No Editable / 1: Editable
+        $editable = $this->_request->getParam('editable'); # 0 : No Editable / 1: Editable
         $cidsigma = $this->_request->getParam('cidsigma');
         $ctipjerar = $this->_request->getParam('ctipjerar');
         $mdocumento = $this->_request->getParam('mdocumento');
-        
+
         $cn = new Model_DataAdapter();
-         
+
         $procedure = 'coactivo.Mdocument_get';
         $parameters[0] =  $mdocumento;
         $recordsMdocument1 = $cn->executeAssocQuery($procedure, $parameters);
         $stconcluido = $recordsMdocument1[0]["stconcluido"];
-        
+
         // todo : Revisar
         $dasunto = $this->_request->getParam('dasunto');
         if ((string) $dasunto !== '') {
@@ -91,8 +96,8 @@ class DocumentosController extends Zend_Controller_Action {
             //$val[] = array('div_requisitos',$dasunto.'a', 'html');
             $this->view->dasunto = (string) $dasunto;
         }
-        if ($editable==''){
-            $editable ='1';
+        if ($editable == '') {
+            $editable = '1';
         }
         if ($cidsigma == '') {
             $cidsigma = "0000000001";
@@ -109,9 +114,9 @@ class DocumentosController extends Zend_Controller_Action {
         $this->view->cidsigma = $cidsigma;
         $this->view->mdocumento = $mdocumento;
         $this->view->editable = $editable;
-        
-        $this->view->stconcluido = $stconcluido;//modificado 0206
-        
+
+        $this->view->stconcluido = $stconcluido; //modificado 0206
+
 
         $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
 
@@ -122,7 +127,7 @@ class DocumentosController extends Zend_Controller_Action {
         }
 
 
-        
+
         $procedure2 = 'coactivo.mdocument_get';
         //$parameters2[0] = array("@idsigma","0000000001");
         $parameters2[0] =  $mdocumento;
@@ -137,7 +142,8 @@ class DocumentosController extends Zend_Controller_Action {
         $func->PintarValor($val);
     }
 
-    public function ddocumentomanteAction() {
+    public function ddocumentomanteAction()
+    {
         $this->_helper->getHelper('ajaxContext')->initContext();
         $this->_helper->layout->disableLayout();
 
@@ -163,7 +169,7 @@ class DocumentosController extends Zend_Controller_Action {
 
         $cbotipodoc = '9999999999';
         $txtobservacion = "";
-        $txtvfolios = '0';//MODIFICADO 0106
+        $txtvfolios = '0'; //MODIFICADO 0106
         $txtnrodoc = '';
         $cborelevancia = '9999999999';
         $txtfecingresodoc = date("d/m/Y");
@@ -180,7 +186,6 @@ class DocumentosController extends Zend_Controller_Action {
             // todo : Revisar
             if ((string) $reqdoc !== '') {
                 $cbotipodoc = (string) $reqdoc;
-
             }
             $cborelevancia = '0000000140';
         } elseif ($type == 'M' || $type == 'C') {
@@ -191,7 +196,7 @@ class DocumentosController extends Zend_Controller_Action {
             $parameters[3] =  '';
             $recordsDdocument = $cn->executeAssocQuery($procedure, $parameters);
             $cbotipodoc = $recordsDdocument[0]["ctipdocu"];
-            $txtvfolios=$recordsDdocument[0]["vfolios"];//MODIFICADO 0106
+            $txtvfolios = $recordsDdocument[0]["vfolios"]; //MODIFICADO 0106
             $txtobservacion = $recordsDdocument[0]["vobserv"];
             $txtnrodoc = $recordsDdocument[0]["vnrodocu"];
             $txtfecingresodoc = $recordsDdocument[0]["dfecdocu"];
@@ -216,13 +221,13 @@ class DocumentosController extends Zend_Controller_Action {
         //$val[] = array('txtobservacion',$txtobservacion, 'val');
         $this->view->observ = $txtobservacion;
         $val[] = array('txtnrodoc', $txtnrodoc, 'val');
-        $val[] = array('txtvfolios', $txtvfolios, 'val');//MODIFICADO 0106
+        $val[] = array('txtvfolios', $txtvfolios, 'val'); //MODIFICADO 0106
         $val[] = array('txtnroexpe', $recordsMdocument[0]["vnrodocu"], 'val');
         $val[] = array('txtrecurrente', $recordsMdocument[0]["dsperson"], 'val');
         $val[] = array('txtfecingreso', $recordsMdocument[0]["dfecdocu"], 'val');
         $val[] = array('txtfolios', $recordsMdocument[0]["nfolios"], 'val');
         $val[] = array('txtfecingresodoc', $txtfecingresodoc, 'val');
-        
+
 
         $func->PintarValor($val);
 
@@ -242,11 +247,12 @@ class DocumentosController extends Zend_Controller_Action {
             });
  		ProcesoBuscarDocdet("' . (string) $reqdoc . '");
 		</script>';
-        $evt[] = array("txtvfolios", "keypress", "return validarnumerossinespacios(event);");//modificado 0106
-        $func->PintarEvento($evt);//modificado 0106
+        $evt[] = array("txtvfolios", "keypress", "return validarnumerossinespacios(event);"); //modificado 0106
+        $func->PintarEvento($evt); //modificado 0106
     }
 
-    public function ddocumentomantesaveAction() {
+    public function ddocumentomantesaveAction()
+    {
 
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
@@ -279,15 +285,15 @@ class DocumentosController extends Zend_Controller_Action {
                 $xmlDdocument .=  $values->mconfigdoc . '|';
                 $xmlDdocument .=  $values->vdatoitem . '^';
 
-               // $xmlDdocument .='<r ';
-               // $xmlDdocument .=' xidsigma= "' . $values->idsigma . '" ';
+                // $xmlDdocument .='<r ';
+                // $xmlDdocument .=' xidsigma= "' . $values->idsigma . '" ';
                 //$xmlDdocument .=' xmconfigdoc= "' . $values->mconfigdoc . '" ';
                 //$xmlDdocument .=' xvdatoitem= "'.$values->vdatoitem.'" ';
-               // $xmlDdocument .=' xvdatoitem= "' . str_replace(">", "~", str_replace("<", "^", $values->vdatoitem)) . '" ';
+                // $xmlDdocument .=' xvdatoitem= "' . str_replace(">", "~", str_replace("<", "^", $values->vdatoitem)) . '" ';
                 //$xmlDdocument .='>';
-               // $xmlDdocument .='</r>';
+                // $xmlDdocument .='</r>';
             }
-           // $xmlDdocument = "<d>" . $xmlDdocument . "</d>";
+            // $xmlDdocument = "<d>" . $xmlDdocument . "</d>";
 
             $xmlDdocument = substr($xmlDdocument, 0, strlen($xmlDdocument) - 1);
 
@@ -301,7 +307,7 @@ class DocumentosController extends Zend_Controller_Action {
             $parameters[1] = $pidsigma;
             $parameters[2] =  $pctipdocu;
             $parameters[3] =  $pvnrodocu;
-            $parameters[4] =  $pvfolios;//modificado 0106
+            $parameters[4] =  $pvfolios; //modificado 0106
             $parameters[5] = $pvobserv;
             $parameters[6] =  $pctiprele;
             $parameters[7] =  $pctipjerar;
@@ -321,7 +327,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function uploadddocumentsAction() {
+    public function uploadddocumentsAction()
+    {
         //$this->_helper->layout->disableLayout();
         //$this->_helper->viewRenderer->setNoRender();
         //$this->_helper->getHelper('ajaxContext')->initContext();
@@ -358,7 +365,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function forzardescargaAction() {
+    public function forzardescargaAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $carpeta = "uploadDdocuments/";
@@ -368,12 +376,13 @@ class DocumentosController extends Zend_Controller_Action {
         readfile($file);
     }
 
-    public function bandejadocsAction() {
+    public function bandejadocsAction()
+    {
 
         $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
         $opBusDefault = $this->_request->getParam('opbusdefault');
         $func = new Libreria_Pintar();
-        $val[] = array('cboarea', $this->view->util()->getComboContenedorOtro('0000000001',$ddatosuserlog->areacod, 'coactivo.obtener_areas_coactivo'), 'html');
+        $val[] = array('cboarea', $this->view->util()->getComboContenedorOtro('0000000001', $ddatosuserlog->areacod, 'coactivo.obtener_areas_coactivo'), 'html');
         $getdate = date("d/m/Y");
         $val[] = array('fecdesde', $getdate, 'val');
         $val[] = array('fechasta', $getdate, 'val');
@@ -384,7 +393,8 @@ class DocumentosController extends Zend_Controller_Action {
         $this->view->cidusuario = $ddatosuserlog->cidusuario;
     }
 
-    public function rutarecepcionAction() {
+    public function rutarecepcionAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -399,7 +409,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function enviodocumentoAction() {
+    public function enviodocumentoAction()
+    {
         $this->_helper->layout->disableLayout();
         $mdocumentos = $this->_request->getParam('mdocumentos');
 
@@ -422,7 +433,7 @@ class DocumentosController extends Zend_Controller_Action {
 
         $optionsjqcboaccion = '"9999999999" : "SELECCIONAR"';
         foreach ($dtaccdestino as $values) {
-            $optionsjqcboaccion .=' , "' . $values["idsigma"] . '" : "' . $values["vdescri"] . '"';
+            $optionsjqcboaccion .= ' , "' . $values["idsigma"] . '" : "' . $values["vdescri"] . '"';
         }
         $optionsjqcboaccion = '{' . $optionsjqcboaccion . '}';
         $this->view->optionsjqcboaccion = $optionsjqcboaccion;
@@ -439,17 +450,17 @@ class DocumentosController extends Zend_Controller_Action {
             $mdocumento = $values->pmdocumento;
         }
         $cadgrab = substr($cadgrab, 0, strlen($cadgrab) - 1);
-        
+
         $ctiprele = '0000000140';
         $nfolios = 0;
-        if($mdocumento!=''){
+        if ($mdocumento != '') {
             $procedurex = 'coactivo.mdocument_get';
             $parametersx[0] =  $mdocumento;
             $recordsMdocument = $cn->executeAssocQuery($procedurex, $parametersx);
             $ctiprele = $recordsMdocument[0]["ctiprele"];
-            $nfolios=$recordsMdocument[0]["nfolios"];
+            $nfolios = $recordsMdocument[0]["nfolios"];
         }
-        
+
         $parameters2[0] =  $cadgrab;
         $parameters2[1] = '^';
         $parameters2[2] = '|';
@@ -458,19 +469,19 @@ class DocumentosController extends Zend_Controller_Action {
         $xvnrodocu = '';
         $cadena = '';
 
-        
-        
-        
-        
+
+
+
+
         foreach ($recordsareas as $values2) {
 
             if ($xvnrodocu != $values2["vnrodocu"]) {
 
                 $cadena = (strlen($cadena) > 0 ? substr($cadena, 0, strlen($cadena) - 2) : $cadena);
-                $cadena .=($cadena == '' ? '' : '<br>') . '<b>' . $values2["vnrodocu"] . '</b> : ';
+                $cadena .= ($cadena == '' ? '' : '<br>') . '<b>' . $values2["vnrodocu"] . '</b> : ';
                 $xvnrodocu = $values2["vnrodocu"];
 
-                
+
                 //$mdocumento = $values2["mdocumento"];
                 //$ctiprele = $values2["ctiprele"];
                 //$nfolios = $values2["nfolios"];
@@ -491,7 +502,8 @@ class DocumentosController extends Zend_Controller_Action {
 		</script>';
     }
 
-    public function updaterelevanciadocAction() {
+    public function updaterelevanciadocAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -511,7 +523,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function enviodocumentosaveAction() {
+    public function enviodocumentosaveAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -521,7 +534,7 @@ class DocumentosController extends Zend_Controller_Action {
             //$mdocumento = $this->_request->getParam('pmdocumento');
             //$ctiprele = $this->_request->getParam('pctiprele');
             //$pfolios = $this->_request->getParam('pfolios');
-            
+
             $pareadestino = $this->_request->getParam('pareadestino');
             $pctipacc = $this->_request->getParam('pctipacc');
             $mdocumentos = $this->_request->getParam('pmdocumentos');
@@ -546,9 +559,9 @@ class DocumentosController extends Zend_Controller_Action {
             foreach ($pareadestinoarr as $values) {
                 $cadareades .= '|';
                 $cadareades .=  $values->parea . '|';
-                $cadareades .= ($ptodos == 'true' ? $pctipacc : $values->jqcboaccion )  . '|';
+                $cadareades .= ($ptodos == 'true' ? $pctipacc : $values->jqcboaccion)  . '|';
                 $cadareades .= ($ptodos == 'true' ? $pvobserv : $values->vobserv) . '^';
-               /* $xmlareades .=' xparea= "' . $values->parea . '" ';
+                /* $xmlareades .=' xparea= "' . $values->parea . '" ';
                 $xmlareades .=' xjqcboaccion= "' . ($ptodos == 'true' ? $pctipacc : $values->jqcboaccion ) . '" ';
                 //$xmlareades .=' xvobserv= "'.str_replace(str_replace(($ptodos=='true'? $pvobserv:$values->vobserv), "<", "^"),">","~").'" ';
                 $xmlareades .=' xvobserv= "' . 
@@ -566,11 +579,11 @@ class DocumentosController extends Zend_Controller_Action {
             $cadareades = substr($cadareades, 0, strlen($cadareades) - 1);
 
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
-            
-            
-            
+
+
+
             $cn = new Model_DataAdapter();
-            
+
 
             $procedure = ' coactivo.mruta_insupd';
             $parameters[0] =  $cad;
@@ -593,7 +606,8 @@ class DocumentosController extends Zend_Controller_Action {
             echo json_encode($records);
         }
     }
-    public function obsbigpanelAction(){
+    public function obsbigpanelAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
@@ -608,13 +622,15 @@ class DocumentosController extends Zend_Controller_Action {
             $this->view->vobserv = $panelobs[0]['vobserv'];
         }
     }
-    public function hojarutaAction() {
+    public function hojarutaAction()
+    {
         $this->_helper->layout->disableLayout();
         $mruta = $this->_request->getParam('mruta');
         $this->view->mruta = $mruta;
     }
 
-    public function enviousuariodocumentoAction() {
+    public function enviousuariodocumentoAction()
+    {
         $this->_helper->layout->disableLayout();
         $mdocumentos = $this->_request->getParam('mdocumentos');
         $cidarea = $this->_request->getParam('cidarea');
@@ -647,7 +663,8 @@ class DocumentosController extends Zend_Controller_Action {
 		</script>';
     }
 
-    public function enviousuariodocumentosaveAction() {
+    public function enviousuariodocumentosaveAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -668,7 +685,7 @@ class DocumentosController extends Zend_Controller_Action {
             foreach ($mdocumentosarr as $values) {
                 $cadgrab .= '|';
                 $cadgrab .= $values->pidsigma  . '|';
-                $cadgrab .= $values->pmdocumento. '|';
+                $cadgrab .= $values->pmdocumento . '|';
                 $cadgrab .= $values->pccocsini . '^';
             }
             $cadgrab = substr($cadgrab, 0, strlen($cadgrab) - 1);
@@ -694,13 +711,15 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function docvencidosAction() {
+    public function docvencidosAction()
+    {
 
         $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
         $this->view->cidarea = $ddatosuserlog->cidarea;
     }
 
-    public function panelobsenvioAction() {
+    public function panelobsenvioAction()
+    {
 
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -720,7 +739,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function bandejadocsuserAction() {
+    public function bandejadocsuserAction()
+    {
 
         $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
         $this->view->cidusuario = $ddatosuserlog->cidusuario;
@@ -733,7 +753,8 @@ class DocumentosController extends Zend_Controller_Action {
     }
 
     /**Consultas*/
-    public function consultasAction() {
+    public function consultasAction()
+    {
 
         $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
         $this->view->cidusuario = $ddatosuserlog->cidusuario;
@@ -747,7 +768,8 @@ class DocumentosController extends Zend_Controller_Action {
     /**FIN*/
 
     /**Reportes*/
-    public function reportesAction() {
+    public function reportesAction()
+    {
 
         $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
         $this->view->cidusuario = $ddatosuserlog->cidusuario;
@@ -760,7 +782,8 @@ class DocumentosController extends Zend_Controller_Action {
     }
     /**FIN*/
 
-    public function drutarecepdevolAction() {
+    public function drutarecepdevolAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -777,7 +800,8 @@ class DocumentosController extends Zend_Controller_Action {
         }
     }
 
-    public function lstdocumentosAction() {
+    public function lstdocumentosAction()
+    {
         $this->_helper->layout->disableLayout();
 
         $pmdocumento = $this->_request->getParam('pmdocumento');
@@ -788,14 +812,16 @@ class DocumentosController extends Zend_Controller_Action {
         $this->view->jsonArbol = json_encode($recordsresult);
     }
 
-    public function visordocsAction() {
+    public function visordocsAction()
+    {
 
         $img = $this->_request->getParam('img', '');
         $this->_helper->layout->disableLayout();
         $this->view->img = $img;
     }
 
-    public function cierreenvioAction() {
+    public function cierreenvioAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -811,8 +837,9 @@ class DocumentosController extends Zend_Controller_Action {
             //@pmruta
         }
     }
-    
-    public function concluirexpAction() {
+
+    public function concluirexpAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -824,15 +851,16 @@ class DocumentosController extends Zend_Controller_Action {
             $parameters[0] = $pmruta;
             $recordsresult = $cn->executeAssocQuery($procedure, $parameters);
             echo $this->_helper->json($recordsresult);
-            
         }
     }
-    
-    public function iframedocumentuploadAction() {
+
+    public function iframedocumentuploadAction()
+    {
         $this->_helper->layout->disableLayout();
     }
 
-    public function iframedocumentuploadreadyAction() {
+    public function iframedocumentuploadreadyAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
@@ -890,7 +918,8 @@ class DocumentosController extends Zend_Controller_Action {
         echo "Guardado con exito";
     }
 
-    public function graficocajerosAction(){
+    public function graficocajerosAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $this->_helper->getHelper('ajaxContext')->initContext();
@@ -902,26 +931,26 @@ class DocumentosController extends Zend_Controller_Action {
             $store = 'tesoreria.obtener_montoxcajero';
             $pgraf[] = $vfecha1;
             $pgraf[] = $vfecha2;
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
             $datosgraf = $cn->ejec_store_procedura_sql($store, $pgraf);
             $cadgrafcategorias = '';
             $cadgrafcancelado = '';
             $cadgrafanulado = '';
             $cadgrafdatospie = '';
-            $montorecaudado=0.00;
-            $montoanulado=0.00;
+            $montorecaudado = 0.00;
+            $montoanulado = 0.00;
             //print_r( $datosgraf);
             for ($i = 0; $i < count($datosgraf); $i++) {
-                $cadgrafcategorias .="<category label='" . $datosgraf[$i][1] . "'/>";
-                $cadgrafcancelado .="<set value='" . $datosgraf[$i][2] . "' />";
-                $cadgrafanulado .="<set value='" . $datosgraf[$i][3] . "' />";
-                $cadgrafdatospie .="<set label='" . $datosgraf[$i][1] . "' value='" . $datosgraf[$i][2] . "'/>";
-                $montorecaudado+= $datosgraf[$i][2];
-                $montoanulado+= $datosgraf[$i][3];
+                $cadgrafcategorias .= "<category label='" . $datosgraf[$i][1] . "'/>";
+                $cadgrafcancelado .= "<set value='" . $datosgraf[$i][2] . "' />";
+                $cadgrafanulado .= "<set value='" . $datosgraf[$i][3] . "' />";
+                $cadgrafdatospie .= "<set label='" . $datosgraf[$i][1] . "' value='" . $datosgraf[$i][2] . "'/>";
+                $montorecaudado += $datosgraf[$i][2];
+                $montoanulado += $datosgraf[$i][3];
             }
-            $montorecaudado	=	number_format($montorecaudado, 2, '.', ',');
-            $montoanulado	=	number_format($montoanulado, 2, '.', ',');
-            $htmltotales ="<b>Monto Recaudado  S/. $montorecaudado &nbsp;&nbsp;&nbsp;&nbsp; Monto Anulado  S/. $montoanulado<b>";
+            $montorecaudado    =    number_format($montorecaudado, 2, '.', ',');
+            $montoanulado    =    number_format($montoanulado, 2, '.', ',');
+            $htmltotales = "<b>Monto Recaudado  S/. $montorecaudado &nbsp;&nbsp;&nbsp;&nbsp; Monto Anulado  S/. $montoanulado<b>";
             if (count($datosgraf) > 0) {
                 $cadgrafbarras = "<script >
 				var chart = new FusionCharts('" . $url . "graf/MSColumn3D.swf', 'ChartbarrasId', '990', '500', '0', '0');
@@ -939,13 +968,11 @@ class DocumentosController extends Zend_Controller_Action {
 				chartpie.setDataXML(\"<chart palette='1' caption='Monto por cajeros' numberPrefix='S/.' decimals='2' formatNumberScale='0'  enableSmartLabels='1' enableRotation='1' bgColor='99CCFF,FFFFFF' bgAlpha='40,100' bgRatio='0,100' bgAngle='360' showBorder='1' startingAngle='70'>" . $cadgrafdatospie . "</chart>\");
 				chartpie.render(\"chartdivpie\");
 
-				$('#totalrecaudado').html('".$htmltotales."');
+				$('#totalrecaudado').html('" . $htmltotales . "');
 				</script>";
 
                 echo $cadgrafbarras . $cadgrafpie;
-
             }
         }
     }
-
 }
