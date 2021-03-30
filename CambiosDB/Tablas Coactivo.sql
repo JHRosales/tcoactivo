@@ -7,6 +7,7 @@ select * from coactivo.correldocum	-- Correlativo de los documentos o Expediente
 select * from coactivo.costasprocesales -- Costas Procesales datos generales
 select * from coactivo.dasunto_req 	-- Destalle de Asuntos requeridos ?
 select * from coactivo.dcostasprocesales -- Detalle de las costas procesales (Tarifas)
+
 select * from coactivo.ddocumento  	-- Detalle de los expedientes creados
 select * from coactivo.ddocumestr  	-- ??
 select * from coactivo.doc_emitidodet 	-- Documentos emitidos detalle, informacion de la deuda al momento de genera una resolucion en el expediente Coactivo
@@ -21,9 +22,9 @@ select * from coactivo.mruta  		-- detalle de los movimientos transferencias del
 select * from coactivo.mruta_audit  	-- registro de auditoria de la tala mruta (cuando se elimina una movimiento)
 select * from coactivo.pagostesoreria   -- pagos para la pagina principal del Modulo Coactivo
 
-select * from coactivo.mconten where cidtabl='0000000008'
 --Actualizar
-update coactivo.mconten set vdescri='EXPEDIENTE COACTIVO' where idsigma='0000001010' 
+update coactivo.mconten set vdescri='EXPEDIENTE COACTIVO' where idsigma='0000001010' --Descripocion del Asunto
+update coactivo.correldocum set nultgen=0 where cperiodo='2020'  --El correlativo de los expedientes por años
 
 --Depurar Tabla Mconten
 Delete from coactivo.mconten where cidtabl='0000000009' and idsigma not in ('0000000009','0000001010')

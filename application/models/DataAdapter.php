@@ -6,8 +6,8 @@ class Model_DataAdapter
 {
 
     private static $instance;
-    private static $driver = "host=ec2-3-17-204-123.us-east-2.compute.amazonaws.com port=3003 dbname=titania_test user=postgres password=buchisapa";
-    private static $driver2 = "host=localhost port=5432 dbname=titania_prod0703 user=postgres password=1234";
+    private static $driver2 = "host=ec2-3-17-204-123.us-east-2.compute.amazonaws.com port=3003 dbname=titania_test user=postgres password=buchisapa";
+    private static $driver = "host=localhost port=5432 dbname=titania_prod0703 user=postgres password=1234";
 
     private $connection = null;
     private $logger = null;

@@ -1,84 +1,68 @@
 <table border="0">
     <tr>
         <td style="vertical-align: top;">
-            <div id="panelbusqueda" align="center"
-                 class="ui-widget ui-widget-content ui-corner-all "
-                 style="width: 470px;">
+            <div id="panelbusqueda" align="center" class="ui-widget ui-widget-content ui-corner-all " style="width: 470px;">
                 <div class="ui-widget ui-state-default ui-corner-top ui-title">
-                    <label>Datos del Documento</label> 
-                    <input type="hidden" id="Dddocumento" value="<?php echo $this->ddocumento; ?>" /> 
-                    <input type="hidden" id="Dcidsigma" value="<?php echo $this->cidsigma; ?>" /> 
+                    <label>Datos del Documento</label>
+                    <input type="hidden" id="Dddocumento" value="<?php echo $this->ddocumento; ?>" />
+                    <input type="hidden" id="Dcidsigma" value="<?php echo $this->cidsigma; ?>" />
                     <input type="hidden" id="Dctipjerar" value="<?php echo $this->ctipjerar; ?>" />
-                    <input type="hidden" id="Dccate"  value="<?php echo $this->ccate; ?>" />
+                    <input type="hidden" id="Dccate" value="<?php echo $this->ccate; ?>" />
                 </div>
                 <table border="0" width="460px">
                     <tr>
                         <td><b>NºExpediente</b></td>
-                        <td align="left"><input type="text" id="txtnroexpe"
-                            class="ui-text" style="text-align: left; width: 120px;" readOnly="true" disabled />
+                        <td align="left"><input type="text" id="txtnroexpe" class="ui-text" style="text-align: left; width: 120px;" readOnly="true" disabled />
                         </td>
                         <td><b>Fec. Ingreso</b></td>
-                        <td align="left"><input type="text" id="txtfecingreso"
-                            class="ui-text" style="text-align: left; width: 80px;" readOnly="true" disabled  />
+                        <td align="left"><input type="text" id="txtfecingreso" class="ui-text" style="text-align: left; width: 80px;" readOnly="true" disabled />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Folios</b></td>
-                        <td align="left" colspan="4"><input type="text" id="txtfolios"
-                            class="ui-text" style="text-align: left; width: 30px;" readOnly="true" disabled />
+                        <td align="left" colspan="4"><input type="text" id="txtfolios" class="ui-text" style="text-align: left; width: 30px;" readOnly="true" disabled />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Administrado</b></td>
-                        <td align="left" colspan="4"><input type="text" id="txtrecurrente"
-                            class="ui-text" style="text-align: left; width: 95%;" readOnly="true" disabled />
+                        <td align="left" colspan="4"><input type="text" id="txtrecurrente" class="ui-text" style="text-align: left; width: 95%;" readOnly="true" disabled />
                         </td>
                     </tr>
                     <tr>
                         <td colspan="4">
-                            <hr /> 
+                            <hr />
                         </td>
                     </tr>
                     <tr>
                         <td><b>Tipo</b></td>
-                        <td align="left" colspan="4"><select id="cbotipodoc"
-                                                             style="text-align: left; width: 205px;"></select>
+                        <td align="left" colspan="4"><select id="cbotipodoc" style="text-align: left; width: 205px;"></select>
                         </td>
                     </tr>
                     <tr>
                         <td><b>Nro Doc</b></td>
                         <td>
-                            
-                            <input type="text" id="txtnrodoc" class="ui-text"
-                                   style="text-align: left; width: 180px;"  <?php echo ($this->ccate =='1'? 'disabled' :'' ); ?>/> 
-                            
-                                <input type="checkbox" id="chknrodoc" <?php echo ($this->ccate =='2'? 'style="display: none;"' :'checked' ); ?> />
-                            
+
+                            <input type="text" id="txtnrodoc" class="ui-text" style="text-align: left; width: 180px;" <?php echo ($this->ccate == '1' ? 'disabled' : ''); ?> />
+
+                            <input type="checkbox" id="chknrodoc" <?php echo ($this->ccate == '2' ? 'style="display: none;"' : 'checked'); ?> />
+
                         </td>
                         <td><b>Fec. Ingreso</b></td>
-                        <td align="left"><input type="text" id="txtfecingresodoc"
-                                                class="ui-text" style="text-align: left; width: 80px;" />
+                        <td align="left"><input type="text" id="txtfecingresodoc" class="ui-text" style="text-align: left; width: 80px;" />
                         </td>
                     </tr>
-				
+
                     <tr>
 
                         <td><b>Relevancia</b></td>
-                        <td align="left" colspan="4"><select id="cborelevancia"
-                                                             style="text-align: left; width: 205px;"></select>
+                        <td align="left" colspan="4"><select id="cborelevancia" style="text-align: left; width: 205px;"></select>
                         </td>
                     </tr>
                     <!--MODIFICADO 0106-->
                     <tr>
                         <td><b>Folios</b></td>
                         <td style="text-align: left">
-                            <input class="editable ui-text"
-                                   size="19"
-                                   style=""
-                                   type="text"
-                                   id="txtvfolios"
-                                   name="txtvfolios"
-                                   value="<?php echo $this->vfolios; ?>"/>
+                            <input class="editable ui-text" size="19" type="text" id="txtvfolios" name="txtvfolios" value="<?php echo $this->vfolios; ?>" />
                         </td>
                     </tr>
                     <tr>
@@ -106,8 +90,7 @@
                     <div id="paneltblResultDocdetalle">
                         <table id="tblResultDocdetalle"></table>
                         <div id="ptblResultDocdetalle"></div>
-                        <input type="hidden" id="ctblResultDocdetalle"
-                               name="ctblResultDocdetalle" value="" />
+                        <input type="hidden" id="ctblResultDocdetalle" name="ctblResultDocdetalle" value="" />
                     </div>
                 </div>
                 <div id="tab-adjuntos">
@@ -115,23 +98,21 @@
                         <table id="DtblResultDocAdjunto">
                         </table>
                         <div id="pDtblResultDocAdjunto"></div>
-                        <input type="hidden" id="cDtblResultDocAdjunto"
-                               name="cDtblResultDocAdjunto" value="" />
+                        <input type="hidden" id="cDtblResultDocAdjunto" name="cDtblResultDocAdjunto" value="" />
                     </div>
                 </div>
                 <div id="tabs-2">
                     <table style="width: 440px;" border="0">
                         <tr style="display: none;">
                             <td><b>Tipo de Adjunto</b></td>
-                            <td style="width: 70%;"><select id="cbotipadjunto"
-                                                            style="width: 150px;">
+                            <td style="width: 70%;"><select id="cbotipadjunto" style="width: 150px;">
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <div id="dv_ie8"  style="display:none;">
-                                <!--    <button id="btnplusfile">Pluss</button><br/>  -->
+                                <div id="dv_ie8" style="display:none;">
+                                    <!--    <button id="btnplusfile">Pluss</button><br/>  -->
                                     <iframe src="<?php echo $this->util()->getPath(); ?>index.php/documentos/iframedocumentupload" width="100%" height="40px" frameborder="0">
 
                                     </iframe>
@@ -158,12 +139,12 @@
         $('#tabs_ddocument').tabs('select', 0);
 
         var config = {
-            skin: 'v2'
-            , toolbar: [
+            skin: 'v2',
+            toolbar: [
                 ['Bold', 'Italic', 'Underline', '-', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Undo', 'Redo', '-', 'HorizontalRule', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'TextColor', 'BGColor'],
                 ['UIColor']
             ]
-                    //,readOnly: true
+            //,readOnly: true
         };
 
         var hEd = CKEDITOR.instances['txtobservacion'];
@@ -183,21 +164,18 @@
             autoUpload: false
         });
 
-        if (navigator.appName == 'Microsoft Internet Explorer')
-        {
+        if (navigator.appName == 'Microsoft Internet Explorer') {
             var ver = getInternetExplorerVersion();
-            if (ver > -1)
-            {
+            if (ver > -1) {
                 // alert(ver);
-                if (ver <= 9.0)
-                {
+                if (ver <= 9.0) {
                     if ("<?php echo $this->ddocumento; ?>" == "") {
                         //$("#tabs-2").hide();
                         $("#tabs").tabs("option", "disabled", [2]);
                     }
                     $("#dv_ie8").show();
 
-                   /* $("#btnplusfile").button({
+                    /* $("#btnplusfile").button({
                         icons: {
                             primary: "ui-icon-plus"
                         },
@@ -222,7 +200,12 @@
             }
         });
 
-        $("#txtfecingresodoc").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+        $("#txtfecingresodoc").datepicker({
+            showOn: "button",
+            buttonImage: jQuery.scriptPath + "img/calendar.gif",
+            buttonImageOnly: true,
+            dateFormat: "dd/mm/yy"
+        });
         $('#chknrodoc').change(function() {
             if ($(this).is(':checked')) {
                 $("#txtnrodoc").attr("disabled", "disabled");
@@ -235,23 +218,72 @@
             width: 440,
             data: {},
             colNames: ["idsigma", "ddocumento", "ctipdocu", "dstipdocu", "mconfigdoc", "ctipestrdocu", "Item", "Dato", "tipdat"],
-            colModel: [
-                {name: 'idsigma', index: 'idsigma', width: 0.01, align: 'center', hidden: true},
-                {name: 'ddocumento', index: 'ddocumento', width: 0.01, align: 'left', hidden: true},
-                {name: 'ctipdocu', index: 'ctipdocu', width: 0.01, align: 'left', hidden: true},
-                {name: 'dstipdocu', index: 'dstipdocu', width: 0.01, align: 'left', hidden: true},
-                {name: 'mconfigdoc', index: 'mconfigdoc', width: 0.01, align: 'left', hidden: true},
-                {name: 'ctipestrdocu', index: 'ctipestrdocu', width: 0.01, align: 'left', hidden: true},
-                {name: 'dstipestrdocu', index: 'dstipestrdocu', width: 150, align: 'left'},
-                {name: 'vdatoitem', index: 'vdatoitem', width: 220, align: 'left'
-                    , editable: true
-                            /*,editoptions: {
-                             dataInit: function(element,e) {
-                             $(element).datepicker({dateFormat:"yy-mm-dd"});
-                             }
-                             }*/
+            colModel: [{
+                    name: 'idsigma',
+                    index: 'idsigma',
+                    width: 0.01,
+                    align: 'center',
+                    hidden: true
                 },
-                {name: 'tipdat', index: 'tipdat', width: 50, hidden: true}
+                {
+                    name: 'ddocumento',
+                    index: 'ddocumento',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'ctipdocu',
+                    index: 'ctipdocu',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'dstipdocu',
+                    index: 'dstipdocu',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'mconfigdoc',
+                    index: 'mconfigdoc',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'ctipestrdocu',
+                    index: 'ctipestrdocu',
+                    width: 0.01,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'dstipestrdocu',
+                    index: 'dstipestrdocu',
+                    width: 150,
+                    align: 'left'
+                },
+                {
+                    name: 'vdatoitem',
+                    index: 'vdatoitem',
+                    width: 220,
+                    align: 'left',
+                    editable: true
+                    /*,editoptions: {
+                     dataInit: function(element,e) {
+                     $(element).datepicker({dateFormat:"yy-mm-dd"});
+                     }
+                     }*/
+                },
+                {
+                    name: 'tipdat',
+                    index: 'tipdat',
+                    width: 50,
+                    hidden: true
+                }
             ],
             onSelectRow: function(id) {
                 //if(id && id!==lastsel){
@@ -327,13 +359,45 @@
             height: 370,
             width: 440,
             colNames: ["idsigma", "ddocumento", "Nro.", "Adjunto", "Adjunto2", ""],
-            colModel: [
-                {name: 'idsigma', index: 'idsigma', width: 100, align: 'center', hidden: true},
-                {name: 'ddocumento', index: 'ddocumento', width: 20, align: 'left', hidden: true},
-                {name: 'norden', index: 'norden', width: 50, align: 'left'},
-                {name: 'vadjunto', index: 'vadjunto', width: 305, align: 'left', formatter: linkadjunto},
-                {name: 'vadjunto', index: 'vadjunto', width: 305, align: 'left', hidden: true},
-                {name: 'visor', index: 'visor', width: 20}
+            colModel: [{
+                    name: 'idsigma',
+                    index: 'idsigma',
+                    width: 100,
+                    align: 'center',
+                    hidden: true
+                },
+                {
+                    name: 'ddocumento',
+                    index: 'ddocumento',
+                    width: 20,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'norden',
+                    index: 'norden',
+                    width: 50,
+                    align: 'left'
+                },
+                {
+                    name: 'vadjunto',
+                    index: 'vadjunto',
+                    width: 305,
+                    align: 'left',
+                    formatter: linkadjunto
+                },
+                {
+                    name: 'vadjunto',
+                    index: 'vadjunto',
+                    width: 305,
+                    align: 'left',
+                    hidden: true
+                },
+                {
+                    name: 'visor',
+                    index: 'visor',
+                    width: 20
+                }
             ],
             caption: " Adjunto",
             rowNum: 1000,
@@ -348,8 +412,8 @@
     function D_ProcesoBuscarDocAdjunto(pddocumento) {
 
         var paramtrs = '{' +
-                '"pddocumento":"' + pddocumento + '"'
-                + '}';
+            '"pddocumento":"' + pddocumento + '"' +
+            '}';
 
         parameters = {
             "name": "DtblResultDocAdjunto",
@@ -359,8 +423,7 @@
         };
 
         procesarConsultaSubProceso('registrar', parameters, D_procesoDocAdjunto, 'json');
-    }
-    ;
+    };
 
     function DD_formatrow(id) {
         var rowdat = jQuery("#tblResultDocdetalle").jqGrid('getRowData', id);
@@ -369,7 +432,12 @@
         $textrow.addClass("ui-text");
         if (rowdat.tipdat == 'DATE') {
 
-            $("#" + id + "_vdatoitem").datepicker({showOn: "button", buttonImage: jQuery.scriptPath + "img/calendar.gif", buttonImageOnly: true, dateFormat: "dd/mm/yy"});
+            $("#" + id + "_vdatoitem").datepicker({
+                showOn: "button",
+                buttonImage: jQuery.scriptPath + "img/calendar.gif",
+                buttonImageOnly: true,
+                dateFormat: "dd/mm/yy"
+            });
             $("#" + id + "_vdatoitem").css("width", "88%");
         }
 
@@ -393,17 +461,15 @@
 
                 $("#dialogOBS").dialog({
                     dialogClass: "no-close",
-                    buttons: [
-                        {
-                            text: "OK",
-                            click: function() {
-                                var x_oEditor = CKEDITOR.instances['textarOBSContent'];
-                                var obs = x_oEditor.getData();
-                                $textrow.val(obs);
-                                $(this).dialog("close");
-                            }
+                    buttons: [{
+                        text: "OK",
+                        click: function() {
+                            var x_oEditor = CKEDITOR.instances['textarOBSContent'];
+                            var obs = x_oEditor.getData();
+                            $textrow.val(obs);
+                            $(this).dialog("close");
                         }
-                    ]
+                    }]
                 });
 
 
@@ -442,30 +508,33 @@
         }
 
     }
+
     function D_procesoDocAdjunto(request) {
         var
-                records = (request == null ? 0 : request.length),
-                bindkeysDoc = {},
-                _gridConfigDocAdjunto2 = $.extend(_gridConfigDocAdjunto, {
-                    data: request,
-                    datatype: "local",
-                    gridComplete: function() {
-                        isGridComplete = true;
-                        $("#DtblResultDocAdjunto").jqGrid('setSelection', 1, true);
+            records = (request == null ? 0 : request.length),
+            bindkeysDoc = {},
+            _gridConfigDocAdjunto2 = $.extend(_gridConfigDocAdjunto, {
+                data: request,
+                datatype: "local",
+                gridComplete: function() {
+                    isGridComplete = true;
+                    $("#DtblResultDocAdjunto").jqGrid('setSelection', 1, true);
 
-                        var ids = jQuery("#DtblResultDocAdjunto").jqGrid('getDataIDs');
+                    var ids = jQuery("#DtblResultDocAdjunto").jqGrid('getDataIDs');
 
-                        for (var i = 0; i < ids.length; i++) {
-                            var cl = ids[i];
-                            var rowdat = jQuery("#DtblResultDocAdjunto").jqGrid('getRowData', cl);
-                            buttvisor = '<div title="Visor de ' + rowdat.vadjunto + '" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\')" onclick="visorarchivo2(\'' + rowdat.ddocumento + '_' + rowdat.vadjunto + '\');"><span class="ui-icon ui-icon-search"></span></div>';
+                    for (var i = 0; i < ids.length; i++) {
+                        var cl = ids[i];
+                        var rowdat = jQuery("#DtblResultDocAdjunto").jqGrid('getRowData', cl);
+                        buttvisor = '<div title="Visor de ' + rowdat.vadjunto + '" style="float: left; cursor: pointer; display: block;" class="ui-pg-div ui-inline-edit"  onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\')" onclick="visorarchivo2(\'' + rowdat.ddocumento + '_' + rowdat.vadjunto + '\');"><span class="ui-icon ui-icon-search"></span></div>';
 
 
-                            jQuery("#DtblResultDocAdjunto").jqGrid('setRowData', ids[i], {visor: buttvisor});
-                        }
-
+                        jQuery("#DtblResultDocAdjunto").jqGrid('setRowData', ids[i], {
+                            visor: buttvisor
+                        });
                     }
-                });
+
+                }
+            });
 
         $("#DpanelResultDocAdjunto").html('<table id="DtblResultDocAdjunto"></table><div id="pDtblResultDocAdjunto"></div>');
         inicializarGrid("DtblResultDocAdjunto", _gridConfigDocAdjunto2);
@@ -476,21 +545,26 @@
 
 
     function navPanelDocumentosdetalle() {
-        $("#tblResultDocdetalle").jqGrid('navGrid', '#ptblResultDocdetalle', {edit: false, add: false, del: false, search: false, refresh: false});
+        $("#tblResultDocdetalle").jqGrid('navGrid', '#ptblResultDocdetalle', {
+            edit: false,
+            add: false,
+            del: false,
+            search: false,
+            refresh: false
+        });
         /* $("#tblResultDocdetalle").jqGrid('navButtonAdd', '#ptblResultDocdetalle', btnInsertarDocdet);
           $("#tblResultDocdetalle").jqGrid('navSeparatorAdd', '#ptblResultDocdetalle');
          $("#tblResultDocdetalle").jqGrid('navButtonAdd', '#ptblResultDocdetalle', btnEditarDocdet);
          $("#tblResultDocdetalle").jqGrid('navSeparatorAdd', '#ptblResultDocdetalle');*/
         //$("#tblResultDocdetalle").jqGrid('navButtonAdd', '#ptblResultDocdetalle', btnEliminarDocdet);
-    }
-    ;
+    };
 
     function ProcesoBuscarDocdet(vctipdocu) {
 
         var paramtrs = '{' +
-                '"ddocumento":"<?php echo $this->ddocumento; ?>",' +
-                '"ctipdocu":"' + vctipdocu + '"'
-                + '}';
+            '"ddocumento":"<?php echo $this->ddocumento; ?>",' +
+            '"ctipdocu":"' + vctipdocu + '"' +
+            '}';
 
         parameters = {
             "name": "tblResultDoc",
@@ -500,22 +574,21 @@
         };
 
         procesarConsultaSubProceso('registrar', parameters, procesoDocdet, 'json');
-    }
-    ;
+    };
+
     function procesoDocdet(request) {
         var
-                records = (request === null ? 0 : request.length),
-                gridConfigDocdet2 = $.extend(gridConfigDocdet, {
-                    data: request,
-                    datatype: "local"
-                });
+            records = (request === null ? 0 : request.length),
+            gridConfigDocdet2 = $.extend(gridConfigDocdet, {
+                data: request,
+                datatype: "local"
+            });
 
         $("#paneltblResultDocdetalle").html('<table id="tblResultDocdetalle"></table><div id="ptblResultDocdetalle"></div><input type="hidden" id="ctblResultDocdetalle" name="ctblResultDocdetalle" value="' + records + '" />');
         inicializarGrid("tblResultDocdetalle", gridConfigDocdet2, {});
         navPanelDocumentosdetalle();
 
-    }
-    ;
+    };
 
     function DdocumentoSave(type) {
         //$("#sestGrid").clearGridData(false);
@@ -523,19 +596,19 @@
         var vcbotipodoc = $("#cbotipodoc").val();
         var vcborelevancia = $("#cborelevancia").val();
         var vtxtnrodoc = $("#txtnrodoc").val();
-        var vtxtfolios= $("#txtvfolios").val();//MODIFICADO 0106
+        var vtxtfolios = $("#txtvfolios").val(); //MODIFICADO 0106
         //MODIFICADO 0106
-        if (vtxtfolios ===''){
+        if (vtxtfolios === '') {
             openDialogError("Ingresar numero de folios", "250", "150", function() {
-                    $("#txtvfolios").focus();
-                });
-                return;
+                $("#txtvfolios").focus();
+            });
+            return;
         }
-        if (vtxtfolios =='0'){
+        if (vtxtfolios == '0') {
             openDialogError("La cantidad e Folios no puede ser 0", "250", "150", function() {
-                    $("#txtvfolios").focus();
-                });
-                return;
+                $("#txtvfolios").focus();
+            });
+            return;
         }
         if (vcbotipodoc === '9999999999') {
             openDialogError("Seleccionar tipo de documento", "250", "150", function() {
@@ -577,7 +650,7 @@
         parmter.pidsigma = $('#Dddocumento').val();
         parmter.pctipdocu = $("#cbotipodoc").val();
         parmter.pvnrodocu = $("#txtnrodoc").val();
-        parmter.pvfolios=$("#txtvfolios").val();//MODIFICADO 0106
+        parmter.pvfolios = $("#txtvfolios").val(); //MODIFICADO 0106
         parmter.pvobserv = obs;
         parmter.pctiprele = $("#cborelevancia").val();
         parmter.pctipjerar = $("#Dctipjerar").val();
@@ -619,54 +692,35 @@
     function visorarchivo2(nom_archivo) {
         /*openDialogDataFunction1("documentos/ddocumentomante", { type: "M", ddocument: row.idsigma,cidsigma :$('#cidsigma').val(),ctipjerar: $('#ctipjerar').val() }, "980", "630", "Modificar Documento " + row.dstipdocu, null, { 'Aceptar': function() { DdocumentoSave('M'); }, 'Cancelar': function() { closeDialog("jqDialog1"); } });*/
         //http://localhost:81/titaniaSQL/public/uploadDdocuments/
-//console.log(jQuery.scriptPath+'uploadDdocuments/'+nom_archivo);
+        //console.log(jQuery.scriptPath+'uploadDdocuments/'+nom_archivo);
         var page = '';
         arrarchivo = nom_archivo.split(".");
         extarchivo = arrarchivo[1];
 
         if (extarchivo == 'png' || extarchivo == 'jpg' || extarchivo == 'gif') {
 
-            if (navigator.appName == 'Microsoft Internet Explorer')
-            {
+            if (navigator.appName == 'Microsoft Internet Explorer') {
 
                 var ver = getInternetExplorerVersion();
-                if (ver > -1)
-                {
+                if (ver > -1) {
                     // alert(ver);
-                    if (ver <= 9.0)
-                    {
+                    if (ver <= 9.0) {
                         page = jQuery.scriptPath + 'uploadDdocuments/' + nom_archivo;
                         var $dialog = $('<div></div>')
-                                .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
-                                .dialog({
-                                    autoOpen: false,
-                                    modal: true,
-                                    height: 700,
-                                    width: 800,
-                                    title: "Visor de Archivos"
-                                });
+                            .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
+                            .dialog({
+                                autoOpen: false,
+                                modal: true,
+                                height: 700,
+                                width: 800,
+                                title: "Visor de Archivos"
+                            });
                         $dialog.dialog('open');
 
                     }
                 } else {
                     page = path + "documentos/visordocs?img=" + nom_archivo;
                     var $dialog = $('<div></div>')
-                            .load(page)
-                            .dialog({
-                                autoOpen: false,
-                                modal: true,
-                                height: 650,
-                                width: 800,
-                                title: "Visor de Archivos"
-                            });
-                    $dialog.dialog('open');
-
-
-                }
-            } else {
-
-                page = path + "documentos/visordocs?img=" + nom_archivo;
-                var $dialog = $('<div></div>')
                         .load(page)
                         .dialog({
                             autoOpen: false,
@@ -675,6 +729,22 @@
                             width: 800,
                             title: "Visor de Archivos"
                         });
+                    $dialog.dialog('open');
+
+
+                }
+            } else {
+
+                page = path + "documentos/visordocs?img=" + nom_archivo;
+                var $dialog = $('<div></div>')
+                    .load(page)
+                    .dialog({
+                        autoOpen: false,
+                        modal: true,
+                        height: 650,
+                        width: 800,
+                        title: "Visor de Archivos"
+                    });
                 $dialog.dialog('open');
 
             }
@@ -685,19 +755,15 @@
         } else {
             page = jQuery.scriptPath + 'uploadDdocuments/' + nom_archivo;
             var $dialog = $('<div></div>')
-                    .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
-                    .dialog({
-                        autoOpen: false,
-                        modal: true,
-                        height: 700,
-                        width: 800,
-                        title: "Visor de Archivos"
-                    });
+                .html('<div align="center"><iframe style="border: 0px; " src="' + page + '" width="700" height="600"></iframe></div>')
+                .dialog({
+                    autoOpen: false,
+                    modal: true,
+                    height: 700,
+                    width: 800,
+                    title: "Visor de Archivos"
+                });
             $dialog.dialog('open');
         }
     }
-
-
-
-
 </script>

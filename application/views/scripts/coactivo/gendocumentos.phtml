@@ -22,6 +22,11 @@
                 <input type="radio" class="squaredOne" name="tipo" id="otras" onclick="mostrar()" value="03"> <b>Otras Resoluciones</b>
             </td>
         </tr>
+        <tr>
+            <td colspan="3">
+                <input type="radio" class="squaredOne" name="tipo" id="comunicado" onclick="mostrar()" value="04"> <b>Comunicado de Cobranza</b>
+            </td>
+        </tr>
         <tr id="recs">
             <td colspan="3"><br>
                 <div class="ui-widget ui-state-active ui-corner-top ui-corner-bottom "><br>
@@ -75,7 +80,7 @@
         if (document.getElementById('rec').checked) {
             document.getElementById('recs').style.display = 'block';
             document.getElementById('otrasre').style.display = 'none';
-        } else if (document.getElementById('suspen').checked) {
+        } else if (document.getElementById('suspen').checked || document.getElementById('comunicado').checked) {
             document.getElementById('recs').style.display = 'none';
             document.getElementById('otrasre').style.display = 'none';
         } else {
