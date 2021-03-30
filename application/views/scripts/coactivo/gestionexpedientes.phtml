@@ -193,7 +193,11 @@
                 idsigma: row.idsigma,
                 iddocum: '',
                 nroexp: row.vnrodocu
+<<<<<<< HEAD
             }, "415", "300",
+=======
+            }, "415", "250",
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
             "Agregar Documento");
 
     };
@@ -268,7 +272,11 @@
         });
     };
 
+<<<<<<< HEAD
     optionCajero = {
+=======
+    optionDocumentos = {
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
         height: 190,
         width: 650,
         colNames: ["C\u00F3digo", "Fecha Creacion", "Tipo doc", "Tipo Documento", "Descripcion", "Fecha Notificacion"],
@@ -381,17 +389,27 @@
                     '"p_mdocument":"' + mpoblad + '"' +
                     '}'
             };
+<<<<<<< HEAD
             optionCajero.caption = "Documentos";
             //procesarProcedimientoJSON('panelResult2','tblResult2',optionCajero,params,null,navPanelCentroP2);
             procesar = function(requestData) {
                 options = $.extend(optionCajero, {
+=======
+            optionDocumentos.caption = "Documentos";
+            procesar = function(requestData) {
+                options = $.extend(optionDocumentos, {
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
                     data: requestData,
                     gridComplete: function() {
                         isGridComplete = true;
                         $("#tblResult2").jqGrid('setSelection', 1, true);
                     }
                 });
+<<<<<<< HEAD
                 procesarProcedimientoJSON('panelResult2', 'tblResult2', optionCajero, params, null, null);
+=======
+                procesarProcedimientoJSON('panelResult2', 'tblResult2', optionDocumentos, params, null, null);
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
             };
             procesarConsultaSubProceso("registrar", params, procesar, 'json');
         } else {
@@ -435,7 +453,13 @@
         row1 = $("#tblExpcostas").jqGrid('getRowData', rowid1);
         openDialogDataFunction1("coactivo/expedientescostas", {
             idsigma: row.idsigma,
+<<<<<<< HEAD
             idcostas: row1.idsigma
+=======
+            idcostas: row1.idsigma,
+            idtipoCosta: row1.tipocosta,
+            cantidad: row1.cantidad
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
         }, "550", "520", "Modificar Costas Procesales");
     };
     btnAgregaCostasProce = {
@@ -474,11 +498,19 @@
             defaultSearch: 'cn'
         });
     };
+<<<<<<< HEAD
     optionmcaja = {
         height: 90,
         width: 650,
         editurl: "seriessave",
         colNames: ["C\u00F3digo", "Tipo", "Costa Procesal", "Fecha", "Monto", "Cantidad", "Total"],
+=======
+    optionCostasProcesales = {
+        height: 90,
+        width: 650,
+        editurl: "seriessave",
+        colNames: ["C\u00F3digo", "CodigoCostaPr", "Costa Procesal", "Fecha", "Monto", "Cantidad", "Total"],
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
         colModel: [{
                 name: 'idsigma',
                 index: 'idsigma',
@@ -515,22 +547,37 @@
                 edittype: "select"
             },
             {
+<<<<<<< HEAD
                 name: 'ctipdoc',
                 index: 'ctipdoc',
+=======
+                name: 'monto',
+                index: 'monto',
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
                 align: 'center',
                 width: 60,
                 hidden: false
             },
             {
+<<<<<<< HEAD
                 name: 'ccajdes',
                 index: 'ccajdes',
+=======
+                name: 'cantidad',
+                index: 'cantidad',
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
                 align: 'center',
                 width: 60,
                 hidden: false
             },
             {
+<<<<<<< HEAD
                 name: 'nestado',
                 index: 'nestado',
+=======
+                name: 'total',
+                index: 'total',
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
                 width: 60,
                 search: false,
                 align: "center"
@@ -549,6 +596,7 @@
                     jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'idsigma', '', {
                         color: 'red'
                     });
+<<<<<<< HEAD
                     jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'ccajero', '', {
                         color: 'red'
                     }); //,backgroundColor:'#D8D8D8'
@@ -580,6 +628,24 @@
                         Color: 'red'
                     });
                     jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'nestado', '', {
+=======
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'tipocosta', '', {
+                        color: 'red'
+                    }); //,backgroundColor:'#D8D8D8'
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'costaprocesal', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'fecha', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'monto', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'cantidad', '', {
+                        color: 'red'
+                    });
+                    jQuery("#tblExpcostas").jqGrid('setCell', rowid, 'total', '', {
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
                         color: 'red'
                     });
                     break;
@@ -611,11 +677,19 @@
                     '"p_mdocument":"' + mdocumento + '"' +
                     '}'
             };
+<<<<<<< HEAD
             optionmcaja.caption = "Costas Procesales";
             proceso = function(requestData) {
                 $("#panelExpcostas").html(requestData);
                 records = $("#ctblExpcostas").val();
                 actualizarGrid("tblExpcostas", optionmcaja, bindkeysmcajero);
+=======
+            optionCostasProcesales.caption = "Costas Procesales";
+            proceso = function(requestData) {
+                $("#panelExpcostas").html(requestData);
+                records = $("#ctblExpcostas").val();
+                actualizarGrid("tblExpcostas", optionCostasProcesales, bindkeysmcajero);
+>>>>>>> 7f07bc9159562078652863367456184b07fbd494
                 navPanelCentroP();
             };
             procesarConsultaSubProceso('registrar', parameters, proceso);

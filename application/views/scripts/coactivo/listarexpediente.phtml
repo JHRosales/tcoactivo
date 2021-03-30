@@ -382,14 +382,12 @@ $niveltramite = $userdata->ntramite;
         var paramtrs = {
             pmdocumento: rowdat.idsigma
         }
-
         openDialogDataFunction3("coactivo/lstdocumentos", paramtrs, "1000", "520", "Documentos", null, {});
     }
 
 
     function btnprint(cellvalue, options, rowObject) {
-
-        return '<div align="center" class="ui-pg-button " title="Hoja de tramite" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnprint(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
+        return '<div align="center" class="ui-pg-button " title="Imprimir Expediente" style="text-align:center;float: left; cursor: pointer; display: block;" onmouseover="jQuery(this).addClass(\'ui-state-hover\');" onmouseout="jQuery(this).removeClass(\'ui-state-hover\');" onclick="accionbtnprint(\'' + options.rowId + '\');"><div class="ui-pg-div  ui-inline-edit" ><span class="ui-icon ui-icon-print"></span></div></div>';
     }
 
     function accionbtnprint(rowId) {

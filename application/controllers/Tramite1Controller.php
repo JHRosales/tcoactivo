@@ -2,17 +2,19 @@
 
 require_once 'Zend/Controller/Action.php';
 
-class TramiteController extends Zend_Controller_Action {
+class Tramite1Controller extends Zend_Controller_Action
+{
 
-    public function init() {
-        
+    public function init()
+    {
     }
 
-    public function indexAction() {
-        
+    public function indexAction()
+    {
     }
 
-    public function explegalAction() {
+    public function explegalAction()
+    {
         //$func = new Libreria_Pintar();
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
@@ -22,37 +24,37 @@ class TramiteController extends Zend_Controller_Action {
             $vnrodocu = $this->_request->getPost('vnrodocu');
             $pmruta = $this->_request->getPost('pmruta');
             $accion = $this->_request->getPost('accion');
-            
-            $cn = new Model_DataAdapter ();
+
+            $cn = new Model_DataAdapter();
             $parametros = null;
             $parametros[] =  $mdocumento;
 
             $datos = $cn->executeAssocQuery(
-                    'legal.buscar_explegal'
-                    , $parametros
+                'legal.buscar_explegal',
+                $parametros
             );
 
             $this->view->mdocumento = $mdocumento;
             $this->view->vnrodocu = $vnrodocu;
-            $this->view->pmruta = $pmruta; 
-            $this->view->accion = $accion; 
+            $this->view->pmruta = $pmruta;
+            $this->view->accion = $accion;
             $cdatos = count($datos);
             if ($cdatos == 0) {
                 $this->view->vexpjud = '';
-                $this->view->vcedula= '';
+                $this->view->vcedula = '';
                 $this->view->cidespe = '9999999999';
                 $this->view->cidmateria = '9999999999';
-                $this->view->vpdelitos= '';
-                $this->view->cidjuzgado= '9999999999';
-                $this->view->ciddemandante= '';
-                $this->view->vdemandante= '';
-                $this->view->ciddenunciado= '';
-                $this->view->vdenunciado= '';
-                $this->view->cidagraviado= '';
-                $this->view->vagraviado= '';
-                $this->view->nmontoejec= '0';
-                $this->view->ninteres= '0';
-                $this->view->nmontopend= '0';
+                $this->view->vpdelitos = '';
+                $this->view->cidjuzgado = '9999999999';
+                $this->view->ciddemandante = '';
+                $this->view->vdemandante = '';
+                $this->view->ciddenunciado = '';
+                $this->view->vdenunciado = '';
+                $this->view->cidagraviado = '';
+                $this->view->vagraviado = '';
+                $this->view->nmontoejec = '0';
+                $this->view->ninteres = '0';
+                $this->view->nmontopend = '0';
                 $this->view->dfecreqpago = '01/01/1989';
                 $this->view->vobserv = '';
                 $this->view->dfecpago = '01/01/1989';
@@ -60,11 +62,10 @@ class TramiteController extends Zend_Controller_Action {
                 $this->view->nmontoamor = '0';
                 $this->view->ninteresamor = '0';
                 $this->view->ncodinterno = '';
-               
             } else {
                 $this->view->vexpjud = $datos[0]['vexpjud'];
                 $this->view->vcedula = $datos[0]['vcedula'];
-                $this->view->cidespe = $datos[0]['cidespe'];   
+                $this->view->cidespe = $datos[0]['cidespe'];
                 $this->view->cidmateria = $datos[0]['cidmateria'];
                 $this->view->vpdelitos = $datos[0]['vpdelitos'];
                 $this->view->cidjuzgado = $datos[0]['cidjuzgado'];
@@ -84,11 +85,11 @@ class TramiteController extends Zend_Controller_Action {
                 $this->view->nmontoamor = $datos[0]['nmontoamor'];
                 $this->view->ninteresamor = $datos[0]['ninteresamor'];
                 $this->view->ncodinterno = $datos[0]['ncodinterno'];
-               
             }
         }
     }
-    public function guardarexplegalAction() {
+    public function guardarexplegalAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
@@ -125,105 +126,107 @@ class TramiteController extends Zend_Controller_Action {
             $mqueja = $this->_request->getPost('mqueja');
 
 
-            $vhostnm='local';
+            $vhostnm = 'local';
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
             $vusernm =  $ddatosuserlog->cidusuario;
-            
-            $cn = new Model_DataAdapter ();
+
+            $cn = new Model_DataAdapter();
 
             $userdata = new Zend_Session_Namespace('datosuserlog');
             $nombrestore = 'legal.guardar_explegal';
 
-            $parametros [0] =  $mdocumento;
-            $parametros [1] =  $vexpjud;
-            $parametros [2] =  $vcedula;
-            $parametros [3] =  $cidespe;
-            $parametros [4] =  $cidmateria;
-            $parametros [5] =  $vpdelitos;
-            $parametros [6] =  $cidjuzgado;
-            $parametros [7] =  $ciddemandante;
-            $parametros [8] =  $ciddemandado;
-            $parametros [9] =  $cidagraviado;
-            $parametros [10] =  $nmontoejec;
-            $parametros [11] =  $ninteres;
-            $parametros [12] =  $dfecreqpago;
-            $parametros [13] =  $vobserv;
-            $parametros [14] =  $vhostnm;
-            $parametros [15] =  $vusernm;
-            $parametros [16] =  $dfecpago;
-            $parametros [17] =  $nmontodem;
-            $parametros [18] =  $nmontoamor;
-            $parametros [19] =  $ninteresamor;
-            $parametros [20] =  $ncodinterno;
+            $parametros[0] =  $mdocumento;
+            $parametros[1] =  $vexpjud;
+            $parametros[2] =  $vcedula;
+            $parametros[3] =  $cidespe;
+            $parametros[4] =  $cidmateria;
+            $parametros[5] =  $vpdelitos;
+            $parametros[6] =  $cidjuzgado;
+            $parametros[7] =  $ciddemandante;
+            $parametros[8] =  $ciddemandado;
+            $parametros[9] =  $cidagraviado;
+            $parametros[10] =  $nmontoejec;
+            $parametros[11] =  $ninteres;
+            $parametros[12] =  $dfecreqpago;
+            $parametros[13] =  $vobserv;
+            $parametros[14] =  $vhostnm;
+            $parametros[15] =  $vusernm;
+            $parametros[16] =  $dfecpago;
+            $parametros[17] =  $nmontodem;
+            $parametros[18] =  $nmontoamor;
+            $parametros[19] =  $ninteresamor;
+            $parametros[20] =  $ncodinterno;
             /*JR*/
 
-            $parametros [21] =  $proceso;
-            $parametros [22] = $entidad;
-            $parametros [23] = $instancia;
-            $parametros [24] =  $dcontralor;
-            $parametros [25] =  $dfechinicio;
-            $parametros [26] =  $djudicial;
-            $parametros [27] =  $dquejado;
-            $parametros [28] =  $mqueja;
-           
+            $parametros[21] =  $proceso;
+            $parametros[22] = $entidad;
+            $parametros[23] = $instancia;
+            $parametros[24] =  $dcontralor;
+            $parametros[25] =  $dfechinicio;
+            $parametros[26] =  $djudicial;
+            $parametros[27] =  $dquejado;
+            $parametros[28] =  $mqueja;
+
             $datos = $cn->executeAssocQuery($nombrestore, $parametros);
             $cdatos = json_encode($datos[0]);
             echo $cdatos;
-
         }
     }
 
-    public function guardardemquejAction() {
+    public function guardardemquejAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->viewRenderer->setNoRender();
             $this->_helper->getHelper('ajaxContext')->initContext();
 
-           // $idsigma = $this->_request->getPost('idsigma');
+            // $idsigma = $this->_request->getPost('idsigma');
             $mdocumento = $this->_request->getPost('mdocumento');
             $mperson = $this->_request->getPost('mperson');
             $flag = $this->_request->getPost('flag');
 
-            $vhostnm='local';
+            $vhostnm = 'local';
             $ddatosuserlog = new Zend_Session_Namespace('datosuserlog');
             $vusernm =  $ddatosuserlog->cidusuario;
 
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
 
             $userdata = new Zend_Session_Namespace('datosuserlog');
             $nombrestore = 'LEGAL.guardar_legaldem';
 
-            $parametros [0] = "";
-            $parametros [1] =  $mdocumento;
-            $parametros [2] =  $mperson;
-            $parametros [3] =  $flag;
+            $parametros[0] = "";
+            $parametros[1] =  $mdocumento;
+            $parametros[2] =  $mperson;
+            $parametros[3] =  $flag;
 
             $datos = $cn->executeAssocQuery($nombrestore, $parametros);
             $cdatos = json_encode($datos[0]);
             echo $cdatos;
-
         }
     }
 
-    public function obtenermaterialegalAction() {
+    public function obtenermaterialegalAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->getHelper('ajaxContext')->initContext();
 
         $cidespe = $this->_request->getPost('cidespe');
 
-        echo $this->view->util()->getComboContenedorMateriaLegal($cidespe,'');
+        echo $this->view->util()->getComboContenedorMateriaLegal($cidespe, '');
     }
 
-    public function obtenerjuzgadolegalAction() {
+    public function obtenerjuzgadolegalAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->getHelper('ajaxContext')->initContext();
 
         $cidespe = $this->_request->getPost('cidespe');
 
-        echo $this->view->util()->getComboContenedorJuzgadoLegal($cidespe,'');
+        echo $this->view->util()->getComboContenedorJuzgadoLegal($cidespe, '');
     }
 
-    public function asuntoAction() {
+    public function asuntoAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
@@ -245,7 +248,8 @@ class TramiteController extends Zend_Controller_Action {
         }
     }
 
-    public function guardarasuntoAction() {
+    public function guardarasuntoAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
@@ -303,7 +307,8 @@ class TramiteController extends Zend_Controller_Action {
         }
     }
 
-    public function dasuntoreqAction() {
+    public function dasuntoreqAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
@@ -317,15 +322,17 @@ class TramiteController extends Zend_Controller_Action {
         }
     }
 
-    public function nrequisitoAction(){
+    public function nrequisitoAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
-            $this->view->tipodocs = $this->view->util()->getComboContenedorTramite('0000000001','');
+            $this->view->tipodocs = $this->view->util()->getComboContenedorTramite('0000000001', '');
         }
     }
 
-    public function dasuntoAction() {
+    public function dasuntoAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
@@ -355,7 +362,8 @@ class TramiteController extends Zend_Controller_Action {
         }
     }
 
-    public function guardardasuntoAction() {
+    public function guardardasuntoAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
@@ -383,11 +391,12 @@ class TramiteController extends Zend_Controller_Action {
         }
     }
 
-    public function listarmasuntoAction() {
-        
+    public function listarmasuntoAction()
+    {
     }
 
-    public function listarexpedienteAction() {
+    public function listarexpedienteAction()
+    {
         $cidarea = '';
         $vestado = '';
         $vnrodoc = $this->_request->getParam('vnrodoc');
@@ -408,10 +417,11 @@ class TramiteController extends Zend_Controller_Action {
         $this->view->cidareauser = $ddatosuserlog->areacod;
         $this->view->cidarea = $cidarea;
         $this->view->vestado = $vestado;
-     $this->view->vnrodoc = $vnrodoc;
+        $this->view->vnrodoc = $vnrodoc;
     }
 
-    public function listardasuntoAction() {
+    public function listardasuntoAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $cidsigma = $this->_request->getParam('ctryid');
@@ -424,14 +434,16 @@ class TramiteController extends Zend_Controller_Action {
             $this->view->ctiptra = $ctiptra;
         }
     }
-    public function buscarpersonaAction() {
+    public function buscarpersonaAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
         }
     }
 
-    public function expedienteAction() {
+    public function expedienteAction()
+    {
         $idsigma = '0000000000';
         $titulo = 'Nuevo Expediente';
 
@@ -440,14 +452,13 @@ class TramiteController extends Zend_Controller_Action {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $idsigma = $this->_request->getPost('idsigma');
             $titulo = $this->_request->getPost('dstitulo');
-
         } else {
             #$idsigma = $this->_request->getPost('idsigma');
             #$titulo = $this->_request->getPost('dstitulo');
 
         }
         $func = new Libreria_Pintar();
-        $cn = new Model_DataAdapter ();
+        $cn = new Model_DataAdapter();
 
         $this->view->idsigma = $idsigma;
         $this->view->dstitulo = $titulo;
@@ -495,7 +506,6 @@ class TramiteController extends Zend_Controller_Action {
             // Expediente precedente
             $this->view->mdocumento = '';
             $this->view->vmdocumento = '';
-
         } else {
 
             $parametros[0] =  $idsigma;
@@ -513,7 +523,8 @@ class TramiteController extends Zend_Controller_Action {
 
             // Obtener datos panel Expediente
             $panelExp = $cn->executeAssocQuery(
-                    'coactivo.panel_expediente', $parametros
+                'coactivo.panel_expediente',
+                $parametros
             );
 
             // Obtener datos panel Administrado
@@ -554,14 +565,14 @@ class TramiteController extends Zend_Controller_Action {
             // Expediente precedente
             $this->view->mdocumento = $datos[0]['mdocumento'];
             $this->view->vmdocumento = $datos[0]['vmdocumento'];
-
         }
-       // ECHO $this->view->ccosini;
+        // ECHO $this->view->ccosini;
     }
 
 
 
-    public function paneladministradoAction() {
+    public function paneladministradoAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
@@ -582,8 +593,8 @@ class TramiteController extends Zend_Controller_Action {
             $params[4] =  "";
             $params[5] =  "";
             $datos = $cn->executeAssocQuery(
-                    'coactivo.listar_mdocumento'
-                    , $params
+                'coactivo.listar_mdocumento',
+                $params
             );
 
             $cdatos = count($datos);
@@ -595,21 +606,22 @@ class TramiteController extends Zend_Controller_Action {
                 $params[3] =  "";
                 $params[4] =  "";
                 $panelPers = $cn->executeAssocQuery(
-                        'coactivo.buscar_persona', $params
+                    'coactivo.buscar_persona',
+                    $params
                 );
-// Panel Administrado
+                // Panel Administrado
                 $this->view->mperson = $panelPers[0]['cidpers'];
                 $this->view->ctipper = $panelPers[0]['ctipper'];
                 $this->view->vperson = $panelPers[0]['crazsoc'];
                 $this->view->vdirecc = $panelPers[0]['direccf'];
                 $this->view->vdocper = $panelPers[0]['vnrodoc'];
 
-// -- Representante Legal
+                // -- Representante Legal
                 $this->view->crepres = $datos[0]['crepres'];
                 $this->view->vrepres = $datos[0]['vrepres'];
                 $this->view->vdocrep = $datos[0]['vdocrep'];
 
-// -- Persona que entrega el documento
+                // -- Persona que entrega el documento
                 $this->view->centrega = $datos[0]['centrega'];
                 $this->view->ventrega = $datos[0]['ventrega'];
                 $this->view->dentrega = $datos[0]['dentrega'];
@@ -618,7 +630,8 @@ class TramiteController extends Zend_Controller_Action {
         }
     }
 
-    public function panelexpedienteAction() {
+    public function panelexpedienteAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
 
@@ -632,7 +645,8 @@ class TramiteController extends Zend_Controller_Action {
                 $params[0] = $idsigma;
 
                 $panelExp = $cn->executeAssocQuery(
-                        'coactivo.panel_expediente', $params
+                    'coactivo.panel_expediente',
+                    $params
                 );
                 $cpanelExp = count($panelExp);
                 $params[1] =  "";
@@ -643,33 +657,33 @@ class TramiteController extends Zend_Controller_Action {
                 $userdata = new Zend_Session_Namespace('datosuserlog');
                 $nombrestore = 'coactivo.listar_mdocumento';
                 $datos = $cn->executeAssocQuery(
-                        $nombrestore
-                        , $params
+                    $nombrestore,
+                    $params
                 );
 
                 $cdatos = count($datos);
 
-                
+
                 if ($cpanelExp > 0) {
                     $this->view->vaccion = $panelExp[0]['vtipacc'];
                     $this->view->carea = $panelExp[0]['carea'];
                     $this->view->varea = $panelExp[0]['varea'];
                 }
-                if($cdatos>0){
+                if ($cdatos > 0) {
                     $this->view->vnrodocu = $datos[0]['vnrodocu'];
                     $this->view->vindicador = $datos[0]['vindicador'];
                     $this->view->dtiprtram = $datos[0]['dtiprtram'];
                     $this->view->diastranscurridos = $datos[0]['ndias_transcurridos'];
-                    $this->view->diasrestantes = $datos[0]['ndias_restantes'];    
+                    $this->view->diasrestantes = $datos[0]['ndias_restantes'];
                 }
-                
             } else {
                 $this->view->vindicador = '00ff00-2.png';
             }
         }
     }
 
-    public function guardarexpedienteAction() {
+    public function guardarexpedienteAction()
+    {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->getHelper('ajaxContext')->initContext();
@@ -701,58 +715,59 @@ class TramiteController extends Zend_Controller_Action {
             $cusuario_registro = $ddatosuserlog->cidusuario;
             $cidpers = $ddatosuserlog->cidpers;
 
-            $cn = new Model_DataAdapter ();
+            $cn = new Model_DataAdapter();
 
             $userdata = new Zend_Session_Namespace('datosuserlog');
             $nombrestore = 'coactivo.guardar_mdocumento_1' . ($userdata->nvista);
 
-            $parametros [0] =  $idsigma;
-            $parametros [1] =  $dasunto;
-            $parametros [2] =  $mperson;
-            $parametros [3] =  $dfecdocu;
-            $parametros [4] =  $nfolios;
-            $parametros [5] =  $ctiprtram;
-            $parametros [6] =  $vasunto;
-            $parametros [7] =  $ccosini;
-            $parametros [8] =  $ctiprele;
-            $parametros [9] = $vobserv;
-            $parametros [10] =  strtoupper($vnrodocu);
-            $parametros [11] =  $crepres;
-            $parametros [12] =  '';
-            $parametros [13] =  '';
-            $parametros [14] =  $centrega;
-            $parametros [15] =  $cusuario_registro;
-            $parametros [16] =  $mdocumento;
-            $parametros [17] =  strtoupper($dentrega);
-            $parametros [18] = $flagdentrega;
-            $parametros [19] =  strtoupper($dsadministrado);
-            $parametros [20] =  $ndias;
-            $parametros [21] =  $ccossender;
-            $parametros [22] = strtoupper($vnrodocini);
+            $parametros[0] =  $idsigma;
+            $parametros[1] =  $dasunto;
+            $parametros[2] =  $mperson;
+            $parametros[3] =  $dfecdocu;
+            $parametros[4] =  $nfolios;
+            $parametros[5] =  $ctiprtram;
+            $parametros[6] =  $vasunto;
+            $parametros[7] =  $ccosini;
+            $parametros[8] =  $ctiprele;
+            $parametros[9] = $vobserv;
+            $parametros[10] =  strtoupper($vnrodocu);
+            $parametros[11] =  $crepres;
+            $parametros[12] =  '';
+            $parametros[13] =  '';
+            $parametros[14] =  $centrega;
+            $parametros[15] =  $cusuario_registro;
+            $parametros[16] =  $mdocumento;
+            $parametros[17] =  strtoupper($dentrega);
+            $parametros[18] = $flagdentrega;
+            $parametros[19] =  strtoupper($dsadministrado);
+            $parametros[20] =  $ndias;
+            $parametros[21] =  $ccossender;
+            $parametros[22] = strtoupper($vnrodocini);
 
             $datos = $cn->executeAssocQuery($nombrestore, $parametros);
             $cdatos = count($datos);
 
             if ($cdatos == 1) {
                 #if ($ctiprtram == '0000000620') {
-                    echo json_encode($datos[0]);
-                    #echo '<script>window.open(\'' . $this->view->util()->getLink('documentos/bandejadocs') . '\', \'_self\');</script>';
+                echo json_encode($datos[0]);
+                #echo '<script>window.open(\'' . $this->view->util()->getLink('documentos/bandejadocs') . '\', \'_self\');</script>';
                 #} else {
                 #    echo '<script>window.open(\'' . $this->view->util()->getLink('coactivo/listarexpediente') . '\', \'_self\');</script>';
                 #}
             } else {
-                echo json_encode(array("st"=>"0","msj"=>'Error en el guardado...'));
+                echo json_encode(array("st" => "0", "msj" => 'Error en el guardado...'));
             }
         }
     }
-	
-	public function validardocumentomigradoAction() {
-		$this->_helper->layout->disableLayout();
-		$this->_helper->viewRenderer->setNoRender();
-		$this->_helper->getHelper('ajaxContext')->initContext();
-		
+
+    public function validardocumentomigradoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->getHelper('ajaxContext')->initContext();
+
         if ($this->getRequest()->isXmlHttpRequest()) {
-            
+
             $cn = new Model_DataAdapter();
 
             $mdocumento = $this->_request->getPost('mdocumento');
@@ -762,5 +777,4 @@ class TramiteController extends Zend_Controller_Action {
             echo json_encode($result[0]);
         }
     }
-
 }

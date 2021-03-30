@@ -461,17 +461,14 @@ class CoactivoController extends Zend_Controller_Action
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->_helper->getHelper('ajaxContext')->initContext();
             $this->_helper->layout->disableLayout();
-            $p_idsigma = $this->_request->getPost('idsigma');
+            $p_idDocumentos = $this->_request->getPost('idsigma');
             $p_pcostas = $this->_request->getParam('idcostas');
+            $p_tipocostas = $this->_request->getParam('idtipoCosta');
             $p_cantidad = $this->_request->getParam('cantidad');
-            //$pcostasenvio = json_decode($p_pcostas);
-            //$dataAdapter = new Model_DataAdapter();
-            //$procedure = 'coactivo.obtener_tabla';
-            //$parametersaa[0] = '0000000003';
-            //$records = $dataAdapter->executeAssocQuery($procedure, $parametersaa);
-            //$this->view->arrareas = json_encode($records);
-            $this->view->codmdocum = $p_idsigma;
-            $this->view->idsigma = $p_pcostas;
+
+            $this->view->p_mdocum = $p_idDocumentos;
+            $this->view->p_pcostas = $p_pcostas;
+            $this->view->p_tipocostas = $p_tipocostas;
             $this->view->cantidad = $p_cantidad;
         }
     }
